@@ -1,0 +1,65 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  schema?: object;
+}
+const { title, description, canonical, schema } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  <link rel="canonical" href={canonical}>
+  <link rel="alternate" hreflang="x-default" href={canonical}>
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  <meta property="og:url" content={canonical}>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="cssgenerators.dev">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content={title}>
+  <meta name="twitter:description" content={description}>
+  {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script defer src="https://vps-4db95b47.vps.ovh.net/script.js" data-website-id="c53fbaf6-7286-4b45-90aa-6e5b6902b67f"></script>
+  <style is:global>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: #0f0f13; color: #e6e6ee; font-family: Inter, sans-serif; }
+    ::selection { background: #6366f1; color: #fff; }
+    a { color: inherit; }
+    button { font-family: Inter, sans-serif; }
+    input[type=range] {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 6px; border-radius: 3px;
+      background: #26262f; outline: none; cursor: pointer;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 15px; height: 15px; border-radius: 50%;
+      background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.5); cursor: pointer;
+    }
+    input[type=range]::-moz-range-thumb {
+      width: 15px; height: 15px; border-radius: 50%;
+      background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.5); cursor: pointer; border: none;
+    }
+    .seo-content h2 { font: 700 20px/1.3 Inter; color: #e6e6ee; margin: 28px 0 10px; }
+    .seo-content h3 { font: 600 16px/1.4 Inter; color: #c0c0d0; margin: 20px 0 8px; }
+    .seo-content p { font: 400 15px/1.65 Inter; color: #9b9bab; margin: 0 0 14px; }
+    .seo-content code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: #1a1a24; padding: 2px 6px; border-radius: 4px; color: #a5b4fc; }
+    @media (max-width: 768px) {
+      .tool-cols { flex-direction: column !important; }
+      .tool-controls { width: 100% !important; }
+    }
+  </style>
+</head>
+<body>
+  <slot />
+</body>
+</html>

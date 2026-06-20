@@ -1,0 +1,46 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ClipPath from '../components/tools/ClipPath';
+
+const siteUrl = 'https://cssgenerators.dev';
+const canonical = `${siteUrl}/css-clip-path-generator`;
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebApplication', name: 'CSS Clip Path Generator', url: canonical, applicationCategory: 'DeveloperApplication', operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
+    { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl }, { '@type': 'ListItem', position: 2, name: 'Clip Path Generator', item: canonical }] },
+  ],
+};
+---
+<Layout title="CSS Clip Path Generator — Free Online Tool | cssgenerators.dev" description="Generate CSS clip-path values online. Choose from triangle, pentagon, hexagon, star, arrow and more shapes. Live preview, copy CSS instantly." canonical={canonical} schema={schema}>
+  <Header />
+  <main>
+    <div style="padding:32px 40px 16px">
+      <div style="font:500 12.5px/1 Inter;color:#6b6b7b;margin-bottom:12px"><a href="/" style="color:#8a8a9a;text-decoration:none">Tools</a><span style="color:#3a3a48"> / </span>Clip Path</div>
+      <h1 style="font:800 34px/1.1 Inter;color:#f2f2f7;margin:0 0 8px;letter-spacing:-0.02em">CSS Clip Path Generator</h1>
+      <p style="font:400 15.5px/1.5 Inter;color:#9b9bab;margin:0 0 32px;max-width:620px">Pick a shape — triangle, hexagon, star, arrow, chevron and more — and copy the <code style="font-family:'JetBrains Mono',monospace;font-size:14px;background:#1a1a24;padding:2px 6px;border-radius:4px;color:#a5b4fc">clip-path</code> CSS with one click.</p>
+    </div>
+    <div style="padding:0 40px 40px"><ClipPath client:load /></div>
+    <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
+      <div class="seo-content">
+        <h2>What is CSS clip-path?</h2>
+        <p>The <code>clip-path</code> property clips (masks) an element to a specific shape. Everything outside the shape becomes invisible. The most versatile value is <code>polygon()</code>, which accepts a list of x/y coordinate pairs as percentages.</p>
+        <h2>clip-path syntax</h2>
+        <p><code>clip-path: polygon(x1 y1, x2 y2, ...)</code>. Coordinates are percentages of the element's bounding box. <code>clip-path: circle(50%)</code> clips to a circle. <code>clip-path: ellipse(50% 30%)</code> clips to an ellipse.</p>
+        <h3>Common shapes</h3>
+        <p><strong>Triangle</strong>: <code>polygon(50% 0%, 0% 100%, 100% 100%)</code>. <strong>Star</strong>: 10-point polygon with alternating inner/outer radii. <strong>Hexagon</strong>: 6-point polygon. Each is available as a preset in this generator.</p>
+        <h3>Animating clip-path</h3>
+        <p>CSS can animate between two <code>clip-path: polygon()</code> values as long as they have the same number of points. Use <code>transition: clip-path 0.3s ease</code> for smooth morphing effects on hover.</p>
+      </div>
+    </div>
+    <div style="padding:24px 40px 40px;border-top:1px solid #1c1c26">
+      <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:16px">Other CSS Tools</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        {[['Drop Shadow','/css-drop-shadow-generator'],['CSS Filter','/css-filter-generator'],['Triangle','/css-triangle-generator'],['Gradient','/css-gradient-generator']].map(([name,href])=>(<a href={href} style="padding:8px 16px;border:1px solid #2a2a38;border-radius:8px;background:#16161e;color:#c0c0d0;text-decoration:none;font:500 13px/1 Inter">{name}</a>))}
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>

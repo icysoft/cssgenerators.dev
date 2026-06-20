@@ -1,0 +1,46 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Triangle from '../components/tools/Triangle';
+
+const siteUrl = 'https://cssgenerators.dev';
+const canonical = `${siteUrl}/css-triangle-generator`;
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebApplication', name: 'CSS Triangle Generator', url: canonical, applicationCategory: 'DeveloperApplication', operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
+    { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl }, { '@type': 'ListItem', position: 2, name: 'Triangle Generator', item: canonical }] },
+  ],
+};
+---
+<Layout title="CSS Triangle Generator — Free Online Tool | cssgenerators.dev" description="Generate CSS triangles using the border trick. Choose direction, size and color with live preview. Copy pure CSS — no images needed." canonical={canonical} schema={schema}>
+  <Header />
+  <main>
+    <div style="padding:32px 40px 16px">
+      <div style="font:500 12.5px/1 Inter;color:#6b6b7b;margin-bottom:12px"><a href="/" style="color:#8a8a9a;text-decoration:none">Tools</a><span style="color:#3a3a48"> / </span>Triangle</div>
+      <h1 style="font:800 34px/1.1 Inter;color:#f2f2f7;margin:0 0 8px;letter-spacing:-0.02em">CSS Triangle Generator</h1>
+      <p style="font:400 15.5px/1.5 Inter;color:#9b9bab;margin:0 0 32px;max-width:620px">Generate CSS triangles using the classic border trick — no images, no SVG. Pick direction, size and color.</p>
+    </div>
+    <div style="padding:0 40px 40px"><Triangle client:load /></div>
+    <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
+      <div class="seo-content">
+        <h2>How CSS triangles work</h2>
+        <p>Setting an element to <code>width: 0; height: 0</code> and applying a colored border on one side while making adjacent borders transparent creates a triangle. The size of the triangle is controlled by the border width.</p>
+        <h2>CSS triangle syntax</h2>
+        <p>For an upward-pointing triangle: <code>border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 30px solid #6366f1</code>. Swap <code>border-bottom</code> for <code>border-top</code> to point down, etc.</p>
+        <h3>Diagonal triangles</h3>
+        <p>Diagonal (corner) triangles use only two borders instead of three. For a top-right triangle: <code>border-top: 40px solid #6366f1; border-left: 40px solid transparent</code>.</p>
+        <h3>Modern alternative</h3>
+        <p>In modern CSS, <code>clip-path: polygon(50% 0%, 0% 100%, 100% 100%)</code> is a simpler alternative that also lets you add background colors, gradients and borders to the triangle.</p>
+      </div>
+    </div>
+    <div style="padding:24px 40px 40px;border-top:1px solid #1c1c26">
+      <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:16px">Other CSS Tools</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        {[['Arrow','/css-arrow-generator'],['Clip Path','/css-clip-path-generator'],['Speech Bubble','/css-speech-bubble-generator'],['Border','/css-border-generator']].map(([name,href])=>(<a href={href} style="padding:8px 16px;border:1px solid #2a2a38;border-radius:8px;background:#16161e;color:#c0c0d0;text-decoration:none;font:500 13px/1 Inter">{name}</a>))}
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>

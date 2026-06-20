@@ -1,0 +1,88 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Flexbox from '../components/tools/Flexbox';
+
+const siteUrl = 'https://cssgenerators.dev';
+const canonical = `${siteUrl}/css-flexbox-generator`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'CSS Flexbox Generator',
+      url: canonical,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Any',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      description: 'Free CSS flexbox generator. Visually set flex-direction, justify-content, align-items, flex-wrap and gap with live preview.',
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Flexbox Generator', item: canonical },
+      ],
+    },
+  ],
+};
+---
+<Layout
+  title="CSS Flexbox Generator — Free Online Tool | cssgenerators.dev"
+  description="Build flex container CSS visually. Set flex-direction, justify-content, align-items, wrap and gap with live preview. Copy production-ready CSS instantly."
+  canonical={canonical}
+  schema={schema}
+>
+  <Header />
+  <main>
+    <div style="padding:32px 40px 16px">
+      <div style="font:500 12.5px/1 Inter;color:#6b6b7b;margin-bottom:12px">
+        <a href="/" style="color:#8a8a9a;text-decoration:none">Tools</a>
+        <span style="color:#3a3a48"> / </span>
+        Flexbox
+      </div>
+      <h1 style="font:800 34px/1.1 Inter;color:#f2f2f7;margin:0 0 8px;letter-spacing:-0.02em">CSS Flexbox Generator</h1>
+      <p style="font:400 15.5px/1.5 Inter;color:#9b9bab;margin:0 0 32px;max-width:620px">Build a flex container visually. Set direction, alignment and gap — watch items rearrange in real time. The most-used CSS flex generator online.</p>
+    </div>
+    <div style="padding:0 40px 40px">
+      <Flexbox client:load />
+    </div>
+
+    <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
+      <div class="seo-content">
+        <h2>How to use the CSS flex generator</h2>
+        <p>Click the direction arrows to set <code>flex-direction</code>. The visual buttons for <code>justify-content</code> and <code>align-items</code> show you a miniature layout so you can pick the right value at a glance. The colored numbered boxes in the preview reflect your settings live.</p>
+
+        <h2>CSS flexbox properties explained</h2>
+        <p><strong>flex-direction</strong> sets the main axis (row = horizontal, column = vertical). <strong>justify-content</strong> controls spacing along the main axis. <strong>align-items</strong> controls alignment on the cross axis. <strong>flex-wrap</strong> determines whether items wrap to new lines. <strong>gap</strong> sets spacing between items without needing margins.</p>
+
+        <h3>flex-direction values</h3>
+        <p><code>row</code> (default, left to right), <code>row-reverse</code> (right to left), <code>column</code> (top to bottom), <code>column-reverse</code> (bottom to top).</p>
+
+        <h3>justify-content values</h3>
+        <p><code>flex-start</code>, <code>center</code>, <code>flex-end</code>, <code>space-between</code> (equal gaps between items), <code>space-around</code> (equal space around items), <code>space-evenly</code> (equal space everywhere).</p>
+
+        <h3>Browser compatibility</h3>
+        <p>CSS Flexbox is supported in all modern browsers at 99%+. No vendor prefixes are required in modern codebases. The old <code>display: box</code> syntax from 2009 is obsolete.</p>
+      </div>
+    </div>
+
+    <div style="padding:24px 40px 40px;border-top:1px solid #1c1c26">
+      <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:16px">Other CSS Tools</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        {[
+          ['CSS Grid', '/css-grid-generator'],
+          ['Box Shadow', '/css-box-shadow-generator'],
+          ['Button', '/css-button-generator'],
+          ['Border', '/css-border-generator'],
+          ['Filter', '/css-filter-generator'],
+        ].map(([name, href]) => (
+          <a href={href} style="padding:8px 16px;border:1px solid #2a2a38;border-radius:8px;background:#16161e;color:#c0c0d0;text-decoration:none;font:500 13px/1 Inter">{name}</a>
+        ))}
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>

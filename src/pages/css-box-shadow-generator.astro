@@ -1,0 +1,88 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BoxShadow from '../components/tools/BoxShadow';
+
+const siteUrl = 'https://cssgenerators.dev';
+const canonical = `${siteUrl}/css-box-shadow-generator`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'CSS Box Shadow Generator',
+      url: canonical,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Any',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      description: 'Free CSS box-shadow generator. Stack multiple shadow layers, adjust offset, blur, spread and color. Smooth shadow feature included.',
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Box Shadow Generator', item: canonical },
+      ],
+    },
+  ],
+};
+---
+<Layout
+  title="CSS Box Shadow Generator — Free Online Tool | cssgenerators.dev"
+  description="Generate CSS box-shadow online. Stack multiple layers, adjust offset, blur, spread, color and opacity. Includes smooth shadow feature. Copy CSS instantly."
+  canonical={canonical}
+  schema={schema}
+>
+  <Header />
+  <main>
+    <div style="padding:32px 40px 16px">
+      <div style="font:500 12.5px/1 Inter;color:#6b6b7b;margin-bottom:12px">
+        <a href="/" style="color:#8a8a9a;text-decoration:none">Tools</a>
+        <span style="color:#3a3a48"> / </span>
+        Box Shadow
+      </div>
+      <h1 style="font:800 34px/1.1 Inter;color:#f2f2f7;margin:0 0 8px;letter-spacing:-0.02em">CSS Box Shadow Generator</h1>
+      <p style="font:400 15.5px/1.5 Inter;color:#9b9bab;margin:0 0 32px;max-width:620px">Stack multiple shadow layers, fine-tune offset, blur and spread, then copy production-ready <code style="font-family:'JetBrains Mono',monospace;font-size:14px;background:#1a1a24;padding:2px 6px;border-radius:4px;color:#a5b4fc">box-shadow</code> CSS.</p>
+    </div>
+    <div style="padding:0 40px 40px">
+      <BoxShadow client:load />
+    </div>
+
+    <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
+      <div class="seo-content">
+        <h2>How to use the box-shadow CSS generator</h2>
+        <p>Adjust the sliders for horizontal offset, vertical offset, blur radius and spread radius. Use the color picker to set the shadow color and adjust opacity. Add multiple layers with the "Add shadow layer" button — shadows stack from first (bottom) to last (top).</p>
+
+        <h2>CSS box-shadow syntax</h2>
+        <p><code>box-shadow: offset-x offset-y blur-radius spread-radius color</code>. Add <code>inset</code> before the offsets for an inner shadow. Comma-separate multiple shadows: <code>box-shadow: 0 2px 4px rgba(0,0,0,.3), 0 8px 16px rgba(0,0,0,.1)</code>.</p>
+
+        <h3>Smooth shadow technique</h3>
+        <p>A natural-looking shadow uses 4–5 layers with progressively larger offsets and decreasing opacity. The "Smooth shadow" feature generates this automatically — a technique popularized by <a href="https://shadows.brumm.af" style="color:#a5b4fc">shadows.brumm.af</a>.</p>
+
+        <h3>box-shadow vs drop-shadow</h3>
+        <p><code>box-shadow</code> always follows the rectangular bounding box of the element (including border-radius). <code>filter: drop-shadow()</code> follows the actual visual shape — useful for SVGs and PNGs with transparency.</p>
+
+        <h3>Browser compatibility</h3>
+        <p><code>box-shadow</code> has 99%+ browser support. The <code>-webkit-box-shadow</code> prefix was required for Safari &lt;5.1 (2011) and is no longer needed.</p>
+      </div>
+    </div>
+
+    <div style="padding:24px 40px 40px;border-top:1px solid #1c1c26">
+      <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:16px">Other CSS Tools</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        {[
+          ['Drop Shadow', '/css-drop-shadow-generator'],
+          ['Text Shadow', '/css-text-shadow-generator'],
+          ['CSS Filter', '/css-filter-generator'],
+          ['Border', '/css-border-generator'],
+          ['Button', '/css-button-generator'],
+        ].map(([name, href]) => (
+          <a href={href} style="padding:8px 16px;border:1px solid #2a2a38;border-radius:8px;background:#16161e;color:#c0c0d0;text-decoration:none;font:500 13px/1 Inter">{name}</a>
+        ))}
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>

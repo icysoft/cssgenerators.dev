@@ -1,0 +1,133 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const siteUrl = 'https://cssgenerators.dev';
+
+const tools = [
+  { name: 'Flexbox', slug: 'css-flexbox-generator', desc: 'Align & distribute items visually', badge: 'POPULAR' },
+  { name: 'Box Shadow', slug: 'css-box-shadow-generator', desc: 'Stack multiple shadow layers', badge: 'POPULAR' },
+  { name: 'Drop Shadow', slug: 'css-drop-shadow-generator', desc: 'Follows the shape outline' },
+  { name: 'Button', slug: 'css-button-generator', desc: 'Presets + live hover states' },
+  { name: 'Grid', slug: 'css-grid-generator', desc: 'Visual grid-template builder' },
+  { name: 'Filter', slug: 'css-filter-generator', desc: 'blur · brightness · hue-rotate', badge: 'EASY WIN' },
+  { name: 'Text Shadow', slug: 'css-text-shadow-generator', desc: 'neon · retro · 3D presets', badge: 'EASY WIN' },
+  { name: 'Border', slug: 'css-border-generator', desc: 'style · width · border-radius' },
+  { name: 'Clip Path', slug: 'css-clip-path-generator', desc: 'Polygon & shape presets' },
+  { name: 'Triangle', slug: 'css-triangle-generator', desc: 'Pure-CSS border trick' },
+  { name: 'Arrow', slug: 'css-arrow-generator', desc: 'Chevrons, any direction' },
+  { name: 'Speech Bubble', slug: 'css-speech-bubble-generator', desc: 'Tail position & color' },
+  { name: 'Gradient', slug: 'css-gradient-generator', desc: 'linear · radial · conic' },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'CSS Generators',
+  url: siteUrl,
+  description: 'Free online CSS generator tools for developers. Live preview, one click to copy.',
+};
+---
+<Layout
+  title="CSS Generators — Free Online CSS Tools | cssgenerators.dev"
+  description="13 free CSS generator tools for developers. Live preview, one-click copy. Box shadow, flexbox, button, text shadow, filter, gradient and more."
+  canonical={siteUrl}
+  schema={schema}
+>
+  <Header />
+
+  <div style="padding:64px 40px 48px;text-align:center;background:radial-gradient(ellipse 700px 320px at 50% -10%,rgba(99,102,241,.16),transparent)">
+    <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border:1px solid #2a2a38;border-radius:100px;background:#16161e;margin-bottom:26px">
+      <span style="width:6px;height:6px;border-radius:50%;background:#22d3ee"></span>
+      <span style="font:500 12.5px/1 'JetBrains Mono',monospace;color:#9b9bab;letter-spacing:.02em">13 generators · 100% free · no sign-up</span>
+    </div>
+    <h1 style="font:800 52px/1.06 Inter;color:#f2f2f7;margin:0 auto 18px;letter-spacing:-0.03em;max-width:760px">
+      Every CSS tool you need.<br>
+      <span style="background:linear-gradient(90deg,#818cf8,#22d3ee);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">Live preview, one click to copy.</span>
+    </h1>
+    <p style="font:400 17px/1.5 Inter;color:#9b9bab;margin:0 auto 34px;max-width:560px">Visual generators for shadows, flexbox, buttons, gradients and more. Move a slider, copy the CSS, ship it.</p>
+  </div>
+
+  <div id="tools" style="padding:8px 40px 64px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px">
+      {tools.map(tool => (
+        <a href={`/${tool.slug}`} style="border:1px solid #232330;border-radius:12px;background:#15151c;overflow:hidden;text-decoration:none;display:block">
+          <div style="height:100px;display:flex;align-items:center;justify-content:center;background:#101015;border-bottom:1px solid #1c1c26">
+            {tool.slug === 'css-flexbox-generator' && (
+              <div style="display:flex;align-items:center;gap:7px">
+                <div style="width:26px;height:38px;border-radius:5px;background:linear-gradient(160deg,#6366f1,#4f46e5)"></div>
+                <div style="width:26px;height:38px;border-radius:5px;background:linear-gradient(160deg,#6366f1,#4f46e5);opacity:.7"></div>
+                <div style="width:26px;height:38px;border-radius:5px;background:linear-gradient(160deg,#6366f1,#4f46e5);opacity:.4"></div>
+              </div>
+            )}
+            {tool.slug === 'css-box-shadow-generator' && (
+              <div style="width:50px;height:50px;border-radius:10px;background:#e6e6ee;box-shadow:8px 12px 26px rgba(99,102,241,.55)"></div>
+            )}
+            {tool.slug === 'css-drop-shadow-generator' && (
+              <div style="width:48px;height:48px;background:linear-gradient(135deg,#22d3ee,#6366f1);filter:drop-shadow(6px 8px 8px rgba(34,211,238,.5));clip-path:polygon(50% 0,100% 38%,82% 100%,18% 100%,0 38%)"></div>
+            )}
+            {tool.slug === 'css-button-generator' && (
+              <div style="padding:11px 22px;border-radius:9px;background:linear-gradient(180deg,#6366f1,#4f46e5);box-shadow:0 6px 16px rgba(99,102,241,.4);font:600 13px/1 Inter;color:#fff">Click me</div>
+            )}
+            {tool.slug === 'css-grid-generator' && (
+              <div style="display:grid;grid-template-columns:repeat(3,16px);grid-template-rows:repeat(3,16px);gap:5px">
+                <div style="background:#6366f1;border-radius:3px"></div><div style="background:#2a2a44;border-radius:3px"></div><div style="background:#6366f1;border-radius:3px"></div>
+                <div style="background:#2a2a44;border-radius:3px"></div><div style="background:#6366f1;border-radius:3px"></div><div style="background:#2a2a44;border-radius:3px"></div>
+                <div style="background:#6366f1;border-radius:3px"></div><div style="background:#2a2a44;border-radius:3px"></div><div style="background:#6366f1;border-radius:3px"></div>
+              </div>
+            )}
+            {tool.slug === 'css-filter-generator' && (
+              <div style="width:56px;height:50px;border-radius:10px;background:conic-gradient(from 90deg,#f472b6,#facc15,#22d3ee,#6366f1,#f472b6);filter:saturate(1.4) contrast(1.1)"></div>
+            )}
+            {tool.slug === 'css-text-shadow-generator' && (
+              <span style="font:700 30px/1 'JetBrains Mono',monospace;color:#fff;text-shadow:0 0 5px #22d3ee,0 0 14px #22d3ee,0 0 28px #0ea5b7">Aa</span>
+            )}
+            {tool.slug === 'css-border-generator' && (
+              <div style="width:52px;height:44px;border-radius:14px;border:3px dashed #6366f1"></div>
+            )}
+            {tool.slug === 'css-clip-path-generator' && (
+              <div style="width:50px;height:50px;background:linear-gradient(135deg,#6366f1,#22d3ee);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)"></div>
+            )}
+            {tool.slug === 'css-triangle-generator' && (
+              <div style="width:0;height:0;border-left:26px solid transparent;border-right:26px solid transparent;border-bottom:44px solid #6366f1"></div>
+            )}
+            {tool.slug === 'css-arrow-generator' && (
+              <div style="width:30px;height:30px;border-top:5px solid #22d3ee;border-right:5px solid #22d3ee;transform:rotate(45deg);border-radius:3px"></div>
+            )}
+            {tool.slug === 'css-speech-bubble-generator' && (
+              <div style="position:relative;width:56px;height:36px;border-radius:9px;background:#6366f1">
+                <div style="position:absolute;bottom:-7px;left:14px;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:9px solid #6366f1"></div>
+              </div>
+            )}
+            {tool.slug === 'css-gradient-generator' && (
+              <div style="width:60px;height:44px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#22d3ee,#f472b6)"></div>
+            )}
+          </div>
+          <div style="padding:13px 15px 15px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+              <span style="font:600 14.5px/1 Inter;color:#e6e6ee">{tool.name}</span>
+              {tool.badge && (
+                <span style={`font:600 9.5px/1 'JetBrains Mono',monospace;padding:3px 5px;border-radius:4px;${tool.badge === 'POPULAR' ? 'color:#22d3ee;border:1px solid #134e4a;background:#0c2a28' : 'color:#facc15;border:1px solid #422006;background:#1c0f00'}`}>{tool.badge}</span>
+              )}
+            </div>
+            <div style="font:400 12.5px/1.35 Inter;color:#8a8a9a">{tool.desc}</div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <div style="padding:48px 40px 64px;border-top:1px solid #1c1c26;max-width:860px">
+    <div class="seo-content">
+      <h2>Free CSS Generator Tools for Developers</h2>
+      <p>cssgenerators.dev offers 13 free, client-side CSS generators with live preview. No sign-up, no download, no server. Every tool runs entirely in your browser.</p>
+      <h2>How it works</h2>
+      <p>Move a slider or pick a color — the CSS updates in real time. Click "Copy CSS" and paste it directly into your stylesheet. All generators output clean, production-ready CSS with no extra classes or framework dependencies.</p>
+      <h3>Available CSS generators</h3>
+      <p>Box Shadow, Drop Shadow, Text Shadow, Flexbox, CSS Grid, Button, Border, Filter, Clip Path, Triangle, Arrow, Speech Bubble, and Gradient. Each tool targets a specific CSS property that developers look up frequently.</p>
+    </div>
+  </div>
+
+  <Footer />
+</Layout>

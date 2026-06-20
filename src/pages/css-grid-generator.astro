@@ -1,0 +1,46 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Grid from '../components/tools/Grid';
+
+const siteUrl = 'https://cssgenerators.dev';
+const canonical = `${siteUrl}/css-grid-generator`;
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebApplication', name: 'CSS Grid Generator', url: canonical, applicationCategory: 'DeveloperApplication', operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
+    { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl }, { '@type': 'ListItem', position: 2, name: 'Grid Generator', item: canonical }] },
+  ],
+};
+---
+<Layout title="CSS Grid Generator — Free Online Tool | cssgenerators.dev" description="Generate CSS grid layouts online. Set columns, rows, gaps and grid-template-columns with live preview. Copy production-ready CSS grid code instantly." canonical={canonical} schema={schema}>
+  <Header />
+  <main>
+    <div style="padding:32px 40px 16px">
+      <div style="font:500 12.5px/1 Inter;color:#6b6b7b;margin-bottom:12px"><a href="/" style="color:#8a8a9a;text-decoration:none">Tools</a><span style="color:#3a3a48"> / </span>Grid</div>
+      <h1 style="font:800 34px/1.1 Inter;color:#f2f2f7;margin:0 0 8px;letter-spacing:-0.02em">CSS Grid Generator</h1>
+      <p style="font:400 15.5px/1.5 Inter;color:#9b9bab;margin:0 0 32px;max-width:620px">Build a CSS grid layout visually. Set columns, rows and gaps — edit <code style="font-family:'JetBrains Mono',monospace;font-size:14px;background:#1a1a24;padding:2px 6px;border-radius:4px;color:#a5b4fc">grid-template-columns</code> directly to use <code style="font-family:'JetBrains Mono',monospace;font-size:14px;background:#1a1a24;padding:2px 6px;border-radius:4px;color:#a5b4fc">fr</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:14px;background:#1a1a24;padding:2px 6px;border-radius:4px;color:#a5b4fc">minmax()</code> or fixed values.</p>
+    </div>
+    <div style="padding:0 40px 40px"><Grid client:load /></div>
+    <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
+      <div class="seo-content">
+        <h2>How to use the CSS grid generator</h2>
+        <p>Use the sliders to set the number of columns and rows, then adjust the column and row gaps. You can also type directly in the <code>grid-template-columns</code> field to use <code>fr</code> units, <code>minmax()</code>, <code>auto</code>, or fixed pixel values.</p>
+        <h2>CSS Grid fundamentals</h2>
+        <p><code>display: grid</code> turns any element into a grid container. <code>grid-template-columns</code> defines the column track sizes — <code>1fr 1fr 1fr</code> creates three equal columns. <code>column-gap</code> and <code>row-gap</code> set the gutter between tracks (shorthand: <code>gap</code>).</p>
+        <h3>The fr unit</h3>
+        <p><code>fr</code> stands for "fractional unit" — it distributes available space proportionally. <code>1fr 2fr 1fr</code> creates a 3-column layout where the middle column is twice as wide as the others.</p>
+        <h3>CSS Grid vs Flexbox</h3>
+        <p>Use Grid for 2D layouts (rows AND columns). Use Flexbox for 1D layouts (either a row OR a column). They complement each other — a grid item can itself be a flex container.</p>
+      </div>
+    </div>
+    <div style="padding:24px 40px 40px;border-top:1px solid #1c1c26">
+      <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:16px">Other CSS Tools</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        {[['Flexbox','/css-flexbox-generator'],['Button','/css-button-generator'],['Border','/css-border-generator'],['Box Shadow','/css-box-shadow-generator']].map(([name,href])=>(<a href={href} style="padding:8px 16px;border:1px solid #2a2a38;border-radius:8px;background:#16161e;color:#c0c0d0;text-decoration:none;font:500 13px/1 Inter">{name}</a>))}
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>

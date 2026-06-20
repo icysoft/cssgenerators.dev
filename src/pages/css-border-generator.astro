@@ -1,0 +1,46 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Border from '../components/tools/Border';
+
+const siteUrl = 'https://cssgenerators.dev';
+const canonical = `${siteUrl}/css-border-generator`;
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebApplication', name: 'CSS Border Generator', url: canonical, applicationCategory: 'DeveloperApplication', operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
+    { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl }, { '@type': 'ListItem', position: 2, name: 'Border Generator', item: canonical }] },
+  ],
+};
+---
+<Layout title="CSS Border Generator — Free Online Tool | cssgenerators.dev" description="Generate CSS border styles online. Choose solid, dashed, dotted, double and more. Adjust width, color and border-radius with live preview. Copy CSS instantly." canonical={canonical} schema={schema}>
+  <Header />
+  <main>
+    <div style="padding:32px 40px 16px">
+      <div style="font:500 12.5px/1 Inter;color:#6b6b7b;margin-bottom:12px"><a href="/" style="color:#8a8a9a;text-decoration:none">Tools</a><span style="color:#3a3a48"> / </span>Border</div>
+      <h1 style="font:800 34px/1.1 Inter;color:#f2f2f7;margin:0 0 8px;letter-spacing:-0.02em">CSS Border Generator</h1>
+      <p style="font:400 15.5px/1.5 Inter;color:#9b9bab;margin:0 0 32px;max-width:620px">Pick a border style, width, color and corner radius — generate <code style="font-family:'JetBrains Mono',monospace;font-size:14px;background:#1a1a24;padding:2px 6px;border-radius:4px;color:#a5b4fc">border</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:14px;background:#1a1a24;padding:2px 6px;border-radius:4px;color:#a5b4fc">border-radius</code> CSS with live preview.</p>
+    </div>
+    <div style="padding:0 40px 40px"><Border client:load /></div>
+    <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
+      <div class="seo-content">
+        <h2>CSS border properties</h2>
+        <p>The <code>border</code> shorthand sets width, style and color in one declaration: <code>border: 2px solid #6366f1</code>. You can also set individual sides: <code>border-top</code>, <code>border-right</code>, <code>border-bottom</code>, <code>border-left</code>.</p>
+        <h2>Border styles</h2>
+        <p><strong>solid</strong> — continuous line. <strong>dashed</strong> — series of short dashes. <strong>dotted</strong> — series of dots. <strong>double</strong> — two parallel solid lines. <strong>groove/ridge</strong> — 3D effects that use the border-color. <strong>inset/outset</strong> — make the element appear embedded or raised.</p>
+        <h3>border-radius explained</h3>
+        <p><code>border-radius: 8px</code> rounds all four corners equally. Use individual corner values for asymmetric shapes: <code>border-radius: 10px 5px 20px 0</code> (top-left, top-right, bottom-right, bottom-left).</p>
+        <h3>Pill shape</h3>
+        <p>Set <code>border-radius: 9999px</code> to create a pill/capsule shape that works at any element width.</p>
+      </div>
+    </div>
+    <div style="padding:24px 40px 40px;border-top:1px solid #1c1c26">
+      <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:16px">Other CSS Tools</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        {[['Box Shadow','/css-box-shadow-generator'],['Button','/css-button-generator'],['Flexbox','/css-flexbox-generator'],['Triangle','/css-triangle-generator']].map(([name,href])=>(<a href={href} style="padding:8px 16px;border:1px solid #2a2a38;border-radius:8px;background:#16161e;color:#c0c0d0;text-decoration:none;font:500 13px/1 Inter">{name}</a>))}
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>

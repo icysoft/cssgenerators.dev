@@ -1,0 +1,46 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import DropShadow from '../components/tools/DropShadow';
+
+const siteUrl = 'https://cssgenerators.dev';
+const canonical = `${siteUrl}/css-drop-shadow-generator`;
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebApplication', name: 'CSS Drop Shadow Generator', url: canonical, applicationCategory: 'DeveloperApplication', operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
+    { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl }, { '@type': 'ListItem', position: 2, name: 'Drop Shadow Generator', item: canonical }] },
+  ],
+};
+---
+<Layout title="CSS Drop Shadow Generator — Free Online Tool | cssgenerators.dev" description="Generate CSS filter drop-shadow online. Unlike box-shadow, drop-shadow follows the element's actual shape — perfect for SVGs and transparent PNGs." canonical={canonical} schema={schema}>
+  <Header />
+  <main>
+    <div style="padding:32px 40px 16px">
+      <div style="font:500 12.5px/1 Inter;color:#6b6b7b;margin-bottom:12px"><a href="/" style="color:#8a8a9a;text-decoration:none">Tools</a><span style="color:#3a3a48"> / </span>Drop Shadow</div>
+      <h1 style="font:800 34px/1.1 Inter;color:#f2f2f7;margin:0 0 8px;letter-spacing:-0.02em">CSS Drop Shadow Generator</h1>
+      <p style="font:400 15.5px/1.5 Inter;color:#9b9bab;margin:0 0 32px;max-width:620px">Generate <code style="font-family:'JetBrains Mono',monospace;font-size:14px;background:#1a1a24;padding:2px 6px;border-radius:4px;color:#a5b4fc">filter: drop-shadow()</code> CSS. Unlike box-shadow, it follows the actual shape outline of SVGs, clip-path elements, and transparent PNGs.</p>
+    </div>
+    <div style="padding:0 40px 40px"><DropShadow client:load /></div>
+    <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
+      <div class="seo-content">
+        <h2>drop-shadow vs box-shadow</h2>
+        <p><code>filter: drop-shadow()</code> computes the shadow from the element's alpha channel — it follows irregular shapes, SVG paths, and clip-path cutouts. <code>box-shadow</code> always uses the rectangular bounding box, ignoring transparent areas.</p>
+        <h2>CSS drop-shadow syntax</h2>
+        <p><code>filter: drop-shadow(offset-x offset-y blur-radius color)</code>. Note: there is no spread radius and no inset option — these are features of box-shadow only.</p>
+        <h3>When to use drop-shadow</h3>
+        <p>Use drop-shadow on SVG icons, PNG logos with transparent backgrounds, and any element using clip-path. The shadow will follow the contour rather than the box.</p>
+        <h3>Browser compatibility</h3>
+        <p><code>filter: drop-shadow()</code> is supported in all modern browsers. For IE11, use <code>box-shadow</code> as a fallback.</p>
+      </div>
+    </div>
+    <div style="padding:24px 40px 40px;border-top:1px solid #1c1c26">
+      <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:16px">Other CSS Tools</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        {[['Box Shadow','/css-box-shadow-generator'],['CSS Filter','/css-filter-generator'],['Text Shadow','/css-text-shadow-generator'],['Clip Path','/css-clip-path-generator']].map(([name,href])=>(<a href={href} style="padding:8px 16px;border:1px solid #2a2a38;border-radius:8px;background:#16161e;color:#c0c0d0;text-decoration:none;font:500 13px/1 Inter">{name}</a>))}
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>

@@ -1,0 +1,46 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Arrow from '../components/tools/Arrow';
+
+const siteUrl = 'https://cssgenerators.dev';
+const canonical = `${siteUrl}/css-arrow-generator`;
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebApplication', name: 'CSS Arrow Generator', url: canonical, applicationCategory: 'DeveloperApplication', operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
+    { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl }, { '@type': 'ListItem', position: 2, name: 'Arrow Generator', item: canonical }] },
+  ],
+};
+---
+<Layout title="CSS Arrow Generator — Free Online Tool | cssgenerators.dev" description="Generate CSS chevron arrows in any direction. Adjust size, thickness, color and border-radius. Pure CSS using border-top + border-right + transform. Copy instantly." canonical={canonical} schema={schema}>
+  <Header />
+  <main>
+    <div style="padding:32px 40px 16px">
+      <div style="font:500 12.5px/1 Inter;color:#6b6b7b;margin-bottom:12px"><a href="/" style="color:#8a8a9a;text-decoration:none">Tools</a><span style="color:#3a3a48"> / </span>Arrow</div>
+      <h1 style="font:800 34px/1.1 Inter;color:#f2f2f7;margin:0 0 8px;letter-spacing:-0.02em">CSS Arrow Generator</h1>
+      <p style="font:400 15.5px/1.5 Inter;color:#9b9bab;margin:0 0 32px;max-width:620px">Generate CSS chevron arrows pointing in any of 8 directions. Pure CSS using <code style="font-family:'JetBrains Mono',monospace;font-size:14px;background:#1a1a24;padding:2px 6px;border-radius:4px;color:#a5b4fc">border-top + border-right + transform</code>.</p>
+    </div>
+    <div style="padding:0 40px 40px"><Arrow client:load /></div>
+    <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
+      <div class="seo-content">
+        <h2>How CSS arrows work</h2>
+        <p>A CSS chevron arrow uses two borders on a square element — <code>border-top</code> and <code>border-right</code> — then rotates the element with <code>transform: rotate()</code> to point in the desired direction.</p>
+        <h2>CSS arrow direction angles</h2>
+        <p>Right: <code>rotate(45deg)</code>. Down: <code>rotate(135deg)</code>. Left: <code>rotate(225deg)</code>. Up: <code>rotate(315deg)</code>. Diagonal arrows use 0°, 90°, 180°, 270°.</p>
+        <h3>Styling tips</h3>
+        <p>Add <code>border-radius: 2px</code> to the corners for a slightly rounded, modern chevron. Use <code>transition: transform 0.2s ease</code> to animate direction changes on hover.</p>
+        <h3>Alternative: CSS clip-path arrows</h3>
+        <p>For filled arrow shapes (not just outlines), use <code>clip-path: polygon()</code>. See the <a href="/css-clip-path-generator" style="color:#a5b4fc">clip path generator</a> for arrow and chevron polygon presets.</p>
+      </div>
+    </div>
+    <div style="padding:24px 40px 40px;border-top:1px solid #1c1c26">
+      <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:16px">Other CSS Tools</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        {[['Triangle','/css-triangle-generator'],['Clip Path','/css-clip-path-generator'],['Speech Bubble','/css-speech-bubble-generator'],['Border','/css-border-generator']].map(([name,href])=>(<a href={href} style="padding:8px 16px;border:1px solid #2a2a38;border-radius:8px;background:#16161e;color:#c0c0d0;text-decoration:none;font:500 13px/1 Inter">{name}</a>))}
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>

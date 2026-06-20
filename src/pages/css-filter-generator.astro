@@ -1,0 +1,88 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Filter from '../components/tools/Filter';
+
+const siteUrl = 'https://cssgenerators.dev';
+const canonical = `${siteUrl}/css-filter-generator`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'CSS Filter Generator',
+      url: canonical,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Any',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      description: 'Free CSS filter generator with live preview. Adjust blur, brightness, contrast, grayscale, hue-rotate, saturate and sepia.',
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Filter Generator', item: canonical },
+      ],
+    },
+  ],
+};
+---
+<Layout
+  title="CSS Filter Generator — Free Online Tool | cssgenerators.dev"
+  description="Generate CSS filter effects online. Adjust blur, brightness, contrast, grayscale, hue-rotate, saturate and sepia with live preview. Copy CSS instantly."
+  canonical={canonical}
+  schema={schema}
+>
+  <Header />
+  <main>
+    <div style="padding:32px 40px 16px">
+      <div style="font:500 12.5px/1 Inter;color:#6b6b7b;margin-bottom:12px">
+        <a href="/" style="color:#8a8a9a;text-decoration:none">Tools</a>
+        <span style="color:#3a3a48"> / </span>
+        Filter
+      </div>
+      <h1 style="font:800 34px/1.1 Inter;color:#f2f2f7;margin:0 0 8px;letter-spacing:-0.02em">CSS Filter Generator</h1>
+      <p style="font:400 15.5px/1.5 Inter;color:#9b9bab;margin:0 0 32px;max-width:620px">Adjust blur, brightness, contrast, grayscale, hue-rotate and more — live preview updates as you move sliders. Copy the <code style="font-family:'JetBrains Mono',monospace;font-size:14px;background:#1a1a24;padding:2px 6px;border-radius:4px;color:#a5b4fc">filter</code> CSS with one click.</p>
+    </div>
+    <div style="padding:0 40px 40px">
+      <Filter client:load />
+    </div>
+
+    <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
+      <div class="seo-content">
+        <h2>How to use the CSS filter generator</h2>
+        <p>Adjust the sliders for each filter function. The conic-gradient preview updates in real time so you can see how filters stack. Only non-default values are included in the generated CSS — if brightness is 100% (the default), it is omitted.</p>
+
+        <h2>CSS filter syntax</h2>
+        <p>The <code>filter</code> property accepts a space-separated list of filter functions: <code>filter: blur(4px) brightness(110%) contrast(120%)</code>. Functions are applied in order, left to right.</p>
+
+        <h3>Available filter functions</h3>
+        <p><strong>blur(px)</strong> — applies a Gaussian blur. <strong>brightness(%)</strong> — adjusts lightness (100% = original). <strong>contrast(%)</strong> — adjusts contrast. <strong>grayscale(%)</strong> — converts to grayscale. <strong>hue-rotate(deg)</strong> — rotates hue on the color wheel. <strong>opacity(%)</strong> — adjusts transparency (same as the opacity property). <strong>saturate(%)</strong> — adjusts color saturation. <strong>sepia(%)</strong> — applies a sepia tone.</p>
+
+        <h3>CSS filter vs backdrop-filter</h3>
+        <p>The <code>filter</code> property applies to the element itself. <code>backdrop-filter</code> applies to everything behind the element — useful for frosted glass effects on overlays and modals.</p>
+
+        <h3>Browser compatibility</h3>
+        <p>CSS <code>filter</code> is supported in all modern browsers. No vendor prefixes are required in 2024+. The <code>-webkit-filter</code> prefix was required for Safari before version 9.1 (2015).</p>
+      </div>
+    </div>
+
+    <div style="padding:24px 40px 40px;border-top:1px solid #1c1c26">
+      <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:16px">Other CSS Tools</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        {[
+          ['Drop Shadow', '/css-drop-shadow-generator'],
+          ['Box Shadow', '/css-box-shadow-generator'],
+          ['Text Shadow', '/css-text-shadow-generator'],
+          ['Clip Path', '/css-clip-path-generator'],
+          ['Gradient', '/css-gradient-generator'],
+        ].map(([name, href]) => (
+          <a href={href} style="padding:8px 16px;border:1px solid #2a2a38;border-radius:8px;background:#16161e;color:#c0c0d0;text-decoration:none;font:500 13px/1 Inter">{name}</a>
+        ))}
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>
