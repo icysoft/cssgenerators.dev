@@ -9,8 +9,49 @@ const canonical = `${siteUrl}/css-border-generator`;
 const schema = {
   '@context': 'https://schema.org',
   '@graph': [
-    { '@type': 'WebApplication', name: 'CSS Border Generator', url: canonical, applicationCategory: 'DeveloperApplication', operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
-    { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl }, { '@type': 'ListItem', position: 2, name: 'Border Generator', item: canonical }] },
+    {
+      '@type': 'WebApplication',
+      '@id': `${canonical}#app`,
+      name: 'CSS Border Generator',
+      url: canonical,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Any',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      description: 'Free CSS border generator. Choose solid, dashed, dotted, double and more styles. Adjust border-width, border-color and border-radius with live preview.',
+      creator: { '@id': 'https://cssgenerators.dev/#organization' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Border Generator', item: canonical },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What are the CSS border properties?',
+          acceptedAnswer: { '@type': 'Answer', text: 'The border shorthand sets width, style and color in one declaration: border: 2px solid #6366f1. You can also set individual sides: border-top, border-right, border-bottom, border-left.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What are the CSS border styles?',
+          acceptedAnswer: { '@type': 'Answer', text: 'solid — continuous line. dashed — series of short dashes. dotted — series of dots. double — two parallel solid lines. groove/ridge — 3D effects that use the border-color. inset/outset — make the element appear embedded or raised.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'How does border-radius work in CSS?',
+          acceptedAnswer: { '@type': 'Answer', text: 'border-radius: 8px rounds all four corners equally. Use individual corner values for asymmetric shapes: border-radius: 10px 5px 20px 0 (top-left, top-right, bottom-right, bottom-left).' },
+        },
+        {
+          '@type': 'Question',
+          name: 'How do you create a pill shape with CSS border-radius?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Set border-radius: 9999px to create a pill/capsule shape that works at any element width.' },
+        },
+      ],
+    },
   ],
 };
 ---
@@ -25,13 +66,13 @@ const schema = {
     <div style="padding:0 40px 40px"><Border client:load /></div>
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
-        <h2>CSS border properties</h2>
+        <h2>What are the CSS border properties?</h2>
         <p>The <code>border</code> shorthand sets width, style and color in one declaration: <code>border: 2px solid #6366f1</code>. You can also set individual sides: <code>border-top</code>, <code>border-right</code>, <code>border-bottom</code>, <code>border-left</code>.</p>
-        <h2>Border styles</h2>
+        <h2>What are the CSS border styles?</h2>
         <p><strong>solid</strong> — continuous line. <strong>dashed</strong> — series of short dashes. <strong>dotted</strong> — series of dots. <strong>double</strong> — two parallel solid lines. <strong>groove/ridge</strong> — 3D effects that use the border-color. <strong>inset/outset</strong> — make the element appear embedded or raised.</p>
-        <h3>border-radius explained</h3>
+        <h3>How does border-radius work in CSS?</h3>
         <p><code>border-radius: 8px</code> rounds all four corners equally. Use individual corner values for asymmetric shapes: <code>border-radius: 10px 5px 20px 0</code> (top-left, top-right, bottom-right, bottom-left).</p>
-        <h3>Pill shape</h3>
+        <h3>How do you create a pill shape with CSS border-radius?</h3>
         <p>Set <code>border-radius: 9999px</code> to create a pill/capsule shape that works at any element width.</p>
       </div>
     </div>

@@ -12,18 +12,50 @@ const schema = {
   '@graph': [
     {
       '@type': 'WebApplication',
+      '@id': `${canonical}#app`,
       name: 'CSS Flexbox Generator',
       url: canonical,
       applicationCategory: 'DeveloperApplication',
       operatingSystem: 'Any',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
       description: 'Free CSS flexbox generator. Visually set flex-direction, justify-content, align-items, flex-wrap and gap with live preview.',
+      creator: { '@id': 'https://cssgenerators.dev/#organization' },
     },
     {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl },
         { '@type': 'ListItem', position: 2, name: 'Flexbox Generator', item: canonical },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'How do you use the CSS flex generator?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Click the direction arrows to set flex-direction. The visual buttons for justify-content and align-items show you a miniature layout so you can pick the right value at a glance. The colored numbered boxes in the preview reflect your settings live.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What are the CSS flexbox properties?',
+          acceptedAnswer: { '@type': 'Answer', text: 'flex-direction sets the main axis (row = horizontal, column = vertical). justify-content controls spacing along the main axis. align-items controls alignment on the cross axis. flex-wrap determines whether items wrap to new lines. gap sets spacing between items without needing margins.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What are the flex-direction values?',
+          acceptedAnswer: { '@type': 'Answer', text: 'row (default, left to right), row-reverse (right to left), column (top to bottom), column-reverse (bottom to top).' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What are the justify-content values in CSS Flexbox?',
+          acceptedAnswer: { '@type': 'Answer', text: 'flex-start, center, flex-end, space-between (equal gaps between items), space-around (equal space around items), space-evenly (equal space everywhere).' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the browser compatibility for CSS Flexbox?',
+          acceptedAnswer: { '@type': 'Answer', text: 'CSS Flexbox is supported in all modern browsers at 99%+. No vendor prefixes are required in modern codebases. The old display: box syntax from 2009 is obsolete.' },
+        },
       ],
     },
   ],
@@ -52,23 +84,27 @@ const schema = {
 
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
-        <h2>How to use the CSS flex generator</h2>
+        <h2>How do you use the CSS flex generator?</h2>
         <p>Click the direction arrows to set <code>flex-direction</code>. The visual buttons for <code>justify-content</code> and <code>align-items</code> show you a miniature layout so you can pick the right value at a glance. The colored numbered boxes in the preview reflect your settings live.</p>
 
-        <h2>CSS flexbox properties explained</h2>
+        <h2>What are the CSS flexbox properties?</h2>
         <p><strong>flex-direction</strong> sets the main axis (row = horizontal, column = vertical). <strong>justify-content</strong> controls spacing along the main axis. <strong>align-items</strong> controls alignment on the cross axis. <strong>flex-wrap</strong> determines whether items wrap to new lines. <strong>gap</strong> sets spacing between items without needing margins.</p>
 
-        <h3>flex-direction values</h3>
+        <h3>What are the flex-direction values?</h3>
         <p><code>row</code> (default, left to right), <code>row-reverse</code> (right to left), <code>column</code> (top to bottom), <code>column-reverse</code> (bottom to top).</p>
 
-        <h3>justify-content values</h3>
+        <h3>What are the justify-content values in CSS Flexbox?</h3>
         <p><code>flex-start</code>, <code>center</code>, <code>flex-end</code>, <code>space-between</code> (equal gaps between items), <code>space-around</code> (equal space around items), <code>space-evenly</code> (equal space everywhere).</p>
 
-        <h3>Browser compatibility</h3>
+        <h3>What is the browser compatibility for CSS Flexbox?</h3>
         <p>CSS Flexbox is supported in all modern browsers at 99%+. No vendor prefixes are required in modern codebases. The old <code>display: box</code> syntax from 2009 is obsolete.</p>
       </div>
     </div>
 
+    <div style="padding:24px 40px 0;border-top:1px solid #1c1c26">
+      <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:12px">From the blog</div>
+      <a href="/blog/css-flexbox-guide" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid #2a2a44;border-radius:8px;background:#131320;color:#a5b4fc;font:500 13.5px/1 Inter;text-decoration:none">CSS Flexbox Guide: the complete visual reference →</a>
+    </div>
     <div style="padding:24px 40px 40px;border-top:1px solid #1c1c26">
       <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:16px">Other CSS Tools</div>
       <div style="display:flex;flex-wrap:wrap;gap:10px">

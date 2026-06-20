@@ -9,8 +9,49 @@ const canonical = `${siteUrl}/css-clip-path-generator`;
 const schema = {
   '@context': 'https://schema.org',
   '@graph': [
-    { '@type': 'WebApplication', name: 'CSS Clip Path Generator', url: canonical, applicationCategory: 'DeveloperApplication', operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
-    { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl }, { '@type': 'ListItem', position: 2, name: 'Clip Path Generator', item: canonical }] },
+    {
+      '@type': 'WebApplication',
+      '@id': `${canonical}#app`,
+      name: 'CSS Clip Path Generator',
+      url: canonical,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Any',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      description: 'Free CSS clip-path generator. Choose from triangle, pentagon, hexagon, star, arrow and more polygon shapes. Live preview and one-click copy.',
+      creator: { '@id': 'https://cssgenerators.dev/#organization' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Clip Path Generator', item: canonical },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is CSS clip-path?',
+          acceptedAnswer: { '@type': 'Answer', text: 'The clip-path property clips (masks) an element to a specific shape. Everything outside the shape becomes invisible. The most versatile value is polygon(), which accepts a list of x/y coordinate pairs as percentages.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the CSS clip-path syntax?',
+          acceptedAnswer: { '@type': 'Answer', text: 'clip-path: polygon(x1 y1, x2 y2, ...). Coordinates are percentages of the element\'s bounding box. clip-path: circle(50%) clips to a circle. clip-path: ellipse(50% 30%) clips to an ellipse.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What are the common clip-path polygon shapes?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Triangle: polygon(50% 0%, 0% 100%, 100% 100%). Star: 10-point polygon with alternating inner/outer radii. Hexagon: 6-point polygon. Each is available as a preset in this generator.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'How do you animate clip-path in CSS?',
+          acceptedAnswer: { '@type': 'Answer', text: 'CSS can animate between two clip-path: polygon() values as long as they have the same number of points. Use transition: clip-path 0.3s ease for smooth morphing effects on hover.' },
+        },
+      ],
+    },
   ],
 };
 ---
@@ -27,13 +68,17 @@ const schema = {
       <div class="seo-content">
         <h2>What is CSS clip-path?</h2>
         <p>The <code>clip-path</code> property clips (masks) an element to a specific shape. Everything outside the shape becomes invisible. The most versatile value is <code>polygon()</code>, which accepts a list of x/y coordinate pairs as percentages.</p>
-        <h2>clip-path syntax</h2>
+        <h2>What is the CSS clip-path syntax?</h2>
         <p><code>clip-path: polygon(x1 y1, x2 y2, ...)</code>. Coordinates are percentages of the element's bounding box. <code>clip-path: circle(50%)</code> clips to a circle. <code>clip-path: ellipse(50% 30%)</code> clips to an ellipse.</p>
-        <h3>Common shapes</h3>
+        <h3>What are the common clip-path polygon shapes?</h3>
         <p><strong>Triangle</strong>: <code>polygon(50% 0%, 0% 100%, 100% 100%)</code>. <strong>Star</strong>: 10-point polygon with alternating inner/outer radii. <strong>Hexagon</strong>: 6-point polygon. Each is available as a preset in this generator.</p>
-        <h3>Animating clip-path</h3>
+        <h3>How do you animate clip-path in CSS?</h3>
         <p>CSS can animate between two <code>clip-path: polygon()</code> values as long as they have the same number of points. Use <code>transition: clip-path 0.3s ease</code> for smooth morphing effects on hover.</p>
       </div>
+    </div>
+    <div style="padding:24px 40px 0;border-top:1px solid #1c1c26">
+      <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:12px">From the blog</div>
+      <a href="/blog/css-clip-path-guide" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid #2a2a44;border-radius:8px;background:#131320;color:#a5b4fc;font:500 13.5px/1 Inter;text-decoration:none">CSS clip-path Guide: shapes and hover animations →</a>
     </div>
     <div style="padding:24px 40px 40px;border-top:1px solid #1c1c26">
       <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:16px">Other CSS Tools</div>

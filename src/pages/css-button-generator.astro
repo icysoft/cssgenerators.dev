@@ -9,8 +9,49 @@ const canonical = `${siteUrl}/css-button-generator`;
 const schema = {
   '@context': 'https://schema.org',
   '@graph': [
-    { '@type': 'WebApplication', name: 'CSS Button Generator', url: canonical, applicationCategory: 'DeveloperApplication', operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
-    { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl }, { '@type': 'ListItem', position: 2, name: 'Button Generator', item: canonical }] },
+    {
+      '@type': 'WebApplication',
+      '@id': `${canonical}#app`,
+      name: 'CSS Button Generator',
+      url: canonical,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Any',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      description: 'Free CSS button generator with presets (Modern, Flat, Outline, Glassmorphism, Gradient, Retro). Customize colors, radius, padding and hover state. Copy full button CSS including :hover.',
+      creator: { '@id': 'https://cssgenerators.dev/#organization' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Button Generator', item: canonical },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'How do you generate button CSS?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Pick a preset style (Modern, Flat, Outline, Glassmorphism, Gradient, or Retro) then fine-tune any property. Hover over the live preview to see the hover state. The CSS output includes both .button and .button:hover rules.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What are the CSS button properties?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Key properties for styling buttons: background (solid or gradient), color (text), border-radius (corner rounding), padding (inner spacing), border (outline), box-shadow (depth), and transition (smooth hover animation).' },
+        },
+        {
+          '@type': 'Question',
+          name: 'How does a glassmorphism button work in CSS?',
+          acceptedAnswer: { '@type': 'Answer', text: 'The glass preset uses backdrop-filter: blur() with a semi-transparent background and subtle border to create a frosted-glass effect. Works best over coloured or blurred backgrounds.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What accessibility requirements apply to CSS buttons?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Ensure your button has sufficient color contrast (WCAG AA requires 4.5:1 for normal text). Use cursor: pointer so the cursor changes on hover. The generated CSS already includes this.' },
+        },
+      ],
+    },
   ],
 };
 ---
@@ -25,13 +66,13 @@ const schema = {
     <div style="padding:0 40px 40px"><ButtonGen client:load /></div>
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
-        <h2>How to generate button CSS</h2>
+        <h2>How do you generate button CSS?</h2>
         <p>Pick a preset style (Modern, Flat, Outline, Glassmorphism, Gradient, or Retro) then fine-tune any property. Hover over the live preview to see the hover state. The CSS output includes both <code>.button</code> and <code>.button:hover</code> rules.</p>
-        <h2>CSS button properties</h2>
+        <h2>What are the CSS button properties?</h2>
         <p>Key properties for styling buttons: <code>background</code> (solid or gradient), <code>color</code> (text), <code>border-radius</code> (corner rounding), <code>padding</code> (inner spacing), <code>border</code> (outline), <code>box-shadow</code> (depth), and <code>transition</code> (smooth hover animation).</p>
-        <h3>Glassmorphism button</h3>
+        <h3>How does a glassmorphism button work in CSS?</h3>
         <p>The glass preset uses <code>backdrop-filter: blur()</code> with a semi-transparent background and subtle border to create a frosted-glass effect. Works best over coloured or blurred backgrounds.</p>
-        <h3>Accessibility note</h3>
+        <h3>What accessibility requirements apply to CSS buttons?</h3>
         <p>Ensure your button has sufficient color contrast (WCAG AA requires 4.5:1 for normal text). Use <code>cursor: pointer</code> so the cursor changes on hover. The generated CSS already includes this.</p>
       </div>
     </div>

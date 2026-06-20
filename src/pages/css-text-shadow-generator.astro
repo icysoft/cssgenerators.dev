@@ -12,18 +12,50 @@ const schema = {
   '@graph': [
     {
       '@type': 'WebApplication',
+      '@id': `${canonical}#app`,
       name: 'CSS Text Shadow Generator',
       url: canonical,
       applicationCategory: 'DeveloperApplication',
       operatingSystem: 'Any',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
       description: 'Free online CSS text-shadow generator with live preview. Create neon, retro, 3D text shadow effects and copy the CSS instantly.',
+      creator: { '@id': 'https://cssgenerators.dev/#organization' },
     },
     {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl },
         { '@type': 'ListItem', position: 2, name: 'Text Shadow Generator', item: canonical },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'How do you use the CSS text-shadow generator?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Select a preset (Neon Blue, Retro, 3D, etc.) or adjust the sliders manually. The horizontal offset moves the shadow left/right, the vertical offset moves it up/down, and blur radius controls how soft the shadow appears. The preview updates instantly.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the CSS text-shadow syntax?',
+          acceptedAnswer: { '@type': 'Answer', text: 'The text-shadow property accepts: text-shadow: offset-x offset-y blur-radius color. You can stack multiple shadows by comma-separating them, which is how neon glow effects are created.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'How do you create a neon text shadow effect in CSS?',
+          acceptedAnswer: { '@type': 'Answer', text: 'To create a neon glow, set horizontal and vertical offsets to 0 and use a vivid color like cyan (#22d3ee) or pink (#f472b6). Stack two shadows — one with a small blur and one with a larger blur — for a more realistic glow effect.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'How do you create a retro or 3D text shadow in CSS?',
+          acceptedAnswer: { '@type': 'Answer', text: 'For a retro effect, set a small positive offset on both axes (e.g. 3px 3px) with blur at 0. For a 3D layered effect, stack multiple shadows at incremental offsets using the same or progressively darker color.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the browser compatibility for CSS text-shadow?',
+          acceptedAnswer: { '@type': 'Answer', text: 'text-shadow has 97%+ browser support and works in all modern browsers — Chrome, Firefox, Safari, and Edge — without vendor prefixes.' },
+        },
       ],
     },
   ],
@@ -52,23 +84,27 @@ const schema = {
 
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
-        <h2>How to use the CSS text-shadow generator</h2>
+        <h2>How do you use the CSS text-shadow generator?</h2>
         <p>Select a preset (Neon Blue, Retro, 3D, etc.) or adjust the sliders manually. The horizontal offset moves the shadow left/right, the vertical offset moves it up/down, and blur radius controls how soft the shadow appears. The preview updates instantly.</p>
 
-        <h2>CSS text-shadow syntax</h2>
+        <h2>What is the CSS text-shadow syntax?</h2>
         <p>The <code>text-shadow</code> property accepts: <code>text-shadow: offset-x offset-y blur-radius color</code>. You can stack multiple shadows by comma-separating them, which is how neon glow effects are created.</p>
 
-        <h3>Neon text shadow effect</h3>
+        <h3>How do you create a neon text shadow effect in CSS?</h3>
         <p>To create a neon glow, set horizontal and vertical offsets to 0 and use a vivid color like cyan (<code>#22d3ee</code>) or pink (<code>#f472b6</code>). Stack two shadows — one with a small blur and one with a larger blur — for a more realistic glow effect.</p>
 
-        <h3>Retro / 3D text shadow</h3>
+        <h3>How do you create a retro or 3D text shadow in CSS?</h3>
         <p>For a retro effect, set a small positive offset on both axes (e.g. 3px 3px) with blur at 0. For a 3D layered effect, stack multiple shadows at incremental offsets using the same or progressively darker color.</p>
 
-        <h3>CSS text-shadow browser compatibility</h3>
+        <h3>What is the browser compatibility for CSS text-shadow?</h3>
         <p><code>text-shadow</code> has 97%+ browser support and works in all modern browsers — Chrome, Firefox, Safari, and Edge — without vendor prefixes.</p>
       </div>
     </div>
 
+    <div style="padding:24px 40px 0;border-top:1px solid #1c1c26">
+      <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:12px">From the blog</div>
+      <a href="/blog/css-shadow-guide" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid #2a2a44;border-radius:8px;background:#131320;color:#a5b4fc;font:500 13.5px/1 Inter;text-decoration:none">CSS Shadow Guide: box-shadow, drop-shadow, text-shadow →</a>
+    </div>
     <div style="padding:24px 40px 40px;border-top:1px solid #1c1c26">
       <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:16px">Other CSS Tools</div>
       <div style="display:flex;flex-wrap:wrap;gap:10px">

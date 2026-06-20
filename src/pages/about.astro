@@ -1,0 +1,88 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const siteUrl = 'https://cssgenerators.dev';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      '@id': `${siteUrl}/about#webpage`,
+      url: `${siteUrl}/about`,
+      name: 'About — CSS Generators',
+      description: 'CSS Generators is built by Dinno SAS, a French software company. 13 free CSS tools for developers.',
+      isPartOf: { '@id': `${siteUrl}/#website` },
+    },
+    {
+      '@type': 'Organization',
+      '@id': `${siteUrl}/#organization`,
+      name: 'CSS Generators',
+      legalName: 'Dinno SAS',
+      url: siteUrl,
+      email: 'contact@cssgenerators.dev',
+      sameAs: ['https://github.com/icysoft/cssgenerators.dev'],
+    },
+  ],
+};
+---
+<Layout
+  title="About — CSS Generators | cssgenerators.dev"
+  description="CSS Generators is built by Dinno SAS, a French software company. 13 free, browser-side CSS tools for developers — no sign-up, no tracking."
+  canonical={`${siteUrl}/about`}
+  schema={schema}
+>
+  <Header />
+
+  <main style="max-width:760px;margin:0 auto;padding:64px 40px 80px">
+    <nav style="font:400 13px/1 Inter;color:#6b6b7b;margin-bottom:32px">
+      <a href="/" style="color:#8a8a9a;text-decoration:none">Tools</a>
+      <span style="margin:0 8px;color:#3a3a4a">›</span>
+      <span style="color:#e6e6ee">About</span>
+    </nav>
+
+    <h1 style="font:800 38px/1.1 Inter;color:#f2f2f7;margin:0 0 12px;letter-spacing:-0.02em">About CSS Generators</h1>
+    <p style="font:400 16px/1.6 Inter;color:#9b9bab;margin:0 0 48px;border-bottom:1px solid #1c1c26;padding-bottom:48px">
+      Built by developers, for developers.
+    </p>
+
+    <div class="seo-content">
+      <h2>Who built this?</h2>
+      <p>
+        CSS Generators is built and maintained by <strong style="color:#e6e6ee">Dinno SAS</strong>, a French software company (SIREN 812225373).
+        We build developer tools and web applications with a focus on simplicity and zero-friction UX.
+      </p>
+      <p>
+        The source code is open and available on <a href="https://github.com/icysoft/cssgenerators.dev" target="_blank" rel="noopener" style="color:#818cf8;text-decoration:none">GitHub</a>.
+      </p>
+
+      <h2>Why we built it</h2>
+      <p>
+        CSS properties like <code>box-shadow</code>, <code>clip-path</code>, and <code>filter</code> require a lot of trial and error
+        to get right. We kept switching between a text editor and the browser DevTools to tweak values — so we built
+        interactive generators that let you see the result in real time and copy the final CSS in one click.
+      </p>
+      <p>
+        Every tool runs entirely in your browser. No server, no account, no data sent anywhere except a self-hosted
+        <a href="https://umami.is" target="_blank" rel="noopener" style="color:#818cf8;text-decoration:none">Umami</a> analytics
+        instance for aggregate page view counts (no cookies, no fingerprinting).
+      </p>
+
+      <h2>The tools</h2>
+      <p>
+        13 free CSS generators: Box Shadow, Drop Shadow, Text Shadow, Flexbox, CSS Grid, Button, Border, Filter,
+        Clip Path, Triangle, Arrow, Speech Bubble, and Gradient. Each targets a CSS property that developers reach for
+        frequently and that benefits from a live visual editor.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Questions, bug reports, or suggestions: <a href="mailto:contact@cssgenerators.dev" style="color:#818cf8;text-decoration:none">contact@cssgenerators.dev</a>
+      </p>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

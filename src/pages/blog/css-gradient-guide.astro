@@ -1,0 +1,434 @@
+---
+import BlogLayout from '../../layouts/BlogLayout.astro';
+
+const siteUrl = 'https://cssgenerators.dev';
+const canonical = `${siteUrl}/blog/css-gradient-guide`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      '@id': `${canonical}#article`,
+      headline: 'CSS Gradients: The Complete Guide to linear-gradient, radial-gradient and conic-gradient',
+      description: 'A deep-dive into all three CSS gradient types — linear, radial, and conic — with live demos, code examples, advanced techniques, and browser compatibility notes.',
+      url: canonical,
+      datePublished: '2026-06-20',
+      dateModified: '2026-06-20',
+      author: { '@type': 'Organization', name: 'Dinno SAS', url: siteUrl },
+      publisher: { '@id': `${siteUrl}/#organization` },
+      isPartOf: { '@id': `${siteUrl}/#website` },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Blog', item: `${siteUrl}/blog` },
+        { '@type': 'ListItem', position: 3, name: 'CSS Gradients Guide', item: canonical },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is the difference between linear-gradient, radial-gradient and conic-gradient?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'linear-gradient transitions colors along a straight line at a given angle. radial-gradient radiates colors outward from a center point in a circle or ellipse. conic-gradient rotates colors around a center point like a color wheel — useful for pie charts and angle-based patterns.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How do I create a gradient text effect in CSS?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Set background to your gradient, then apply -webkit-background-clip: text and -webkit-text-fill-color: transparent. Also add the unprefixed background-clip: text for forward compatibility. Example: background: linear-gradient(90deg, #818cf8, #22d3ee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is conic-gradient safe to use in production?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes, as of 2026 conic-gradient has over 96% global browser support. It landed in Safari 12.1 (2019), Chrome 69 (2018), and Firefox 83 (2020). The only concern is very old Android WebView, but a solid fallback background-color handles that gracefully.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How do I make a CSS gradient border?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'The most robust technique uses a pseudo-element: set the element to position: relative with a solid background, then use ::before with position: absolute; inset: -2px; background: your-gradient; border-radius: inherit; z-index: -1. This creates a gradient "frame" behind the element.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can CSS gradients replace images for backgrounds?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'For geometric patterns, vignettes, and color washes — yes. CSS gradients are resolution-independent, render instantly with no network request, and scale perfectly on retina screens. For photographic textures or complex organic patterns, a compressed WebP image is still the right call.',
+          },
+        },
+      ],
+    },
+  ],
+};
+---
+<BlogLayout
+  title="CSS Gradients: Complete Guide to linear-gradient, radial-gradient and conic-gradient — cssgenerators.dev"
+  description="Master all three CSS gradient types with live demos: linear-gradient angles and color stops, radial-gradient shapes, conic-gradient pie charts, gradient text fill, gradient borders, and CSS pattern techniques."
+  canonical={canonical}
+  datePublished="2026-06-20"
+  readingTime="13 min"
+  schema={schema}
+>
+
+<p>CSS gradients have been around since 2012, but in 2026 the picture is complete: <code>linear-gradient</code>, <code>radial-gradient</code>, and <code>conic-gradient</code> are all fully supported across every modern browser, including Safari. Combined with <code>repeating-*</code> variants and <code>background-size</code>, they can replace entire image libraries. This guide covers all three from syntax to production tricks — with live demos rendered directly in your browser.</p>
+
+<div class="callout">
+  <p><strong>Just want to generate one?</strong> Use the <a href="/css-gradient-generator">CSS Gradient Generator</a> — pick your type, drag color stops, and copy the CSS in one click.</p>
+</div>
+
+<h2>What are the three types of CSS gradient?</h2>
+
+<p>A CSS gradient is an image generated by the browser at render time — no file, no network request. It behaves exactly like a <code>url()</code> in <code>background</code>, <code>background-image</code>, <code>border-image</code>, or <code>mask-image</code>. The three types differ only in <em>direction</em>:</p>
+
+<div class="demo">
+  <div class="demo-item">
+    <div style="width:110px;height:88px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#22d3ee)"></div>
+    <div class="demo-label">linear-gradient</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:110px;height:88px;border-radius:10px;background:radial-gradient(circle at 35% 40%,#f472b6 0%,#6366f1 100%)"></div>
+    <div class="demo-label">radial-gradient</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:110px;height:88px;border-radius:10px;background:conic-gradient(from 0deg,#6366f1,#22d3ee,#f472b6,#6366f1)"></div>
+    <div class="demo-label">conic-gradient</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:110px;height:88px;border-radius:10px;background:repeating-linear-gradient(45deg,#6366f1,#6366f1 4px,#1a1a24 4px,#1a1a24 14px)"></div>
+    <div class="demo-label">repeating-linear</div>
+  </div>
+</div>
+
+<ul>
+  <li><strong>linear-gradient</strong> — colors run along a straight line at a specified angle.</li>
+  <li><strong>radial-gradient</strong> — colors radiate outward from a center point in a circle or ellipse.</li>
+  <li><strong>conic-gradient</strong> — colors rotate around a center point, like slices of a pie.</li>
+  <li><strong>repeating-*</strong> variants — tile the gradient infinitely, enabling pure-CSS patterns.</li>
+</ul>
+
+<h2>How does linear-gradient work?</h2>
+
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/gradient/linear-gradient" target="_blank" rel="noopener">linear-gradient</a> is the most common. Its full syntax is:</p>
+
+<pre><code>background: linear-gradient(direction, color-stop-1, color-stop-2, ...);</code></pre>
+
+<h3>What are the direction options?</h3>
+
+<p>Direction can be a keyword or an angle:</p>
+
+<pre><code>/* Keywords */
+linear-gradient(to right, #6366f1, #22d3ee)      /* left → right */
+linear-gradient(to bottom right, #6366f1, #22d3ee) /* diagonal */
+
+/* Angles — 0deg = top, clockwise */
+linear-gradient(90deg, #6366f1, #22d3ee)   /* left → right */
+linear-gradient(45deg, #6366f1, #22d3ee)   /* diagonal ↗ */
+linear-gradient(180deg, #6366f1, #22d3ee)  /* top → bottom (default) */</code></pre>
+
+<div class="demo">
+  <div class="demo-item">
+    <div style="width:90px;height:72px;border-radius:8px;background:linear-gradient(to right,#6366f1,#22d3ee)"></div>
+    <div class="demo-label">to right (90deg)</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:90px;height:72px;border-radius:8px;background:linear-gradient(45deg,#6366f1,#22d3ee)"></div>
+    <div class="demo-label">45deg</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:90px;height:72px;border-radius:8px;background:linear-gradient(135deg,#6366f1,#f472b6)"></div>
+    <div class="demo-label">135deg</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:90px;height:72px;border-radius:8px;background:linear-gradient(180deg,#6366f1,#22d3ee)"></div>
+    <div class="demo-label">to bottom (default)</div>
+  </div>
+</div>
+
+<h3>How do color stops and positions work?</h3>
+
+<p>Each color stop is a color value plus an optional position. Without positions, stops are evenly distributed:</p>
+
+<pre><code>/* Evenly spaced — stop at 0%, 50%, 100% */
+linear-gradient(90deg, #6366f1, #f472b6, #22d3ee)
+
+/* Explicit positions */
+linear-gradient(90deg, #6366f1 0%, #f472b6 30%, #22d3ee 100%)
+
+/* Two positions per stop = hard stop (sharp edge) */
+linear-gradient(90deg, #6366f1 0% 50%, #22d3ee 50% 100%)</code></pre>
+
+<h3>How do hard stops create striped patterns?</h3>
+
+<p>When two adjacent stops share the same position, the transition is instant — a hard edge. Combined with <code>background-size</code> and <code>background-repeat</code>, you get CSS-only patterns with no images:</p>
+
+<pre><code>/* Diagonal stripes */
+background: repeating-linear-gradient(
+  45deg,
+  #6366f1 0px,
+  #6366f1 4px,
+  #1a1a24 4px,
+  #1a1a24 14px
+);
+
+/* Checkerboard */
+background:
+  linear-gradient(45deg, #6366f1 25%, transparent 25%, transparent 75%, #6366f1 75%),
+  linear-gradient(45deg, #6366f1 25%, #1a1a24 25%);
+background-size: 18px 18px;</code></pre>
+
+<div class="demo">
+  <div class="demo-item">
+    <div style="width:130px;height:90px;border-radius:10px;background:repeating-linear-gradient(45deg,#6366f1,#6366f1 4px,#1a1a24 4px,#1a1a24 14px)"></div>
+    <div class="demo-label">Diagonal stripes</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:130px;height:90px;border-radius:10px;background:linear-gradient(45deg,#6366f1 25%,transparent 25%,transparent 75%,#6366f1 75%),linear-gradient(45deg,#6366f1 25%,#1a1a24 25%);background-size:18px 18px"></div>
+    <div class="demo-label">Checkerboard</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:130px;height:90px;border-radius:10px;background:repeating-linear-gradient(0deg,transparent,transparent 8px,rgba(99,102,241,.15) 8px,rgba(99,102,241,.15) 9px),repeating-linear-gradient(90deg,transparent,transparent 8px,rgba(99,102,241,.15) 8px,rgba(99,102,241,.15) 9px),#0d0d12"></div>
+    <div class="demo-label">Grid pattern</div>
+  </div>
+</div>
+
+<p>This is one of the most underused CSS techniques: <strong>gradient + background-size = unlimited geometric patterns with zero HTTP requests</strong>. Check <a href="https://projects.verou.me/css3patterns/" target="_blank" rel="noopener">CSS3 Patterns Gallery</a> for inspiration.</p>
+
+<h2>How does radial-gradient work?</h2>
+
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/gradient/radial-gradient" target="_blank" rel="noopener">radial-gradient</a> paints colors outward from a focal point:</p>
+
+<pre><code>background: radial-gradient(shape size at position, color-stop, ...);</code></pre>
+
+<h3>What are the shape and size options?</h3>
+
+<p><strong>Shape</strong>: <code>circle</code> or <code>ellipse</code> (default). A circle has equal radius in all directions; an ellipse stretches to the box dimensions.</p>
+
+<p><strong>Size keywords</strong>:</p>
+<ul>
+  <li><code>closest-side</code> — gradient reaches the nearest side of the box.</li>
+  <li><code>farthest-corner</code> — gradient reaches the farthest corner (default for ellipse).</li>
+  <li><code>closest-corner</code> / <code>farthest-side</code> — less common, useful for specific effects.</li>
+</ul>
+
+<pre><code>/* Circle, centered */
+radial-gradient(circle, #6366f1, #0f0f13)
+
+/* Ellipse reaching farthest corner from a custom position */
+radial-gradient(ellipse farthest-corner at 20% 80%, #f472b6, #6366f1)
+
+/* Spotlight effect */
+radial-gradient(circle at center, rgba(99,102,241,.4), transparent 60%)</code></pre>
+
+<div class="demo">
+  <div class="demo-item">
+    <div style="width:110px;height:90px;border-radius:10px;background:radial-gradient(circle,#6366f1,#0d0d12)"></div>
+    <div class="demo-label">circle centered</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:110px;height:90px;border-radius:10px;background:radial-gradient(ellipse farthest-corner at 20% 80%,#f472b6,#6366f1)"></div>
+    <div class="demo-label">ellipse off-center</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:110px;height:90px;border-radius:10px;position:relative;background:#0d0d12;overflow:hidden">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at center,rgba(99,102,241,.5),transparent 65%)"></div>
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:600 11px/1 'JetBrains Mono',monospace;color:#e6e6ee;letter-spacing:.04em">SPOTLIGHT</div>
+    </div>
+    <div class="demo-label">Spotlight overlay</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:110px;height:90px;border-radius:10px;position:relative;background:linear-gradient(135deg,#6366f1,#22d3ee)">
+      <div style="position:absolute;inset:0;border-radius:10px;background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,.6))"></div>
+    </div>
+    <div class="demo-label">Vignette effect</div>
+  </div>
+</div>
+
+<p>The vignette technique — a dark <code>radial-gradient</code> overlay from transparent center to opaque edges — is widely used in hero sections and card imagery. It draws focus inward and boosts text contrast without affecting the base image.</p>
+
+<h2>How does conic-gradient work — and is it safe to use in 2026?</h2>
+
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/gradient/conic-gradient" target="_blank" rel="noopener">conic-gradient</a> distributes colors by angle around a point rather than by distance. This makes it the natural tool for pie charts, color wheels, and angular patterns.</p>
+
+<p>As of June 2026, conic-gradient has <strong>96.8% global browser support</strong> (<a href="https://caniuse.com/css-conic-gradients" target="_blank" rel="noopener">Can I Use</a>). It landed in Chrome 69 (2018), Safari 12.1 (2019), and Firefox 83 (2020). You can use it in production without a polyfill — just add a <code>background-color</code> fallback for the 3% of ancient Android WebViews.</p>
+
+<pre><code>/* Basic syntax */
+background: conic-gradient(from 0deg at center, color-stop, ...);
+
+/* Pie chart: 35% indigo, 25% cyan, 20% pink, 20% yellow */
+background: conic-gradient(
+  #6366f1 0% 35%,
+  #22d3ee 35% 60%,
+  #f472b6 60% 80%,
+  #facc15 80% 100%
+);
+border-radius: 50%;
+
+/* Color wheel */
+background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);</code></pre>
+
+<div class="demo">
+  <div class="demo-item">
+    <div style="width:100px;height:100px;border-radius:50%;background:conic-gradient(#6366f1 0% 35%,#22d3ee 35% 60%,#f472b6 60% 80%,#facc15 80% 100%)"></div>
+    <div class="demo-label">Pie chart (pure CSS)</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:100px;height:100px;border-radius:50%;background:conic-gradient(red,yellow,lime,aqua,blue,magenta,red)"></div>
+    <div class="demo-label">Color wheel</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:100px;height:100px;border-radius:10px;background:repeating-conic-gradient(#6366f1 0deg 45deg,#1a1a24 45deg 90deg)"></div>
+    <div class="demo-label">repeating-conic checkerboard</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:100px;height:100px;border-radius:10px;background:conic-gradient(from 225deg,#6366f1,#22d3ee,#f472b6,#6366f1);filter:blur(24px) saturate(1.5);transform:scale(1.1)"></div>
+    <div class="demo-label">Aurora blur</div>
+  </div>
+</div>
+
+<p>The checkerboard using <code>repeating-conic-gradient</code> is arguably cleaner than the <code>linear-gradient</code> version — fewer lines, same effect. This is a good example of conic-gradient solving a problem that previously required a hack.</p>
+
+<h2>How do you create gradient text in CSS?</h2>
+
+<p>This is one of the most-searched CSS gradient techniques. It requires three declarations:</p>
+
+<pre><code>.gradient-text &#123;
+  background: linear-gradient(90deg, #818cf8, #22d3ee, #f472b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text; /* unprefixed, for future compat */
+&#125;</code></pre>
+
+<div class="demo">
+  <div style="text-align:center">
+    <span style="font:800 52px/1 Inter;letter-spacing:-0.03em;background:linear-gradient(90deg,#818cf8,#22d3ee,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Gradient Text</span>
+    <br>
+    <span style="font:800 36px/1.2 Inter;letter-spacing:-0.02em;background:linear-gradient(135deg,#facc15,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">works on any weight</span>
+  </div>
+</div>
+
+<p>Two caveats: <strong>1)</strong> <code>-webkit-text-fill-color: transparent</code> overrides <code>color</code>, so you need a fallback <code>color</code> declaration before it for accessibility tools that don't render backgrounds. <strong>2)</strong> The text becomes part of the background layer — <code>text-shadow</code> will not work on gradient text. Use <code>filter: drop-shadow()</code> instead.</p>
+
+<h2>How do you create a CSS gradient border?</h2>
+
+<p>CSS does not support <code>border-image</code> with <code>border-radius</code> simultaneously (a long-standing limitation). The cleanest workaround uses a pseudo-element:</p>
+
+<pre><code>.gradient-border &#123;
+  position: relative;
+  background: #0f0f13; /* your element's background */
+  border-radius: 12px;
+&#125;
+
+.gradient-border::before &#123;
+  content: '';
+  position: absolute;
+  inset: -2px; /* border thickness */
+  background: linear-gradient(135deg, #6366f1, #22d3ee, #f472b6);
+  border-radius: inherit;
+  z-index: -1;
+&#125;</code></pre>
+
+<div class="demo">
+  <div class="demo-item">
+    <div style="position:relative;padding:20px 28px;border-radius:12px;background:#0f0f13;font:600 14px/1 Inter;color:#e6e6ee">
+      <div style="position:absolute;inset:-2px;background:linear-gradient(135deg,#6366f1,#22d3ee,#f472b6);border-radius:12px;z-index:-1"></div>
+      gradient border
+    </div>
+  </div>
+  <div class="demo-item">
+    <div style="position:relative;padding:20px 28px;border-radius:12px;background:#0f0f13;font:600 14px/1 Inter;color:#e6e6ee">
+      <div style="position:absolute;inset:-2px;background:conic-gradient(from 0deg,#6366f1,#22d3ee,#f472b6,#6366f1);border-radius:12px;z-index:-1"></div>
+      conic border
+    </div>
+  </div>
+</div>
+
+<p>The <code>inset: -2px</code> shorthand (equal to <code>top: -2px; right: -2px; bottom: -2px; left: -2px</code>) controls the border thickness. Increase it for a thicker border. The <code>z-index: -1</code> pushes the pseudo-element behind the element's background.</p>
+
+<h2>How do layered gradients work?</h2>
+
+<p>The <code>background</code> property accepts multiple comma-separated values. Each layer is composited in order (first = top). This allows complex effects with no images:</p>
+
+<pre><code>background:
+  /* Layer 1 — top: subtle noise grid */
+  repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,.03) 40px),
+  repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,.03) 40px),
+  /* Layer 2 — mid: radial spotlight */
+  radial-gradient(ellipse 60% 50% at 50% 0%, rgba(99,102,241,.3), transparent),
+  /* Layer 3 — base: solid dark */
+  #0f0f13;</code></pre>
+
+<div class="demo">
+  <div style="width:100%;max-width:480px;height:120px;border-radius:12px;background:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.04) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.04) 40px),radial-gradient(ellipse 60% 120% at 50% -10%,rgba(99,102,241,.35),transparent),#0f0f13;display:flex;align-items:center;justify-content:center;font:700 18px/1 Inter;color:#e6e6ee;letter-spacing:-0.01em">Layered gradients — three backgrounds</div>
+</div>
+
+<p>This exact pattern is used in the hero section of cssgenerators.dev itself. Three layers: grid, purple glow from above, dark base. Zero images, zero JavaScript.</p>
+
+<h2>What are the performance considerations for CSS gradients?</h2>
+
+<p>Gradients are <strong>GPU-composited</strong> in all modern browsers — they repaint efficiently and scale without any quality loss on retina displays. Compared to background images:</p>
+
+<ul>
+  <li><strong>Gradients win</strong> for geometric patterns, vignettes, color washes, noise overlays: no HTTP request, smaller CSS weight, infinite resolution.</li>
+  <li><strong>Images win</strong> for photographic textures, complex organic patterns, or anything with more than ~6–8 gradient stops: a compressed WebP is smaller and faster to decode than a CSS runtime computation at paint time.</li>
+</ul>
+
+<p>Avoid animating <code>background</code> gradients directly (causes repaint every frame). Instead, animate <code>background-position</code> on a larger static gradient, or use <code>opacity</code> / <code>transform</code> on a pseudo-element overlay.</p>
+
+<pre><code>/* Animated gradient: move background-position, not the gradient itself */
+.animated-gradient &#123;
+  background: linear-gradient(270deg, #6366f1, #22d3ee, #f472b6);
+  background-size: 200% 200%;
+  animation: gradientShift 4s ease infinite;
+&#125;
+
+@keyframes gradientShift &#123;
+  0%   &#123; background-position: 0% 50%; &#125;
+  50%  &#123; background-position: 100% 50%; &#125;
+  100% &#123; background-position: 0% 50%; &#125;
+&#125;</code></pre>
+
+<h2>What is the browser compatibility for CSS gradients?</h2>
+
+<ul>
+  <li><strong>linear-gradient / radial-gradient</strong> — 99.5%+ global support. No prefixes needed in 2026. The <code>-webkit-</code> prefix was last required for Safari 6.1 (2013).</li>
+  <li><strong>conic-gradient</strong> — 96.8% global support (<a href="https://caniuse.com/css-conic-gradients" target="_blank" rel="noopener">Can I Use</a>). Safe for production with a <code>background-color</code> fallback.</li>
+  <li><strong>repeating-* variants</strong> — same support as their base type.</li>
+  <li><strong>gradient text (background-clip: text)</strong> — requires <code>-webkit-background-clip</code> and <code>-webkit-text-fill-color</code>; the unprefixed <code>background-clip</code> is also supported but not sufficient on its own in all browsers yet.</li>
+</ul>
+
+<div class="callout">
+  <p><strong>Try it live:</strong> <a href="/css-gradient-generator">CSS Gradient Generator</a> — build linear, radial and conic gradients visually, with unlimited color stops and instant CSS output. No sign-up.</p>
+</div>
+
+<p style="margin-top:16px">
+  <a href="/css-gradient-generator" class="tool-cta">→ CSS Gradient Generator</a>
+</p>
+
+<div class="sources">
+  <h4>Sources</h4>
+  <ul>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/gradient/linear-gradient" target="_blank" rel="noopener">MDN — linear-gradient()</a></li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/gradient/radial-gradient" target="_blank" rel="noopener">MDN — radial-gradient()</a></li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/gradient/conic-gradient" target="_blank" rel="noopener">MDN — conic-gradient()</a></li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/gradient/repeating-linear-gradient" target="_blank" rel="noopener">MDN — repeating-linear-gradient()</a></li>
+    <li><a href="https://caniuse.com/css-conic-gradients" target="_blank" rel="noopener">Can I Use — CSS Conic Gradients</a></li>
+    <li><a href="https://www.w3.org/TR/css-images-4/#gradients" target="_blank" rel="noopener">W3C CSS Images Level 4 — Gradients</a></li>
+    <li><a href="https://projects.verou.me/css3patterns/" target="_blank" rel="noopener">CSS3 Patterns Gallery — Lea Verou</a></li>
+  </ul>
+</div>
+
+</BlogLayout>

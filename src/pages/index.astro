@@ -23,10 +23,25 @@ const tools = [
 
 const schema = {
   '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: 'CSS Generators',
-  url: siteUrl,
-  description: 'Free online CSS generator tools for developers. Live preview, one click to copy.',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}/#website`,
+      name: 'CSS Generators',
+      url: siteUrl,
+      description: 'Free online CSS generator tools for developers. Live preview, one click to copy.',
+      publisher: { '@id': `${siteUrl}/#organization` },
+    },
+    {
+      '@type': 'Organization',
+      '@id': `${siteUrl}/#organization`,
+      name: 'CSS Generators',
+      legalName: 'Dinno SAS',
+      url: siteUrl,
+      email: 'contact@cssgenerators.dev',
+      sameAs: ['https://github.com/icysoft/cssgenerators.dev'],
+    },
+  ],
 };
 ---
 <Layout

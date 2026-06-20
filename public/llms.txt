@@ -1,0 +1,24 @@
+# CSS Generators
+
+> Free online CSS generator tools for developers. Live preview, one-click copy. No sign-up required.
+> Built by Dinno SAS — https://cssgenerators.dev
+
+## Tools
+
+- [CSS Flexbox Generator](https://cssgenerators.dev/css-flexbox-generator): Visual flex container builder. Set flex-direction, justify-content, align-items, gap and more with live preview.
+- [CSS Box Shadow Generator](https://cssgenerators.dev/css-box-shadow-generator): Stack multiple shadow layers with offset, blur, spread and color controls. Exports clean box-shadow CSS.
+- [CSS Drop Shadow Generator](https://cssgenerators.dev/css-drop-shadow-generator): filter: drop-shadow() generator that follows the element's actual shape outline (unlike box-shadow).
+- [CSS Button Generator](https://cssgenerators.dev/css-button-generator): Design CSS buttons with presets (gradient, glassmorphism, outline) and live hover state preview.
+- [CSS Grid Generator](https://cssgenerators.dev/css-grid-generator): Visual grid-template-columns and grid-template-rows builder with fr unit support.
+- [CSS Filter Generator](https://cssgenerators.dev/css-filter-generator): Combine blur, brightness, contrast, saturate, hue-rotate and more into a single filter: property.
+- [CSS Text Shadow Generator](https://cssgenerators.dev/css-text-shadow-generator): Multi-layer text-shadow generator with neon, retro and 3D presets.
+- [CSS Border Generator](https://cssgenerators.dev/css-border-generator): Configure border-style, border-width, border-color and border-radius with live preview.
+- [CSS Clip Path Generator](https://cssgenerators.dev/css-clip-path-generator): Generate clip-path: polygon() shapes visually with draggable points.
+- [CSS Triangle Generator](https://cssgenerators.dev/css-triangle-generator): Create pure-CSS triangles using the border trick or modern clip-path approach.
+- [CSS Arrow Generator](https://cssgenerators.dev/css-arrow-generator): Generate CSS chevron arrows in any direction using border or clip-path.
+- [CSS Speech Bubble Generator](https://cssgenerators.dev/css-speech-bubble-generator): Create speech bubbles with configurable tail position and color using pure CSS.
+- [CSS Gradient Generator](https://cssgenerators.dev/css-gradient-generator): Build linear, radial and conic gradients with unlimited color stops.
+
+## About
+
+CSS Generators is a suite of free, client-side CSS tools. All generators run entirely in the browser — no server, no sign-up, no tracking by third parties. Published by Dinno SAS (SIREN 812225373).

@@ -4,30 +4,50 @@ export interface Props {
   description: string;
   canonical: string;
   schema?: object;
+  ogImage?: string;
+  robots?: string;
 }
-const { title, description, canonical, schema } = Astro.props;
+const {
+  title,
+  description,
+  canonical,
+  schema,
+  ogImage = 'https://cssgenerators.dev/og-default.jpg',
+  robots = 'index, follow',
+} = Astro.props;
+const INDEXNOW_KEY = '07e1e549a5a853968ba4c48dfe1342101ced6f583a69ba814cbb7344b3c085aa';
 ---
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content={robots}>
+  <meta name="indexnow-key" content={INDEXNOW_KEY}>
   <title>{title}</title>
   <meta name="description" content={description}>
   <link rel="canonical" href={canonical}>
+  <link rel="alternate" hreflang="en" href={canonical}>
   <link rel="alternate" hreflang="x-default" href={canonical}>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="any">
   <meta property="og:title" content={title}>
   <meta property="og:description" content={description}>
   <meta property="og:url" content={canonical}>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="cssgenerators.dev">
+  <meta property="og:image" content={ogImage}>
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content={title}>
   <meta name="twitter:description" content={description}>
+  <meta name="twitter:image" content={ogImage}>
   {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
   <script defer src="https://vps-4db95b47.vps.ovh.net/script.js" data-website-id="c53fbaf6-7286-4b45-90aa-6e5b6902b67f"></script>
   <style is:global>
     *, *::before, *::after { box-sizing: border-box; }

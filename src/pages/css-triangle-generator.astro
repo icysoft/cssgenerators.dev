@@ -9,8 +9,49 @@ const canonical = `${siteUrl}/css-triangle-generator`;
 const schema = {
   '@context': 'https://schema.org',
   '@graph': [
-    { '@type': 'WebApplication', name: 'CSS Triangle Generator', url: canonical, applicationCategory: 'DeveloperApplication', operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
-    { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl }, { '@type': 'ListItem', position: 2, name: 'Triangle Generator', item: canonical }] },
+    {
+      '@type': 'WebApplication',
+      '@id': `${canonical}#app`,
+      name: 'CSS Triangle Generator',
+      url: canonical,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Any',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      description: 'Free CSS triangle generator using the border trick. Choose direction, size and color with live preview. Pure CSS — no images or SVG needed.',
+      creator: { '@id': 'https://cssgenerators.dev/#organization' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Triangle Generator', item: canonical },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'How do CSS triangles work?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Setting an element to width: 0; height: 0 and applying a colored border on one side while making adjacent borders transparent creates a triangle. The size of the triangle is controlled by the border width.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the CSS triangle syntax?',
+          acceptedAnswer: { '@type': 'Answer', text: 'For an upward-pointing triangle: border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 30px solid #6366f1. Swap border-bottom for border-top to point down, etc.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'How do you create diagonal CSS triangles?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Diagonal (corner) triangles use only two borders instead of three. For a top-right triangle: border-top: 40px solid #6366f1; border-left: 40px solid transparent.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the modern CSS alternative to the border triangle trick?',
+          acceptedAnswer: { '@type': 'Answer', text: 'In modern CSS, clip-path: polygon(50% 0%, 0% 100%, 100% 100%) is a simpler alternative that also lets you add background colors, gradients and borders to the triangle.' },
+        },
+      ],
+    },
   ],
 };
 ---
@@ -25,15 +66,19 @@ const schema = {
     <div style="padding:0 40px 40px"><Triangle client:load /></div>
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
-        <h2>How CSS triangles work</h2>
+        <h2>How do CSS triangles work?</h2>
         <p>Setting an element to <code>width: 0; height: 0</code> and applying a colored border on one side while making adjacent borders transparent creates a triangle. The size of the triangle is controlled by the border width.</p>
-        <h2>CSS triangle syntax</h2>
+        <h2>What is the CSS triangle syntax?</h2>
         <p>For an upward-pointing triangle: <code>border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 30px solid #6366f1</code>. Swap <code>border-bottom</code> for <code>border-top</code> to point down, etc.</p>
-        <h3>Diagonal triangles</h3>
+        <h3>How do you create diagonal CSS triangles?</h3>
         <p>Diagonal (corner) triangles use only two borders instead of three. For a top-right triangle: <code>border-top: 40px solid #6366f1; border-left: 40px solid transparent</code>.</p>
-        <h3>Modern alternative</h3>
+        <h3>What is the modern CSS alternative to the border triangle trick?</h3>
         <p>In modern CSS, <code>clip-path: polygon(50% 0%, 0% 100%, 100% 100%)</code> is a simpler alternative that also lets you add background colors, gradients and borders to the triangle.</p>
       </div>
+    </div>
+    <div style="padding:24px 40px 0;border-top:1px solid #1c1c26">
+      <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:12px">From the blog</div>
+      <a href="/blog/css-clip-path-guide" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid #2a2a44;border-radius:8px;background:#131320;color:#a5b4fc;font:500 13.5px/1 Inter;text-decoration:none">CSS clip-path Guide: shapes and hover animations →</a>
     </div>
     <div style="padding:24px 40px 40px;border-top:1px solid #1c1c26">
       <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:16px">Other CSS Tools</div>

@@ -9,8 +9,49 @@ const canonical = `${siteUrl}/css-grid-generator`;
 const schema = {
   '@context': 'https://schema.org',
   '@graph': [
-    { '@type': 'WebApplication', name: 'CSS Grid Generator', url: canonical, applicationCategory: 'DeveloperApplication', operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
-    { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl }, { '@type': 'ListItem', position: 2, name: 'Grid Generator', item: canonical }] },
+    {
+      '@type': 'WebApplication',
+      '@id': `${canonical}#app`,
+      name: 'CSS Grid Generator',
+      url: canonical,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Any',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      description: 'Free CSS grid layout generator. Set columns, rows, gaps and grid-template-columns visually with live preview. Supports fr units, minmax() and fixed values.',
+      creator: { '@id': 'https://cssgenerators.dev/#organization' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Grid Generator', item: canonical },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'How do you use the CSS grid generator?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Use the sliders to set the number of columns and rows, then adjust the column and row gaps. You can also type directly in the grid-template-columns field to use fr units, minmax(), auto, or fixed pixel values.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What are the CSS Grid fundamentals?',
+          acceptedAnswer: { '@type': 'Answer', text: 'display: grid turns any element into a grid container. grid-template-columns defines the column track sizes — 1fr 1fr 1fr creates three equal columns. column-gap and row-gap set the gutter between tracks (shorthand: gap).' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the fr unit in CSS Grid?',
+          acceptedAnswer: { '@type': 'Answer', text: 'fr stands for "fractional unit" — it distributes available space proportionally. 1fr 2fr 1fr creates a 3-column layout where the middle column is twice as wide as the others.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the difference between CSS Grid and Flexbox?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Use Grid for 2D layouts (rows AND columns). Use Flexbox for 1D layouts (either a row OR a column). They complement each other — a grid item can itself be a flex container.' },
+        },
+      ],
+    },
   ],
 };
 ---
@@ -25,13 +66,13 @@ const schema = {
     <div style="padding:0 40px 40px"><Grid client:load /></div>
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
-        <h2>How to use the CSS grid generator</h2>
+        <h2>How do you use the CSS grid generator?</h2>
         <p>Use the sliders to set the number of columns and rows, then adjust the column and row gaps. You can also type directly in the <code>grid-template-columns</code> field to use <code>fr</code> units, <code>minmax()</code>, <code>auto</code>, or fixed pixel values.</p>
-        <h2>CSS Grid fundamentals</h2>
+        <h2>What are the CSS Grid fundamentals?</h2>
         <p><code>display: grid</code> turns any element into a grid container. <code>grid-template-columns</code> defines the column track sizes — <code>1fr 1fr 1fr</code> creates three equal columns. <code>column-gap</code> and <code>row-gap</code> set the gutter between tracks (shorthand: <code>gap</code>).</p>
-        <h3>The fr unit</h3>
+        <h3>What is the fr unit in CSS Grid?</h3>
         <p><code>fr</code> stands for "fractional unit" — it distributes available space proportionally. <code>1fr 2fr 1fr</code> creates a 3-column layout where the middle column is twice as wide as the others.</p>
-        <h3>CSS Grid vs Flexbox</h3>
+        <h3>What is the difference between CSS Grid and Flexbox?</h3>
         <p>Use Grid for 2D layouts (rows AND columns). Use Flexbox for 1D layouts (either a row OR a column). They complement each other — a grid item can itself be a flex container.</p>
       </div>
     </div>

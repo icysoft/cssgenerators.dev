@@ -1,0 +1,364 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const siteUrl = 'https://cssgenerators.dev';
+const canonical = `${siteUrl}/blog`;
+
+const posts = [
+  {
+    slug: 'css-shadow-guide',
+    title: 'CSS Shadow Guide: box-shadow vs. drop-shadow vs. text-shadow',
+    description: 'When to use each CSS shadow property — with live demos showing the difference between box-shadow, filter: drop-shadow() and text-shadow on real shapes.',
+    date: '2026-06-20',
+    readingTime: '12 min',
+    tags: ['box-shadow', 'drop-shadow', 'text-shadow'],
+  },
+  {
+    slug: 'css-flexbox-guide',
+    title: 'CSS Flexbox: The Complete Visual Guide with Live Examples',
+    description: 'Every flexbox property explained with interactive demos. flex-direction, justify-content, align-items, flex-grow, and real-world layout patterns.',
+    date: '2026-06-20',
+    readingTime: '15 min',
+    tags: ['flexbox', 'layout', 'justify-content'],
+  },
+  {
+    slug: 'css-gradient-guide',
+    title: 'CSS Gradients: Complete Guide to linear-gradient, radial-gradient and conic-gradient',
+    description: 'Master all three CSS gradient types. Color stops, hard stops, gradient text, pie charts with conic-gradient, and CSS pattern techniques.',
+    date: '2026-06-20',
+    readingTime: '13 min',
+    tags: ['gradient', 'linear-gradient', 'conic-gradient'],
+  },
+  {
+    slug: 'css-clip-path-guide',
+    title: 'CSS clip-path: Shapes, Creative Effects and Hover Animations',
+    description: 'From polygon triangles to morphing star animations — a complete guide to clip-path with live demos for every shape function.',
+    date: '2026-06-20',
+    readingTime: '11 min',
+    tags: ['clip-path', 'polygon', 'animation'],
+  },
+  {
+    slug: 'css-filter-guide',
+    title: 'CSS filter and backdrop-filter: blur, brightness, drop-shadow and more',
+    description: 'All 10 CSS filter functions explained with live demos. Plus backdrop-filter glassmorphism, performance tips, and Instagram-style color effects.',
+    date: '2026-06-20',
+    readingTime: '12 min',
+    tags: ['filter', 'backdrop-filter', 'blur'],
+  },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': `${canonical}#webpage`,
+      url: canonical,
+      name: 'CSS Blog — Guides and Tutorials',
+      description: 'In-depth CSS guides with live browser demos. box-shadow, flexbox, gradients, clip-path, filters and more.',
+      isPartOf: { '@id': `${siteUrl}/#website` },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Blog', item: canonical },
+      ],
+    },
+  ],
+};
+---
+<Layout
+  title="CSS Blog — Guides and Tutorials | cssgenerators.dev"
+  description="In-depth CSS guides with live browser demos. Shadows, flexbox, gradients, clip-path, filters — every article includes interactive examples you can see directly in the browser."
+  canonical={canonical}
+  schema={schema}
+>
+  <Header />
+
+  <div style="max-width:920px;margin:0 auto;padding:56px 40px 96px">
+    <nav style="font:400 13px/1 Inter;color:#6b6b7b;margin-bottom:32px">
+      <a href="/" style="color:#8a8a9a;text-decoration:none">Tools</a>
+      <span style="margin:0 8px;color:#3a3a4a">›</span>
+      <span style="color:#e6e6ee">Blog</span>
+    </nav>
+
+    <h1 style="font:800 38px/1.1 Inter;color:#f2f2f7;margin:0 0 12px;letter-spacing:-0.025em">CSS Guides & Tutorials</h1>
+    <p style="font:400 16px/1.6 Inter;color:#9b9bab;margin:0 0 48px;max-width:540px">
+      In-depth articles with live demos you can see directly in your browser. No CodePen, no setup — just scroll and see the CSS at work.
+    </p>
+
+    <div class="blog-grid">
+
+      <!-- Article 1 — Shadows -->
+      <a href="/blog/css-shadow-guide" class="blog-card">
+        <div class="blog-thumb">
+          <!-- Three cards with increasing shadow depth -->
+          <div style="display:flex;gap:18px;align-items:flex-end">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <div style="width:52px;height:52px;border-radius:10px;background:#e6e6ee;box-shadow:0 2px 4px rgba(0,0,0,.35)"></div>
+              <span style="font-size:9px;color:#4a4a5a;letter-spacing:.04em;text-transform:uppercase">subtle</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <div style="width:52px;height:52px;border-radius:10px;background:#e6e6ee;box-shadow:0 8px 24px rgba(0,0,0,.45)"></div>
+              <span style="font-size:9px;color:#4a4a5a;letter-spacing:.04em;text-transform:uppercase">deep</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <div style="width:52px;height:52px;border-radius:10px;background:#e6e6ee;box-shadow:0 2px 4px rgba(99,102,241,.3),0 6px 14px rgba(99,102,241,.25),0 18px 36px rgba(99,102,241,.18)"></div>
+              <span style="font-size:9px;color:#6366f1;letter-spacing:.04em;text-transform:uppercase">smooth</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <div style="width:52px;height:52px;border-radius:10px;background:#1e1e2e;box-shadow:inset 0 2px 6px rgba(0,0,0,.6),inset 0 -1px 0 rgba(255,255,255,.06)"></div>
+              <span style="font-size:9px;color:#4a4a5a;letter-spacing:.04em;text-transform:uppercase">inset</span>
+            </div>
+          </div>
+        </div>
+        <div class="blog-body">
+          <div class="blog-meta">
+            <time datetime="2026-06-20">June 20, 2026</time>
+            <span>·</span>
+            <span>12 min read</span>
+          </div>
+          <h2 class="blog-title">CSS Shadow Guide: box-shadow vs. drop-shadow vs. text-shadow</h2>
+          <p class="blog-desc">When to use each shadow property — with live demos on real shapes.</p>
+          <div class="blog-tags">
+            <span class="tag">box-shadow</span>
+            <span class="tag">drop-shadow</span>
+            <span class="tag">text-shadow</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Article 2 — Flexbox -->
+      <a href="/blog/css-flexbox-guide" class="blog-card">
+        <div class="blog-thumb">
+          <div style="display:flex;flex-direction:column;gap:10px;width:100%">
+            <!-- space-between row -->
+            <div style="display:flex;justify-content:space-between;align-items:center;background:#1a1a28;border-radius:7px;padding:8px 10px">
+              <div style="width:28px;height:28px;border-radius:5px;background:#6366f1"></div>
+              <div style="width:28px;height:28px;border-radius:5px;background:#6366f1;opacity:.75"></div>
+              <div style="width:28px;height:28px;border-radius:5px;background:#6366f1;opacity:.5"></div>
+              <div style="width:28px;height:28px;border-radius:5px;background:#6366f1;opacity:.3"></div>
+            </div>
+            <!-- center row -->
+            <div style="display:flex;justify-content:center;align-items:center;gap:8px;background:#1a1a28;border-radius:7px;padding:8px 10px">
+              <div style="width:28px;height:28px;border-radius:5px;background:#22d3ee"></div>
+              <div style="width:28px;height:28px;border-radius:5px;background:#22d3ee;opacity:.75"></div>
+              <div style="width:28px;height:28px;border-radius:5px;background:#22d3ee;opacity:.5"></div>
+            </div>
+            <!-- flex-grow row -->
+            <div style="display:flex;gap:6px;align-items:center;background:#1a1a28;border-radius:7px;padding:8px 10px">
+              <div style="flex:2;height:20px;border-radius:4px;background:linear-gradient(90deg,#6366f1,#818cf8)"></div>
+              <div style="flex:1;height:20px;border-radius:4px;background:#6366f1;opacity:.6"></div>
+              <div style="flex:1;height:20px;border-radius:4px;background:#6366f1;opacity:.4"></div>
+            </div>
+          </div>
+        </div>
+        <div class="blog-body">
+          <div class="blog-meta">
+            <time datetime="2026-06-20">June 20, 2026</time>
+            <span>·</span>
+            <span>15 min read</span>
+          </div>
+          <h2 class="blog-title">CSS Flexbox: The Complete Visual Guide with Live Examples</h2>
+          <p class="blog-desc">Every container and item property with interactive demos and layout patterns.</p>
+          <div class="blog-tags">
+            <span class="tag">flexbox</span>
+            <span class="tag">layout</span>
+            <span class="tag">justify-content</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Article 3 — Gradients -->
+      <a href="/blog/css-gradient-guide" class="blog-card">
+        <div class="blog-thumb">
+          <div style="display:flex;gap:10px;align-items:stretch;height:100px">
+            <!-- Linear -->
+            <div style="flex:1;border-radius:10px;background:linear-gradient(160deg,#6366f1 0%,#22d3ee 100%);display:flex;align-items:flex-end;padding:8px">
+              <span style="font-size:9px;color:rgba(255,255,255,.7);letter-spacing:.04em;text-transform:uppercase">linear</span>
+            </div>
+            <!-- Radial -->
+            <div style="flex:1;border-radius:10px;background:radial-gradient(circle at 35% 35%,#f472b6 0%,#6366f1 70%);display:flex;align-items:flex-end;padding:8px">
+              <span style="font-size:9px;color:rgba(255,255,255,.7);letter-spacing:.04em;text-transform:uppercase">radial</span>
+            </div>
+            <!-- Conic -->
+            <div style="flex:1;border-radius:10px;background:conic-gradient(from 0deg at 50% 50%,#6366f1 0%,#22d3ee 33%,#f472b6 66%,#6366f1 100%);display:flex;align-items:flex-end;padding:8px">
+              <span style="font-size:9px;color:rgba(255,255,255,.7);letter-spacing:.04em;text-transform:uppercase">conic</span>
+            </div>
+          </div>
+        </div>
+        <div class="blog-body">
+          <div class="blog-meta">
+            <time datetime="2026-06-20">June 20, 2026</time>
+            <span>·</span>
+            <span>13 min read</span>
+          </div>
+          <h2 class="blog-title">CSS Gradients: Complete Guide to linear-gradient, radial-gradient and conic-gradient</h2>
+          <p class="blog-desc">Color stops, hard stops, gradient text, pie charts and CSS pattern techniques.</p>
+          <div class="blog-tags">
+            <span class="tag">gradient</span>
+            <span class="tag">linear-gradient</span>
+            <span class="tag">conic-gradient</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Article 4 — clip-path -->
+      <a href="/blog/css-clip-path-guide" class="blog-card">
+        <div class="blog-thumb">
+          <div style="display:flex;gap:16px;align-items:center;justify-content:center">
+            <!-- Hexagon -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <div style="width:56px;height:56px;background:linear-gradient(135deg,#6366f1,#818cf8);clip-path:polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%)"></div>
+              <span style="font-size:9px;color:#4a4a5a;letter-spacing:.04em;text-transform:uppercase">polygon()</span>
+            </div>
+            <!-- Star -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <div style="width:56px;height:56px;background:linear-gradient(135deg,#f472b6,#6366f1);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)"></div>
+              <span style="font-size:9px;color:#4a4a5a;letter-spacing:.04em;text-transform:uppercase">star</span>
+            </div>
+            <!-- Arrow shape -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <div style="width:56px;height:56px;background:linear-gradient(135deg,#22d3ee,#6366f1);clip-path:polygon(0 25%,60% 25%,60% 0%,100% 50%,60% 100%,60% 75%,0 75%)"></div>
+              <span style="font-size:9px;color:#4a4a5a;letter-spacing:.04em;text-transform:uppercase">arrow</span>
+            </div>
+          </div>
+        </div>
+        <div class="blog-body">
+          <div class="blog-meta">
+            <time datetime="2026-06-20">June 20, 2026</time>
+            <span>·</span>
+            <span>11 min read</span>
+          </div>
+          <h2 class="blog-title">CSS clip-path: Shapes, Creative Effects and Hover Animations</h2>
+          <p class="blog-desc">polygon, circle, ellipse, inset — and how to animate between shapes.</p>
+          <div class="blog-tags">
+            <span class="tag">clip-path</span>
+            <span class="tag">polygon</span>
+            <span class="tag">animation</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Article 5 — Filters -->
+      <a href="/blog/css-filter-guide" class="blog-card">
+        <div class="blog-thumb">
+          <div style="display:flex;gap:8px;align-items:stretch;height:100px">
+            <!-- Original -->
+            <div style="flex:1;border-radius:10px;background:linear-gradient(135deg,#6366f1 0%,#22d3ee 50%,#f472b6 100%);display:flex;align-items:flex-end;padding:8px">
+              <span style="font-size:9px;color:rgba(255,255,255,.7);letter-spacing:.04em;text-transform:uppercase">original</span>
+            </div>
+            <!-- Grayscale -->
+            <div style="flex:1;border-radius:10px;background:linear-gradient(135deg,#6366f1 0%,#22d3ee 50%,#f472b6 100%);filter:grayscale(100%);display:flex;align-items:flex-end;padding:8px">
+              <span style="font-size:9px;color:rgba(255,255,255,.7);letter-spacing:.04em;text-transform:uppercase">grayscale</span>
+            </div>
+            <!-- Hue-rotate -->
+            <div style="flex:1;border-radius:10px;background:linear-gradient(135deg,#6366f1 0%,#22d3ee 50%,#f472b6 100%);filter:hue-rotate(120deg) saturate(1.4);display:flex;align-items:flex-end;padding:8px">
+              <span style="font-size:9px;color:rgba(255,255,255,.7);letter-spacing:.04em;text-transform:uppercase">hue-rotate</span>
+            </div>
+            <!-- Blur backdrop glass -->
+            <div style="flex:1;border-radius:10px;overflow:hidden;position:relative;background:linear-gradient(135deg,#6366f1 0%,#22d3ee 50%,#f472b6 100%)">
+              <div style="position:absolute;inset:6px;background:rgba(255,255,255,.1);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border-radius:6px;border:1px solid rgba(255,255,255,.2)"></div>
+              <span style="position:absolute;bottom:8px;left:8px;font-size:9px;color:rgba(255,255,255,.8);letter-spacing:.04em;text-transform:uppercase">glass</span>
+            </div>
+          </div>
+        </div>
+        <div class="blog-body">
+          <div class="blog-meta">
+            <time datetime="2026-06-20">June 20, 2026</time>
+            <span>·</span>
+            <span>12 min read</span>
+          </div>
+          <h2 class="blog-title">CSS filter and backdrop-filter: blur, brightness, drop-shadow and more</h2>
+          <p class="blog-desc">All 10 filter functions with demos. Plus glassmorphism with backdrop-filter.</p>
+          <div class="blog-tags">
+            <span class="tag">filter</span>
+            <span class="tag">backdrop-filter</span>
+            <span class="tag">blur</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 640px) {
+    .blog-grid { grid-template-columns: 1fr; }
+  }
+  .blog-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #1e1e2e;
+    border-radius: 14px;
+    background: #111118;
+    text-decoration: none;
+    overflow: hidden;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .blog-card:hover {
+    border-color: #3a3a5a;
+    transform: translateY(-2px);
+  }
+  .blog-thumb {
+    height: 150px;
+    background: #0d0d12;
+    border-bottom: 1px solid #1e1e2e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 24px;
+  }
+  .blog-body {
+    padding: 20px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .blog-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font: 400 12px/1 Inter;
+    color: #6b6b7b;
+    margin-bottom: 10px;
+  }
+  .blog-title {
+    font: 700 16px/1.35 Inter;
+    color: #e6e6ee;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+  .blog-desc {
+    font: 400 13.5px/1.55 Inter;
+    color: #8a8a9a;
+    margin: 0 0 14px;
+    flex: 1;
+  }
+  .blog-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tag {
+    font-size: 10.5px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    padding: 3px 7px;
+    border-radius: 4px;
+    background: #1a1a24;
+    color: #6366f1;
+    border: 1px solid #2a2a44;
+  }
+</style>

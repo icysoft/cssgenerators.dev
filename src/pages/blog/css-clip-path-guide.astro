@@ -1,0 +1,545 @@
+---
+import BlogLayout from '../../layouts/BlogLayout.astro';
+
+const siteUrl = 'https://cssgenerators.dev';
+const canonical = `${siteUrl}/blog/css-clip-path-guide`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      '@id': `${canonical}#article`,
+      headline: 'CSS clip-path: Shapes, Creative Effects and Hover Animations',
+      description: 'A complete guide to CSS clip-path: every shape function, polygon recipes for triangles, hexagons and stars, GPU-composited hover animations, and real browser demos.',
+      url: canonical,
+      datePublished: '2026-06-20',
+      dateModified: '2026-06-20',
+      author: { '@type': 'Organization', name: 'Dinno SAS', url: siteUrl },
+      publisher: { '@id': `${siteUrl}/#organization` },
+      isPartOf: { '@id': `${siteUrl}/#website` },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is CSS clip-path?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'CSS clip-path defines a clipping region for an element. Only the part of the element inside the region is visible; everything outside is hidden. It accepts shape functions like inset(), circle(), ellipse(), polygon() and path().',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can you animate clip-path in CSS?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. CSS can transition and animate clip-path, but only between two values that use the same shape function and the same number of points (for polygon). For example, you can transition between two polygon() values with 4 points each, but not between a circle() and a polygon().',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the difference between clip-path and mask-image?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'clip-path defines the visible area using geometric shapes or SVG paths — it is binary (visible or hidden). mask-image uses an image or gradient as a mask, supporting partial transparency. Use clip-path for hard-edged geometric shapes and mask-image for soft edges, feathered effects, or irregular image-based masks.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the browser support for clip-path?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'The basic shape functions (inset, circle, ellipse, polygon) are supported in all modern browsers with 97%+ global coverage. The path() function (SVG paths as clip regions) requires Chrome 88+, Firefox 63+, and Safari 13.1+.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is clip-path good for performance?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. clip-path is handled on the GPU compositor thread when animating, which means the browser does not need to repaint the page on every frame. This makes clip-path animations significantly smoother than alternatives that trigger layout or paint, such as changing width/height or border-radius on complex elements.',
+          },
+        },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Blog', item: `${siteUrl}/blog` },
+        { '@type': 'ListItem', position: 3, name: 'CSS clip-path Guide', item: canonical },
+      ],
+    },
+  ],
+};
+---
+
+<BlogLayout
+  title="CSS clip-path: Shapes, Creative Effects and Hover Animations — cssgenerators.dev"
+  description="A complete guide to CSS clip-path: every shape function, polygon recipes for triangles, hexagons and stars, GPU-composited hover animations, and live browser demos you can see right here."
+  canonical={canonical}
+  datePublished="2026-06-20"
+  readingTime="11 min"
+  schema={schema}
+>
+
+<style>
+  .clip-reveal {
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+  .clip-reveal:hover {
+    clip-path: inset(0 0% 0 0);
+  }
+  .morph-shape {
+    width: 90px;
+    height: 90px;
+    background: linear-gradient(135deg, #6366f1, #22d3ee);
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    transition: clip-path 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+  .morph-shape:hover {
+    clip-path: polygon(50% 0%, 100% 19%, 100% 81%, 50% 100%, 0% 81%, 0% 19%, 50% 0%, 100% 19%, 100% 81%, 50% 100%);
+  }
+  .badge-angled {
+    display: inline-block;
+    padding: 8px 20px 8px 14px;
+    background: linear-gradient(90deg, #6366f1, #4f46e5);
+    clip-path: polygon(0 0, 100% 0, 92% 100%, 0 100%);
+    font: 600 13px/1 Inter, sans-serif;
+    color: #fff;
+    letter-spacing: 0.02em;
+  }
+</style>
+
+<p>
+  Of all the CSS properties that shipped in the past decade, <code>clip-path</code> is the one that most consistently
+  surprises developers with what it can do. A single property line turns a plain rectangle into a hexagon, a star, a
+  diagonal hero section, or a reveal animation that makes a gradient seem to slide in from the side. And unlike
+  SVG-based approaches, everything stays in CSS — no extra markup, no image files.
+</p>
+
+<p>
+  This guide covers every shape function, gives you polygon recipes you can copy directly, and shows
+  you six live demos running in your browser right now — no CodePen, no screenshot.
+</p>
+
+<h2>What shape functions does clip-path support?</h2>
+
+<p>
+  The <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path" target="_blank" rel="noopener">CSS <code>clip-path</code> property</a>
+  accepts five shape functions from the CSS Shapes specification, plus a reference to an SVG <code>&lt;clipPath&gt;</code> element.
+  Each function defines the clipping region differently.
+</p>
+
+<div class="demo">
+  <div class="demo-item">
+    <div style="width:80px;height:80px;background:linear-gradient(135deg,#6366f1,#22d3ee);clip-path:inset(10px round 8px)"></div>
+    <div class="demo-label">inset()</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:80px;height:80px;background:linear-gradient(135deg,#6366f1,#22d3ee);clip-path:circle(40px at 50% 50%)"></div>
+    <div class="demo-label">circle()</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:80px;height:80px;background:linear-gradient(135deg,#6366f1,#22d3ee);clip-path:ellipse(40px 25px at 50% 50%)"></div>
+    <div class="demo-label">ellipse()</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:80px;height:80px;background:linear-gradient(135deg,#6366f1,#22d3ee);clip-path:polygon(50% 0%,100% 38%,82% 100%,18% 100%,0 38%)"></div>
+    <div class="demo-label">polygon()</div>
+  </div>
+</div>
+
+<h3>What does inset() do?</h3>
+
+<p>
+  <code>inset(top right bottom left)</code> crops the element from each edge inward, like padding in reverse.
+  You can also pass a single value to crop equally on all sides, or use the <code>round</code> keyword to add
+  border-radius to the cropped rectangle:
+</p>
+
+<pre><code>/* Crop 10px on all sides */
+clip-path: inset(10px);
+
+/* Different values per side */
+clip-path: inset(10px 20px 10px 0);
+
+/* Rounded crop — great for "pill" clipping */
+clip-path: inset(0 round 50px);
+
+/* Asymmetric rounded crop */
+clip-path: inset(10px round 8px 32px 8px 32px);</code></pre>
+
+<p>
+  <code>inset()</code> is the most practical function for masking images and creating slide-in reveal animations, because
+  its values are straightforward to interpolate.
+</p>
+
+<h3>What does circle() do?</h3>
+
+<p>
+  <code>circle(radius at x y)</code> clips the element to a circle. The radius can be a length, a percentage of the
+  element's diagonal, or the keywords <code>closest-side</code> / <code>farthest-side</code>. The position defaults to
+  the element center:
+</p>
+
+<pre><code>/* Circle from the center, radius 40px */
+clip-path: circle(40px);
+
+/* Off-center circle */
+clip-path: circle(60px at 20% 80%);
+
+/* Fill the shortest dimension */
+clip-path: circle(closest-side);</code></pre>
+
+<h3>What does ellipse() do?</h3>
+
+<p>
+  <code>ellipse(rx ry at x y)</code> is the two-radius version of <code>circle()</code>. It accepts horizontal and
+  vertical radii independently:
+</p>
+
+<pre><code>clip-path: ellipse(55% 40% at 50% 50%);
+
+/* Wide ellipse crop at the bottom — useful for wave-like section separators */
+clip-path: ellipse(100% 60% at 50% 100%);</code></pre>
+
+<h3>What does polygon() do?</h3>
+
+<p>
+  <code>polygon(x1 y1, x2 y2, ...)</code> is the most powerful function. You define an arbitrary number of vertices
+  as x/y pairs (percentages, px, or any length unit), and the browser draws the shape by connecting them in order.
+  Every shape you see below is a <code>polygon()</code>.
+</p>
+
+<h2>What polygon shapes can you make?</h2>
+
+<p>Here are six ready-to-copy polygon recipes for the most common shapes developers reach for:</p>
+
+<div class="demo">
+  <div class="demo-item">
+    <div style="width:80px;height:80px;background:linear-gradient(135deg,#f472b6,#6366f1);clip-path:polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%)"></div>
+    <div class="demo-label">Hexagon</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:80px;height:80px;background:linear-gradient(135deg,#facc15,#f472b6);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)"></div>
+    <div class="demo-label">Star</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:80px;height:80px;background:linear-gradient(135deg,#22d3ee,#6366f1);clip-path:polygon(0 25%,60% 25%,60% 0%,100% 50%,60% 100%,60% 75%,0 75%)"></div>
+    <div class="demo-label">Arrow</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:80px;height:80px;background:linear-gradient(135deg,#6366f1,#f472b6);clip-path:polygon(50% 0%,100% 100%,0% 100%)"></div>
+    <div class="demo-label">Triangle</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:80px;height:80px;background:linear-gradient(135deg,#22d3ee,#f472b6);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)"></div>
+    <div class="demo-label">Diamond</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:80px;height:80px;background:linear-gradient(135deg,#6366f1,#22d3ee);clip-path:polygon(0 0,85% 0,100% 50%,85% 100%,0 100%)"></div>
+    <div class="demo-label">Chevron</div>
+  </div>
+</div>
+
+<pre><code>/* Hexagon */
+clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+
+/* 5-point star */
+clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%,
+                   50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+
+/* Arrow / chevron pointing right */
+clip-path: polygon(0 25%, 60% 25%, 60% 0%, 100% 50%, 60% 100%, 60% 75%, 0 75%);
+
+/* Triangle pointing up */
+clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+
+/* Diamond */
+clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+
+/* Angled chevron tab */
+clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);</code></pre>
+
+<div class="callout">
+  <p><strong>Tip:</strong> Our <a href="/css-clip-path-generator">CSS Clip Path Generator</a> lets you drag polygon points visually and copy the result — no mental geometry required.</p>
+</div>
+
+<h2>How do you use clip-path for hero sections?</h2>
+
+<p>
+  One of the most popular applications is cutting a diagonal or wave edge at the bottom of a full-width section,
+  replacing the flat horizontal line with something more dynamic. The technique requires only a <code>polygon()</code>
+  with four points where the bottom two are at different heights:
+</p>
+
+<div style="width:100%;height:140px;background:linear-gradient(135deg,#6366f1,#4f46e5);clip-path:polygon(0 0,100% 0,100% 80%,0 100%);display:flex;align-items:center;padding:0 32px;margin:24px 0 0;border-radius:12px 12px 0 0">
+  <span style="font:700 22px/1 Inter,sans-serif;color:#fff">Hero section with diagonal cut</span>
+</div>
+<div style="width:100%;height:32px;background:#0d0d12;margin:0 0 24px;border-radius:0 0 12px 12px;border:1px solid #1e1e2e;border-top:none"></div>
+
+<pre><code>/* The section element */
+.hero &#123;
+  clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
+  /* Bottom-right corner stays at 80% height; bottom-left drops to 100% */
+&#125;
+
+/* Reverse diagonal */
+.hero-reverse &#123;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 80%);
+&#125;
+
+/* Both bottom corners angled inward — chevron bottom */
+.hero-chevron &#123;
+  clip-path: polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%);
+&#125;</code></pre>
+
+<p>
+  The key detail: because <code>clip-path</code> clips the element including its shadow and outline, you need the
+  section below it to overlap slightly (negative margin-top or absolute positioning) to avoid a gap between sections.
+</p>
+
+<h2>How do you animate clip-path on hover?</h2>
+
+<p>
+  <code>clip-path</code> is fully animatable via CSS transitions and <code>@keyframes</code>. The browser interpolates
+  between two clip values smoothly as long as both use the same function. This enables some of the most fluid reveal
+  effects in CSS today.
+</p>
+
+<h3>Horizontal reveal with inset()</h3>
+
+<p>
+  The most practical reveal animation: <code>inset(0 100% 0 0)</code> hides the element entirely by collapsing the
+  right edge to the left. On hover, it opens to <code>inset(0 0% 0 0)</code> — fully visible. Hover the gradient below:
+</p>
+
+<div class="demo">
+  <div class="demo-item" style="width:100%">
+    <div style="width:260px;height:80px;background:linear-gradient(90deg,#6366f1,#22d3ee,#f472b6);border-radius:10px;display:flex;align-items:center;justify-content:center" class="clip-reveal">
+      <span style="font:600 14px/1 Inter,sans-serif;color:#fff;pointer-events:none">Hover to reveal →</span>
+    </div>
+    <div class="demo-label">inset() reveal</div>
+  </div>
+</div>
+
+<pre><code>.reveal-element &#123;
+  clip-path: inset(0 100% 0 0); /* Fully hidden */
+  transition: clip-path 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+&#125;
+
+.reveal-element:hover,
+.reveal-element.is-visible &#123;
+  clip-path: inset(0 0% 0 0); /* Fully visible */
+&#125;</code></pre>
+
+<p>
+  Swap the axes for a vertical reveal: <code>inset(100% 0 0 0)</code> → <code>inset(0 0 0 0)</code>. Use this on
+  scroll-triggered animations (add the <code>is-visible</code> class via IntersectionObserver).
+</p>
+
+<h3>Polygon morphing — the same number of points rule</h3>
+
+<p>
+  CSS can transition between any two <code>polygon()</code> values — but only if they have the <strong>same number of
+  coordinate pairs</strong>. The browser interpolates each point independently, so a 10-point star can morph to a
+  10-point "circle approximation" (a polygon with 10 evenly-spaced vertices around a center). If the point counts differ,
+  the transition snaps immediately with no interpolation.
+</p>
+
+<p>Hover the shape below to see a 10-point star morph into a hexagonal form:</p>
+
+<div class="demo">
+  <div class="demo-item">
+    <div class="morph-shape"></div>
+    <div class="demo-label">Hover to morph</div>
+  </div>
+</div>
+
+<pre><code>.morph-shape &#123;
+  /* 10-point star */
+  clip-path: polygon(
+    50% 0%, 61% 35%, 98% 35%, 68% 57%,
+    79% 91%, 50% 70%, 21% 91%, 32% 57%,
+    2% 35%, 39% 35%
+  );
+  transition: clip-path 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+&#125;
+
+.morph-shape:hover &#123;
+  /* Same 10 points, different positions */
+  clip-path: polygon(
+    50% 0%, 100% 19%, 100% 81%, 50% 100%,
+    0% 81%, 0% 19%, 50% 0%, 100% 19%,
+    100% 81%, 50% 100%
+  );
+&#125;</code></pre>
+
+<h2>What are practical use cases for clip-path?</h2>
+
+<h3>Angled badges and labels</h3>
+
+<p>
+  A slanted clip at one end of a rectangle creates a badge that looks designed rather than generic. The polygon cuts
+  the right edge at an angle while the left stays flush:
+</p>
+
+<div class="demo">
+  <div class="demo-item">
+    <div class="badge-angled">POPULAR</div>
+    <div class="demo-label">Angled badge</div>
+  </div>
+  <div class="demo-item">
+    <div style="display:inline-block;padding:8px 14px 8px 20px;background:linear-gradient(90deg,#22d3ee,#0ea5e9);clip-path:polygon(8% 0,100% 0,100% 100%,0 100%);font:600 13px/1 Inter,sans-serif;color:#0f172a;letter-spacing:.02em">NEW</div>
+    <div class="demo-label">Reverse angle</div>
+  </div>
+</div>
+
+<pre><code>/* Right side angled inward */
+.badge &#123;
+  clip-path: polygon(0 0, 100% 0, 92% 100%, 0 100%);
+&#125;
+
+/* Left side angled inward */
+.badge-reverse &#123;
+  clip-path: polygon(8% 0, 100% 0, 100% 100%, 0 100%);
+&#125;</code></pre>
+
+<h3>Hexagonal avatars</h3>
+
+<p>
+  Profile pictures clipped to hexagons are common in gaming UIs and dashboards. The key is keeping the element square
+  before clipping — the hexagon polygon uses percentage values that will distort on a rectangle:
+</p>
+
+<div class="demo">
+  <div class="demo-item">
+    <div style="width:90px;height:90px;background:linear-gradient(135deg,#6366f1,#22d3ee);clip-path:polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%);display:flex;align-items:center;justify-content:center;font:700 28px/1 Inter,sans-serif;color:#fff">DS</div>
+    <div class="demo-label">Hex avatar</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:90px;height:90px;background:linear-gradient(135deg,#f472b6,#facc15);clip-path:circle(45px at 50% 50%);display:flex;align-items:center;justify-content:center;font:700 28px/1 Inter,sans-serif;color:#fff">MK</div>
+    <div class="demo-label">Circle avatar</div>
+  </div>
+</div>
+
+<pre><code>.avatar-hex &#123;
+  width: 90px;
+  height: 90px; /* Must be square */
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  overflow: hidden;
+&#125;
+
+.avatar-hex img &#123;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+&#125;</code></pre>
+
+<h2>What is the difference between clip-path and mask-image?</h2>
+
+<p>
+  Both properties hide parts of an element, but they operate differently:
+</p>
+
+<ul>
+  <li><strong>clip-path</strong> uses geometric shapes. The result is binary — pixels are either fully visible or fully hidden. The edges are always hard (anti-aliased, but not soft).</li>
+  <li><strong>mask-image</strong> uses an image, gradient, or SVG as a mask. The alpha channel of the mask controls the opacity of the element at each pixel, so you can have smooth fades, gradual reveals, and irregular soft edges.</li>
+</ul>
+
+<p>In practice:</p>
+<ul>
+  <li>Use <code>clip-path</code> for geometric shapes, diagonal cuts, hover reveals, and anything that needs to animate smoothly.</li>
+  <li>Use <code>mask-image</code> for feathered edges, complex image-based cutouts, and blending an element into its background.</li>
+</ul>
+
+<pre><code>/* clip-path — hard geometric edge */
+.element &#123;
+  clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
+&#125;
+
+/* mask-image — soft faded edge using a gradient */
+.element &#123;
+  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+&#125;</code></pre>
+
+<h2>Is clip-path good for animation performance?</h2>
+
+<p>
+  Yes — and this is a meaningful advantage over alternatives. When you animate <code>clip-path</code>, modern browsers
+  handle it on the GPU compositor thread. That means the CPU does not need to repaint the element on every frame.
+  The animation runs at 60fps even on mid-range hardware.
+</p>
+
+<p>Compare this to alternatives that trigger layout or paint:</p>
+
+<ul>
+  <li><strong>width/height</strong> — triggers layout recalculation on every frame. Avoid for animations.</li>
+  <li><strong>border-radius</strong> — triggers paint on complex elements. Better than layout, but still more expensive than compositor-only.</li>
+  <li><strong>clip-path</strong> — compositor-only. The browser can skip layout and paint entirely and animate directly on the GPU.</li>
+  <li><strong>transform + overflow:hidden</strong> — comparable performance, but <code>overflow:hidden</code> creates a new stacking context and affects child positioning.</li>
+</ul>
+
+<p>
+  The practical rule: for reveal animations and shape transitions, reach for <code>clip-path</code> first. For truly
+  complex masks that cannot be expressed as polygons, <code>mask-image</code> with a CSS gradient is the next choice.
+</p>
+
+<h2>What is the browser support for clip-path?</h2>
+
+<p>
+  The basic shape functions — <code>inset()</code>, <code>circle()</code>, <code>ellipse()</code>, and
+  <code>polygon()</code> — work in all modern browsers and have done so since 2016. Global support is above 97%.
+  No vendor prefix is required in 2026.
+</p>
+
+<p>
+  The <code>path()</code> function, which accepts an SVG path string as a clip shape, landed more recently:
+  Chrome 88 (January 2021), Firefox 63, and Safari 13.1 (Spring 2020). If you need to support older Safari versions,
+  verify on <a href="https://caniuse.com/css-clip-path" target="_blank" rel="noopener">caniuse.com/css-clip-path</a>.
+</p>
+
+<pre><code>/* Basic shapes — safe everywhere */
+clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);
+
+/* path() — check browser support for your audience */
+clip-path: path("M 0,0 L 100,0 Q 150,50 100,100 L 0,100 Z");</code></pre>
+
+<p>
+  For the <code>path()</code> function specifically, use it as a progressive enhancement: define a <code>polygon()</code>
+  fallback first, then override with <code>path()</code> for browsers that support it. Since <code>clip-path</code> is
+  not part of a feature query that <code>@supports</code> handles cleanly for <code>path()</code> specifically, the
+  simplest approach is to check if your minimum browser targets include Safari 13.1+.
+</p>
+
+<h2>Try it: build your own clip-path</h2>
+
+<p>
+  Understanding polygon points is much easier with a visual editor. Drag the handles, see the polygon update in real
+  time, and copy the CSS:
+</p>
+
+<p>
+  <a href="/css-clip-path-generator" class="tool-cta">→ CSS Clip Path Generator</a>
+  <a href="/css-triangle-generator" class="tool-cta">→ CSS Triangle Generator</a>
+  <a href="/css-arrow-generator" class="tool-cta">→ CSS Arrow Generator</a>
+</p>
+
+<div class="sources">
+  <h4>Sources</h4>
+  <ul>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path" target="_blank" rel="noopener">MDN — clip-path</a></li>
+    <li><a href="https://www.w3.org/TR/css-masking-1/#the-clip-path" target="_blank" rel="noopener">W3C CSS Masking Level 1 — clip-path</a></li>
+    <li><a href="https://caniuse.com/css-clip-path" target="_blank" rel="noopener">Can I Use — CSS clip-path</a></li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/mask-image" target="_blank" rel="noopener">MDN — mask-image</a></li>
+  </ul>
+</div>
+
+</BlogLayout>

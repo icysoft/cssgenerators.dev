@@ -1,0 +1,402 @@
+---
+import BlogLayout from '../../layouts/BlogLayout.astro';
+
+const siteUrl = 'https://cssgenerators.dev';
+const canonical = `${siteUrl}/blog/css-shadow-guide`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      '@id': `${canonical}#article`,
+      headline: 'CSS Shadow Guide: box-shadow vs. drop-shadow vs. text-shadow',
+      description: 'A complete guide to the three CSS shadow types: box-shadow, filter: drop-shadow(), and text-shadow. Learn the syntax, the key differences, when to use each, and common mistakes to avoid.',
+      url: canonical,
+      datePublished: '2026-06-20',
+      dateModified: '2026-06-20',
+      author: { '@type': 'Organization', name: 'Dinno SAS', url: siteUrl },
+      publisher: { '@id': `${siteUrl}/#organization` },
+      isPartOf: { '@id': `${siteUrl}/#website` },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is the difference between box-shadow and filter: drop-shadow()?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'box-shadow always follows the rectangular bounding box of the element, even if you use border-radius or clip-path. filter: drop-shadow() follows the actual visual shape of the element, including transparent areas. Use drop-shadow when you need the shadow to hug the real outline of an SVG, a PNG with transparency, or a clipped shape.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can you stack multiple shadows in CSS?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. Both box-shadow and text-shadow accept a comma-separated list of shadow values. Each shadow is rendered in order, with the first value on top. filter: drop-shadow() does not support comma-stacking natively, but you can chain multiple filter functions: filter: drop-shadow(…) drop-shadow(…).',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Does box-shadow affect layout or take up space?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No. box-shadow is rendered outside the normal flow and does not affect the size or position of other elements. It does not add to the element\'s box model dimensions. Use the spread radius to grow the shadow outward without changing layout.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Are CSS shadows bad for performance?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Heavy box-shadow values — especially with large blur and spread on many elements — can trigger GPU compositing and cause paint cost on scroll. filter: drop-shadow() is generally more expensive than box-shadow because it triggers a composite layer. For animations, prefer box-shadow over drop-shadow, and use the will-change: box-shadow hint sparingly.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the smooth shadow technique?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'The smooth shadow technique stacks 4–6 box-shadow layers with progressively larger offsets and decreasing opacity. This approximates how real shadows work in nature — darker and sharper close to the object, softer and lighter further away. The result looks far more natural than a single large-blur shadow.',
+          },
+        },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Blog', item: `${siteUrl}/blog` },
+        { '@type': 'ListItem', position: 3, name: 'CSS Shadow Guide', item: canonical },
+      ],
+    },
+  ],
+};
+---
+<BlogLayout
+  title="CSS Shadow Guide: box-shadow vs. drop-shadow vs. text-shadow — cssgenerators.dev"
+  description="A complete guide to the three CSS shadow types: box-shadow, filter: drop-shadow(), and text-shadow. Learn syntax, key differences, when to use each, and live demos."
+  canonical={canonical}
+  datePublished="2026-06-20"
+  readingTime="12 min"
+  schema={schema}
+>
+
+<p>CSS gives you three distinct ways to add shadows: <code>box-shadow</code>, <code>filter: drop-shadow()</code>, and <code>text-shadow</code>. They look similar at first glance but behave completely differently, have different performance characteristics, and are suited to very different use cases. Choosing the wrong one is one of the most common CSS mistakes in production UIs.</p>
+
+<p>This guide covers all three — with live browser demos, full syntax, the critical differences you need to understand, and the mistakes to avoid.</p>
+
+<h2>What is <code>box-shadow</code> and when should you use it?</h2>
+
+<p><code>box-shadow</code> casts a shadow from the element's <strong>bounding box</strong> — the rectangular region defined by its width, height, and border-radius. It's the right choice for 90% of UI shadow work: cards, buttons, modals, dropdowns, and anything with a clearly rectangular or rounded shape.</p>
+
+<h3>What is the full syntax of <code>box-shadow</code>?</h3>
+
+<pre><code>box-shadow: offset-x offset-y blur-radius spread-radius color;
+box-shadow: inset offset-x offset-y blur-radius spread-radius color;
+
+/* Multiple shadows (first is on top) */
+box-shadow:
+  0 2px 4px rgba(0,0,0,.3),
+  0 8px 24px rgba(0,0,0,.15);</code></pre>
+
+<ul>
+  <li><strong>offset-x</strong> — horizontal distance. Positive = right, negative = left.</li>
+  <li><strong>offset-y</strong> — vertical distance. Positive = down, negative = up.</li>
+  <li><strong>blur-radius</strong> — how soft the shadow edge is. 0 = hard edge. Can't be negative.</li>
+  <li><strong>spread-radius</strong> — expands (positive) or shrinks (negative) the shadow before blurring. Unique to <code>box-shadow</code> — <code>drop-shadow()</code> doesn't have this.</li>
+  <li><strong>color</strong> — any valid CSS color. Use <code>rgba()</code> or <code>hsl()</code> with alpha for natural-looking shadows.</li>
+  <li><strong>inset</strong> — optional keyword that turns the shadow inward, creating an inner glow or pressed effect.</li>
+</ul>
+
+<div class="demo">
+  <div class="demo-item">
+    <div style="width:80px;height:80px;border-radius:12px;background:#1e1e2e;box-shadow:0 4px 6px rgba(0,0,0,.4)"></div>
+    <div class="demo-label">Subtle</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:80px;height:80px;border-radius:12px;background:#1e1e2e;box-shadow:0 10px 30px rgba(0,0,0,.5)"></div>
+    <div class="demo-label">Medium</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:80px;height:80px;border-radius:12px;background:#1e1e2e;box-shadow:0 2px 4px rgba(99,102,241,.3),0 8px 16px rgba(99,102,241,.25),0 20px 40px rgba(99,102,241,.15)"></div>
+    <div class="demo-label">Smooth (multi-layer)</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:80px;height:80px;border-radius:12px;background:#1e1e2e;box-shadow:inset 0 2px 4px rgba(0,0,0,.5),inset 0 -1px 0 rgba(255,255,255,.08)"></div>
+    <div class="demo-label">Inset</div>
+  </div>
+</div>
+
+<h3>What is the smooth shadow technique?</h3>
+
+<p>A single large-blur shadow (e.g. <code>0 20px 40px rgba(0,0,0,.4)</code>) looks flat and artificial. Real shadows in nature are denser and sharper near the object, then diffuse as they spread. The <strong>smooth shadow</strong> technique replicates this by stacking 4–6 layers with progressively larger offsets and decreasing opacity:</p>
+
+<pre><code>box-shadow:
+  0 1px 2px rgba(0,0,0,.07),
+  0 2px 4px rgba(0,0,0,.07),
+  0 4px 8px rgba(0,0,0,.07),
+  0 8px 16px rgba(0,0,0,.07),
+  0 16px 32px rgba(0,0,0,.07),
+  0 32px 64px rgba(0,0,0,.07);</code></pre>
+
+<p>The total opacity feels similar, but the shadow has natural depth. This technique was popularised by <a href="https://shadows.brumm.af" target="_blank" rel="noopener">Philipp Brumm's shadow calculator</a>.</p>
+
+<div class="callout">
+  <p><strong>Colored shadows.</strong> Replace black with your brand color: <code>rgba(99,102,241,.3)</code> for an indigo glow. This works especially well for buttons and CTAs — the shadow feels like it's emanating from the element itself rather than floating on top of the page.</p>
+</div>
+
+<h3>What is the inset shadow used for?</h3>
+
+<p>Adding <code>inset</code> before the offsets pushes the shadow inside the element. Classic uses: pressed button states, recessed input fields, inner glow effects, and neumorphic UI.</p>
+
+<pre><code>/* Pressed button */
+box-shadow: inset 0 3px 6px rgba(0,0,0,.4);
+
+/* Top-lit inner glow */
+box-shadow:
+  inset 0 1px 0 rgba(255,255,255,.1),
+  inset 0 -1px 0 rgba(0,0,0,.3);</code></pre>
+
+<p style="margin-top:24px"><a href="/css-box-shadow-generator" class="tool-cta">Try the Box Shadow Generator →</a></p>
+
+<h2>What is <code>filter: drop-shadow()</code> and how is it different?</h2>
+
+<p>This is where most developers get confused. <code>filter: drop-shadow()</code> is a CSS filter function — it composites the element into an offscreen buffer and paints the shadow from the element's <strong>actual visual outline</strong>, not its bounding box.</p>
+
+<p>The practical difference: if you clip an element with <code>clip-path</code>, or use a PNG/SVG with transparent areas, <code>box-shadow</code> still follows the invisible rectangle. <code>drop-shadow()</code> follows the real shape.</p>
+
+<div class="demo">
+  <div class="demo-item">
+    <div style="width:70px;height:70px;background:linear-gradient(135deg,#6366f1,#22d3ee);clip-path:polygon(50% 0,100% 38%,82% 100%,18% 100%,0 38%);box-shadow:0 8px 20px rgba(99,102,241,.7)"></div>
+    <div class="demo-label">box-shadow<br>(bounding box)</div>
+  </div>
+  <div class="demo-item">
+    <div style="width:70px;height:70px;background:linear-gradient(135deg,#6366f1,#22d3ee);clip-path:polygon(50% 0,100% 38%,82% 100%,18% 100%,0 38%);filter:drop-shadow(0 8px 14px rgba(99,102,241,.85))"></div>
+    <div class="demo-label">drop-shadow<br>(actual shape)</div>
+  </div>
+  <div class="demo-item">
+    <svg width="70" height="70" viewBox="0 0 100 100" style="box-shadow:0 8px 20px rgba(99,102,241,.7)">
+      <polygon points="50,5 95,74 5,74" fill="#6366f1"/>
+    </svg>
+    <div class="demo-label">SVG + box-shadow<br>(misses shape)</div>
+  </div>
+  <div class="demo-item">
+    <svg width="70" height="70" viewBox="0 0 100 100" style="filter:drop-shadow(0 8px 14px rgba(99,102,241,.85))">
+      <polygon points="50,5 95,74 5,74" fill="#6366f1"/>
+    </svg>
+    <div class="demo-label">SVG + drop-shadow<br>(follows shape)</div>
+  </div>
+</div>
+
+<h3>What is the syntax of <code>filter: drop-shadow()</code>?</h3>
+
+<pre><code>filter: drop-shadow(offset-x offset-y blur-radius color);
+
+/* Example */
+filter: drop-shadow(4px 8px 12px rgba(0,0,0,.5));
+
+/* Chain multiple drop-shadows */
+filter:
+  drop-shadow(0 2px 4px rgba(0,0,0,.3))
+  drop-shadow(0 8px 16px rgba(0,0,0,.2));</code></pre>
+
+<p>Notice what's missing compared to <code>box-shadow</code>: there is <strong>no spread radius</strong> and <strong>no <code>inset</code> keyword</strong>. If you need either of those, use <code>box-shadow</code>.</p>
+
+<h3>When should you use <code>drop-shadow()</code> over <code>box-shadow</code>?</h3>
+
+<ul>
+  <li>Icons (SVG or PNG with transparency) where the shadow should hug the icon shape</li>
+  <li>Images with cutout backgrounds (product photos on white, isolated objects)</li>
+  <li>Elements clipped with <code>clip-path</code> where the shadow should follow the clip</li>
+  <li>Text rendered as SVG</li>
+</ul>
+
+<div class="callout">
+  <p><strong>Performance note.</strong> <code>filter: drop-shadow()</code> forces the browser to create a composite layer for the element. On mobile, animating <code>filter</code> is significantly more expensive than animating <code>box-shadow</code>. For hover animations or scroll-driven effects, stick with <code>box-shadow</code> unless you specifically need the shape-following behaviour.</p>
+</div>
+
+<p style="margin-top:24px"><a href="/css-drop-shadow-generator" class="tool-cta">Try the Drop Shadow Generator →</a></p>
+
+<h2>What is <code>text-shadow</code> and what effects can it create?</h2>
+
+<p><code>text-shadow</code> applies a shadow directly to the text glyphs — not to the element box. It's the right property when the subject is the type itself: headlines, display text, hero sections.</p>
+
+<h3>What is the syntax of <code>text-shadow</code>?</h3>
+
+<pre><code>text-shadow: offset-x offset-y blur-radius color;
+
+/* Multiple shadows */
+text-shadow:
+  0 0 7px #22d3ee,
+  0 0 20px #22d3ee,
+  0 0 42px #0ea5e9;</code></pre>
+
+<p><code>text-shadow</code> has no spread radius and no <code>inset</code> keyword. It supports multi-layer stacking with comma separation, same as <code>box-shadow</code>.</p>
+
+<div class="demo" style="flex-direction:column;align-items:flex-start;gap:24px;padding:32px 40px">
+  <div>
+    <span style="font:700 36px/1 'JetBrains Mono',monospace;color:#fff;text-shadow:0 0 7px #22d3ee,0 0 20px #22d3ee,0 0 42px #0ea5e9">Neon glow</span>
+    <div class="demo-label" style="text-align:left;margin-top:8px">3 layers, same hue, increasing blur — zero offset</div>
+  </div>
+  <div>
+    <span style="font:800 36px/1 Inter;color:#f2f2f7;text-shadow:3px 3px 0 #6366f1,6px 6px 0 rgba(99,102,241,.4)">Retro 3D</span>
+    <div class="demo-label" style="text-align:left;margin-top:8px">Solid offset, zero blur — stacked for depth</div>
+  </div>
+  <div>
+    <span style="font:700 36px/1 Inter;color:#f2f2f7;text-shadow:2px 2px 4px rgba(0,0,0,.9)">Legibility boost</span>
+    <div class="demo-label" style="text-align:left;margin-top:8px">Small offset + blur on dark text over image backgrounds</div>
+  </div>
+  <div>
+    <span style="font:800 36px/1 Inter;color:#f2f2f7;text-shadow:1px 1px 0 #818cf8,2px 2px 0 #818cf8,3px 3px 0 #818cf8,4px 4px 0 #818cf8,5px 5px 0 #818cf8,6px 6px 0 #818cf8">Long shadow</span>
+    <div class="demo-label" style="text-align:left;margin-top:8px">6 single-pixel steps — flat design long shadow effect</div>
+  </div>
+</div>
+
+<h3>How does the neon glow effect work?</h3>
+
+<p>The neon technique works by stacking 3 text-shadows at zero offset, each with the same color but increasing blur radius. No offset means the glow radiates evenly. Use the same hue at full saturation for the inner layers, then a slightly darker shade for the outer bloom:</p>
+
+<pre><code>text-shadow:
+  0 0 4px #fff,       /* tight white core */
+  0 0 11px #fff,
+  0 0 19px #fff,
+  0 0 40px #22d3ee,   /* cyan outer glow */
+  0 0 80px #22d3ee,
+  0 0 90px #22d3ee;</code></pre>
+
+<p style="margin-top:24px"><a href="/css-text-shadow-generator" class="tool-cta">Try the Text Shadow Generator →</a></p>
+
+<h2>How do the three shadow types compare?</h2>
+
+<div style="overflow-x:auto;margin:24px 0">
+  <table style="width:100%;border-collapse:collapse;font:400 14px/1.5 Inter;color:#9b9bab">
+    <thead>
+      <tr style="border-bottom:1px solid #1e1e2e">
+        <th style="text-align:left;padding:10px 14px;color:#6b6b7b;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em">Property</th>
+        <th style="text-align:left;padding:10px 14px;color:#6b6b7b;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em">box-shadow</th>
+        <th style="text-align:left;padding:10px 14px;color:#6b6b7b;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em">filter: drop-shadow()</th>
+        <th style="text-align:left;padding:10px 14px;color:#6b6b7b;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em">text-shadow</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid #14141c">
+        <td style="padding:10px 14px;color:#c0c0d0;font-weight:500">Follows shape</td>
+        <td style="padding:10px 14px">Bounding box only</td>
+        <td style="padding:10px 14px">Actual visual shape ✓</td>
+        <td style="padding:10px 14px">Text glyphs ✓</td>
+      </tr>
+      <tr style="border-bottom:1px solid #14141c">
+        <td style="padding:10px 14px;color:#c0c0d0;font-weight:500">Spread radius</td>
+        <td style="padding:10px 14px">✓ Yes</td>
+        <td style="padding:10px 14px">✗ No</td>
+        <td style="padding:10px 14px">✗ No</td>
+      </tr>
+      <tr style="border-bottom:1px solid #14141c">
+        <td style="padding:10px 14px;color:#c0c0d0;font-weight:500">Inset</td>
+        <td style="padding:10px 14px">✓ Yes</td>
+        <td style="padding:10px 14px">✗ No</td>
+        <td style="padding:10px 14px">✗ No</td>
+      </tr>
+      <tr style="border-bottom:1px solid #14141c">
+        <td style="padding:10px 14px;color:#c0c0d0;font-weight:500">Multi-layer</td>
+        <td style="padding:10px 14px">✓ Comma-separated</td>
+        <td style="padding:10px 14px">✓ Chained filters</td>
+        <td style="padding:10px 14px">✓ Comma-separated</td>
+      </tr>
+      <tr style="border-bottom:1px solid #14141c">
+        <td style="padding:10px 14px;color:#c0c0d0;font-weight:500">Animation cost</td>
+        <td style="padding:10px 14px">Low–medium</td>
+        <td style="padding:10px 14px">High (compositing)</td>
+        <td style="padding:10px 14px">Medium</td>
+      </tr>
+      <tr style="border-bottom:1px solid #14141c">
+        <td style="padding:10px 14px;color:#c0c0d0;font-weight:500">Best for</td>
+        <td style="padding:10px 14px">Cards, buttons, UI elements</td>
+        <td style="padding:10px 14px">SVGs, PNGs, clipped shapes</td>
+        <td style="padding:10px 14px">Headlines, display type</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 14px;color:#c0c0d0;font-weight:500">Browser support</td>
+        <td style="padding:10px 14px">99%+ (no prefix)</td>
+        <td style="padding:10px 14px">96%+ (no prefix)</td>
+        <td style="padding:10px 14px">99%+ (no prefix)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h2>What are the most common mistakes with CSS shadows?</h2>
+
+<h3>Using a single heavy shadow instead of the smooth shadow technique</h3>
+
+<p>A single <code>box-shadow: 0 20px 60px rgba(0,0,0,.5)</code> looks like a grey cloud hovering behind the element. It's the most visible sign of amateur CSS. Real shadows are exponential in falloff — dense near the caster, nearly invisible at distance. Three or more layers fixes this permanently.</p>
+
+<h3>Animating <code>filter: drop-shadow()</code> on scroll</h3>
+
+<p>Scroll-linked filter animations force the browser to composite and repaint every frame. On mid-range Android devices, this is a smooth 60fps experience on desktop and a janky 20fps slideshow on mobile. If you need a shadow on a clipped shape that animates, consider rendering the shape differently (background image, border-radius) so you can use the cheaper <code>box-shadow</code>.</p>
+
+<h3>Ignoring opacity in the shadow color</h3>
+
+<p>A shadow with solid color (<code>box-shadow: 0 4px 12px #000</code>) looks harsh on any background that isn't pure white. Always use alpha: <code>rgba(0,0,0,.25)</code>. Better: use the same hue as your background at higher opacity — a dark navy card on a dark navy page needs a much darker shadow than the same card on white. Shadows that "work" across backgrounds use alpha-tuned colors, not black.</p>
+
+<h3>Using <code>box-shadow</code> on a <code>clip-path</code> element expecting it to follow the clip</h3>
+
+<p>This is the most confusing mismatch. <code>clip-path</code> clips the element — including its box-shadow. If you add a <code>box-shadow</code> to a clipped element, the shadow is clipped too and mostly or entirely disappears. The fix: wrap the clipped element in a parent and apply <code>filter: drop-shadow()</code> to the parent instead.</p>
+
+<pre><code>/* Wrong — shadow gets clipped */
+.shape &#123;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  box-shadow: 0 8px 20px rgba(0,0,0,.5); /* clipped, mostly invisible */
+&#125;
+
+/* Correct — parent carries the drop-shadow */
+.shape-wrapper &#123;
+  filter: drop-shadow(0 8px 14px rgba(0,0,0,.5));
+&#125;
+.shape-wrapper .shape &#123;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+&#125;</code></pre>
+
+<div class="demo">
+  <div class="demo-item">
+    <div style="width:70px;height:70px;background:#6366f1;clip-path:polygon(50% 0,100% 100%,0 100%);box-shadow:0 8px 20px rgba(0,0,0,.6)"></div>
+    <div class="demo-label">box-shadow on clipped<br>(shadow disappears)</div>
+  </div>
+  <div class="demo-item">
+    <div style="filter:drop-shadow(0 8px 14px rgba(99,102,241,.8))">
+      <div style="width:70px;height:70px;background:#6366f1;clip-path:polygon(50% 0,100% 100%,0 100%)"></div>
+    </div>
+    <div class="demo-label">drop-shadow on parent<br>(correct)</div>
+  </div>
+</div>
+
+<h3>Forgetting that <code>text-shadow</code> doesn't respect <code>overflow: hidden</code></h3>
+
+<p>A text-shadow with a large blur radius can visually overflow its container even when <code>overflow: hidden</code> is applied to the parent. If your layout has tight boundaries and a glowing headline, test at small viewport sizes — the glow may bleed past the container edge.</p>
+
+<h2>Quick-reference: which shadow property should you reach for?</h2>
+
+<ul>
+  <li><strong>UI card, button, modal, dropdown</strong> → <code>box-shadow</code></li>
+  <li><strong>Hover lift on a card</strong> → <code>box-shadow</code> transition (cheap, composited by GPU)</li>
+  <li><strong>Inner glow, pressed state, recessed input</strong> → <code>box-shadow: inset</code></li>
+  <li><strong>SVG icon, PNG cutout, clipped shape</strong> → <code>filter: drop-shadow()</code> on parent</li>
+  <li><strong>Headline, display text, neon effect</strong> → <code>text-shadow</code></li>
+  <li><strong>Glowing button that also needs shape hug</strong> → <code>box-shadow</code> for the button rectangle + <code>filter: drop-shadow()</code> only if the shape demands it</li>
+</ul>
+
+<div class="sources">
+  <h4>Sources</h4>
+  <ul>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow" target="_blank" rel="noopener">MDN — box-shadow</a></li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/drop-shadow" target="_blank" rel="noopener">MDN — filter: drop-shadow()</a></li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/text-shadow" target="_blank" rel="noopener">MDN — text-shadow</a></li>
+    <li><a href="https://caniuse.com/css-filters" target="_blank" rel="noopener">Can I Use — CSS Filters</a></li>
+    <li><a href="https://www.w3.org/TR/css-backgrounds-3/#box-shadow" target="_blank" rel="noopener">W3C CSS Backgrounds Level 3 — box-shadow spec</a></li>
+  </ul>
+</div>
+
+</BlogLayout>

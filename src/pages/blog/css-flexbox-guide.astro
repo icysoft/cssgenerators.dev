@@ -1,0 +1,506 @@
+---
+import BlogLayout from '../../layouts/BlogLayout.astro';
+
+const siteUrl = 'https://cssgenerators.dev';
+const canonical = `${siteUrl}/blog/css-flexbox-guide`;
+
+const dirAlignMap = { 'row': 'center', 'row-reverse': 'center', 'column': 'flex-start', 'column-reverse': 'flex-start' };
+const justifyItems = [
+  ['flex-start', 'items packed to the start'],
+  ['center', 'items centered'],
+  ['flex-end', 'items packed to the end'],
+  ['space-between', 'equal gaps between items, no outer gaps'],
+  ['space-around', 'equal space around each item (half-size outer gaps)'],
+  ['space-evenly', 'equal space everywhere including outer gaps'],
+];
+const alignItemsValues = [
+  ['flex-start', 'items at the top'],
+  ['center', 'items centered vertically'],
+  ['flex-end', 'items at the bottom'],
+  ['stretch', 'items fill container height (default)'],
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      '@id': `${canonical}#article`,
+      headline: 'CSS Flexbox: The Complete Visual Guide with Live Examples',
+      description: 'A complete guide to CSS Flexbox — every container and item property explained with live visual demos, practical layout patterns, and code you can copy directly.',
+      url: canonical,
+      datePublished: '2026-06-20',
+      dateModified: '2026-06-20',
+      author: { '@type': 'Organization', name: 'Dinno SAS', url: siteUrl },
+      publisher: { '@id': `${siteUrl}/#organization` },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is CSS Flexbox and when should I use it?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'CSS Flexbox (Flexible Box Layout) is a one-dimensional layout model that distributes space along a single axis — either a row or a column. Use it for navigation bars, centering content, aligning items in a header, or any layout where items flow in one direction. For two-dimensional layouts (rows and columns simultaneously), use CSS Grid instead.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the difference between justify-content and align-items in Flexbox?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'justify-content controls alignment along the main axis (horizontal by default). align-items controls alignment along the cross axis (vertical by default). When flex-direction is row: justify-content handles left/right positioning, align-items handles top/bottom positioning. When flex-direction is column, the axes swap.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What does flex: 1 actually mean?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'flex: 1 is shorthand for flex: 1 1 0. It sets flex-grow: 1 (item can grow), flex-shrink: 1 (item can shrink), and flex-basis: 0 (start from zero width before distributing space). This is different from flex: 1 1 auto, which starts from the item\'s natural content size. flex: 1 makes all items the same size; flex: 1 1 auto proportionally distributes remaining space.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How do I center a div vertically and horizontally with Flexbox?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Apply display: flex; align-items: center; justify-content: center to the parent container. Make sure the parent has an explicit height. This is the most reliable centering technique in modern CSS.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Why does my flex item overflow even with flex-shrink: 1?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'The most common cause is a long unbreakable string or a nested element with a fixed width. Flex items have a default min-width: auto, which prevents shrinking below the item\'s content size. Add min-width: 0 to the flex item to allow it to shrink fully. This is one of the most frequent Flexbox bugs in real codebases.',
+          },
+        },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Blog', item: `${siteUrl}/blog` },
+        { '@type': 'ListItem', position: 3, name: 'CSS Flexbox Guide', item: canonical },
+      ],
+    },
+  ],
+};
+---
+<BlogLayout
+  title="CSS Flexbox: The Complete Visual Guide with Live Examples — cssgenerators.dev"
+  description="A complete guide to CSS Flexbox — every container and item property explained with live visual demos, practical layout patterns, and copy-ready CSS."
+  canonical={canonical}
+  datePublished="2026-06-20"
+  readingTime="15 min"
+  schema={schema}
+>
+
+<p>Before Flexbox, centering a div vertically required either a hack (negative margins, absolute positioning with transforms) or a table-cell workaround. Aligning items in a navigation bar meant float: left, clearfix divs, and a prayer. Flexbox — introduced in modern browsers around 2015 and reaching near-universal support — eliminated all of that. It is now the most-used CSS layout module, and understanding it thoroughly makes every other layout problem easier.</p>
+
+<p>This guide covers every Flexbox property with live examples you can see rendering right here in the page, not just code screenshots.</p>
+
+<div class="callout">
+  <p>Want to experiment interactively? <a href="/css-flexbox-generator" class="tool-cta">Open the CSS Flexbox Generator →</a> to build flex containers visually and copy the output CSS.</p>
+</div>
+
+<h2>What is the Flexbox model? Container vs. items</h2>
+
+<p>Flexbox works on two levels simultaneously. You apply <code>display: flex</code> to a <strong>container</strong>, which controls how its direct children — the <strong>flex items</strong> — are laid out. Properties on the container control overall distribution and alignment. Properties on individual items control how each one sizes and positions itself within that distribution.</p>
+
+<p>The core mental model: Flexbox lays items out along two perpendicular axes.</p>
+
+<ul>
+  <li><strong>Main axis</strong> — the primary direction items flow. Horizontal by default (<code>flex-direction: row</code>).</li>
+  <li><strong>Cross axis</strong> — perpendicular to the main axis. Vertical by default.</li>
+</ul>
+
+<div style="background:#0d0d12;border:1px solid #1e1e2e;border-radius:12px;padding:28px;margin:28px 0">
+  <div style="position:relative;display:flex;align-items:center;gap:8px;background:#1a1a24;border-radius:8px;padding:16px 20px">
+    <div style="width:52px;height:52px;border-radius:8px;background:#6366f1;display:flex;align-items:center;justify-content:center;font:700 12px/1 'JetBrains Mono',monospace;color:#fff;flex-shrink:0">1</div>
+    <div style="width:52px;height:52px;border-radius:8px;background:#6366f1;display:flex;align-items:center;justify-content:center;font:700 12px/1 'JetBrains Mono',monospace;color:#fff;flex-shrink:0;opacity:.8">2</div>
+    <div style="width:52px;height:52px;border-radius:8px;background:#6366f1;display:flex;align-items:center;justify-content:center;font:700 12px/1 'JetBrains Mono',monospace;color:#fff;flex-shrink:0;opacity:.6">3</div>
+    <div style="position:absolute;bottom:-22px;left:20px;right:20px;height:1px;background:#2a2a3e"></div>
+    <div style="position:absolute;bottom:-32px;left:50%;transform:translateX(-50%);font:500 11px/1 'JetBrains Mono',monospace;color:#4a4a5a;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap">→ main axis (flex-direction: row)</div>
+  </div>
+  <div style="margin-top:44px;display:flex;gap:8px;align-items:flex-start">
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="width:52px;height:52px;border-radius:8px;background:#22d3ee;display:flex;align-items:center;justify-content:center;font:700 12px/1 'JetBrains Mono',monospace;color:#0f0f13;flex-shrink:0">A</div>
+      <div style="width:52px;height:52px;border-radius:8px;background:#22d3ee;display:flex;align-items:center;justify-content:center;font:700 12px/1 'JetBrains Mono',monospace;color:#0f0f13;flex-shrink:0;opacity:.7">B</div>
+    </div>
+    <div style="font:500 11px/1 'JetBrains Mono',monospace;color:#4a4a5a;text-transform:uppercase;letter-spacing:.04em;writing-mode:vertical-lr;transform:rotate(180deg);margin-top:4px">↑ cross axis</div>
+  </div>
+</div>
+
+<h2>How does <code>flex-direction</code> work?</h2>
+
+<p><code>flex-direction</code> sets which direction the main axis runs, and therefore which way items flow.</p>
+
+<ul>
+  <li><code>row</code> (default) — left to right</li>
+  <li><code>row-reverse</code> — right to left</li>
+  <li><code>column</code> — top to bottom</li>
+  <li><code>column-reverse</code> — bottom to top</li>
+</ul>
+
+<p>This property also flips the meaning of <code>justify-content</code> and <code>align-items</code>. When <code>flex-direction: column</code>, <code>justify-content</code> controls vertical spacing and <code>align-items</code> controls horizontal alignment.</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0">
+  {['row','row-reverse','column','column-reverse'].map((dir) => (
+  <div style="background:#0d0d12;border:1px solid #1e1e2e;border-radius:10px;padding:16px">
+    <div style={'display:flex;flex-direction:' + dir + ';gap:6px;align-items:' + dirAlignMap[dir]}>
+      <div style="width:32px;height:32px;border-radius:5px;background:#6366f1;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;font-size:11px;font-weight:700">1</div>
+      <div style="width:32px;height:32px;border-radius:5px;background:#6366f1;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;font-size:11px;font-weight:700">2</div>
+      <div style="width:32px;height:32px;border-radius:5px;background:#6366f1;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;font-size:11px;font-weight:700">3</div>
+    </div>
+    <div style="font-size:11px;font-weight:500;color:#4a4a5a;margin-top:10px;text-transform:uppercase;letter-spacing:.04em">{dir}</div>
+  </div>
+))}
+</div>
+
+<pre><code>/* The four flex-direction values */
+.container &#123;
+  display: flex;
+  flex-direction: row;          /* default */
+  flex-direction: row-reverse;  /* RTL layouts, reversed stacks */
+  flex-direction: column;       /* vertical stacking */
+  flex-direction: column-reverse;
+&#125;</code></pre>
+
+<h2>How does <code>justify-content</code> control main-axis spacing?</h2>
+
+<p><code>justify-content</code> distributes items along the main axis. The six values cover every meaningful distribution pattern you'll encounter.</p>
+
+<div style="display:flex;flex-direction:column;gap:14px;background:#0d0d12;border:1px solid #1e1e2e;border-radius:12px;padding:24px;margin:24px 0">
+  {justifyItems.map(([val, desc]) => (
+    <div>
+      <div style={'display:flex;justify-content:' + val + ';gap:8px;background:#1a1a24;border-radius:8px;padding:10px 14px'}>
+        <div style="width:36px;height:36px;border-radius:6px;background:#6366f1;flex-shrink:0"></div>
+        <div style="width:36px;height:36px;border-radius:6px;background:#6366f1;flex-shrink:0;opacity:.8"></div>
+        <div style="width:36px;height:36px;border-radius:6px;background:#6366f1;flex-shrink:0;opacity:.6"></div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:baseline;margin-top:5px">
+        <span style="font-size:11px;font-weight:500;color:#818cf8;text-transform:uppercase;letter-spacing:.03em">{val}</span>
+        <span style="font-size:12px;color:#4a4a5a">{desc}</span>
+      </div>
+    </div>
+  ))}
+</div>
+
+<pre><code>.nav &#123;
+  display: flex;
+  justify-content: space-between; /* logo left, links right */
+&#125;
+
+.centered &#123;
+  display: flex;
+  justify-content: center;
+&#125;
+
+.spread &#123;
+  display: flex;
+  justify-content: space-evenly; /* equal gaps, including edges */
+&#125;</code></pre>
+
+<p>The difference between <code>space-between</code>, <code>space-around</code>, and <code>space-evenly</code> trips people up. The rule: <code>space-between</code> puts all gaps <em>between</em> items (no outer gap), <code>space-around</code> puts equal space on each side of each item (outer gaps are half size), and <code>space-evenly</code> makes every gap identical including the first and last.</p>
+
+<h2>How does <code>align-items</code> control cross-axis alignment?</h2>
+
+<p><code>align-items</code> aligns items on the cross axis. For <code>flex-direction: row</code>, this means vertical alignment within the row.</p>
+
+<div style="display:flex;flex-direction:column;gap:12px;background:#0d0d12;border:1px solid #1e1e2e;border-radius:12px;padding:24px;margin:24px 0">
+  {alignItemsValues.map(([val, desc]) => (
+    <div>
+      <div style={'display:flex;align-items:' + val + ';gap:8px;background:#1a1a24;border-radius:8px;padding:10px 14px;height:72px'}>
+        <div style="width:36px;height:32px;border-radius:6px;background:#22d3ee;flex-shrink:0"></div>
+        <div style="width:36px;height:48px;border-radius:6px;background:#22d3ee;flex-shrink:0;opacity:.8"></div>
+        <div style="width:36px;height:36px;border-radius:6px;background:#22d3ee;flex-shrink:0;opacity:.6"></div>
+      </div>
+      <div style="font-size:11px;font-weight:500;color:#22d3ee;margin-top:5px;text-transform:uppercase;letter-spacing:.03em">{val} — {desc}</div>
+    </div>
+  ))}
+</div>
+
+<p>Note how <code>stretch</code> (the default) makes items fill the full cross-axis height. This is why flex items in a row are often the same height as the tallest item — a very useful default that replaces the old equal-height column tricks.</p>
+
+<pre><code>.container &#123;
+  display: flex;
+  align-items: center;    /* vertically centered */
+  align-items: stretch;   /* default — fills container height */
+  align-items: flex-start;
+  align-items: flex-end;
+  align-items: baseline;  /* aligns text baselines — useful for nav with mixed font sizes */
+&#125;</code></pre>
+
+<h2>How do I center a div with Flexbox?</h2>
+
+<p>This is the most-searched Flexbox question. The answer is two lines on the parent:</p>
+
+<div class="demo">
+  <div style="width:240px;height:140px;background:#1a1a24;border-radius:12px;display:flex;align-items:center;justify-content:center;border:1px dashed #2a2a3e">
+    <div style="width:72px;height:44px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#22d3ee);display:flex;align-items:center;justify-content:center;font:700 13px/1 Inter;color:#fff">Centered</div>
+  </div>
+</div>
+
+<pre><code>.parent &#123;
+  display: flex;
+  align-items: center;      /* vertical center */
+  justify-content: center;  /* horizontal center */
+  /* parent needs a height: */
+  height: 100vh; /* or any fixed/percentage height */
+&#125;
+
+/* The child needs nothing special */</code></pre>
+
+<p>This works regardless of the child's size. The parent just needs a defined height — <code>100vh</code> for full-screen centering, or any explicit height for contained layouts.</p>
+
+<h2>What is <code>flex-wrap</code> and when do items overflow?</h2>
+
+<p>By default, flex items will all squeeze onto one line (<code>flex-wrap: nowrap</code>). When items overflow their container at small screen sizes, the fix is almost always <code>flex-wrap: wrap</code>.</p>
+
+<div style="display:flex;flex-direction:column;gap:16px;background:#0d0d12;border:1px solid #1e1e2e;border-radius:12px;padding:24px;margin:24px 0">
+  <div>
+    <div style="display:flex;flex-wrap:nowrap;gap:8px;background:#1a1a24;border-radius:8px;padding:10px;overflow:hidden">
+      {['CSS','Flexbox','Grid','Animations','Transforms','Clip Path','Filters'].map(t => (
+        <div style="padding:6px 12px;border-radius:6px;background:#6366f1;font:500 12px/1 Inter;color:#fff;white-space:nowrap;flex-shrink:0">{t}</div>
+      ))}
+    </div>
+    <div style="font:500 11px/1 'JetBrains Mono',monospace;color:#4a4a5a;margin-top:6px;text-transform:uppercase;letter-spacing:.04em">nowrap (default) — overflows</div>
+  </div>
+  <div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;background:#1a1a24;border-radius:8px;padding:10px">
+      {['CSS','Flexbox','Grid','Animations','Transforms','Clip Path','Filters'].map(t => (
+        <div style="padding:6px 12px;border-radius:6px;background:#22d3ee;font:500 12px/1 Inter;color:#0f0f13;white-space:nowrap">{t}</div>
+      ))}
+    </div>
+    <div style="font:500 11px/1 'JetBrains Mono',monospace;color:#4a4a5a;margin-top:6px;text-transform:uppercase;letter-spacing:.04em">wrap — wraps to next line</div>
+  </div>
+</div>
+
+<pre><code>.tag-list &#123;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+&#125;
+
+/* Items wrap naturally at any screen size */</code></pre>
+
+<h2>What is <code>gap</code>, and is it different from <code>grid-gap</code>?</h2>
+
+<p><code>gap</code> sets spacing between flex items without adding margins to the outer edges. It replaced <code>grid-gap</code> (which only worked on Grid) in 2021 when the spec unified it. Use <code>gap</code> — <code>grid-gap</code> is deprecated in the spec (though browsers still support it).</p>
+
+<pre><code>.container &#123;
+  display: flex;
+  gap: 16px;             /* equal gap between items, no outer gaps */
+  gap: 16px 24px;        /* row-gap column-gap */
+  row-gap: 16px;         /* vertical gap only (relevant with flex-wrap) */
+  column-gap: 24px;      /* horizontal gap only */
+&#125;
+
+/* ✅ Use gap instead of margins on items — gap doesn't add space at the edges */
+/* ❌ Avoid: .item &#123; margin-right: 16px; &#125; — adds unwanted margin after last item */</code></pre>
+
+<h2>How do flex items size themselves? flex-grow, flex-shrink, flex-basis explained</h2>
+
+<p>These three properties control how items distribute available space. The shorthand <code>flex</code> combines all three.</p>
+
+<h3>What does flex-grow do?</h3>
+
+<p><code>flex-grow</code> defines how much an item expands relative to others when there is extra space. A value of <code>1</code> means "take an equal share." A value of <code>2</code> means "take twice the share of a 1."</p>
+
+<div style="background:#0d0d12;border:1px solid #1e1e2e;border-radius:12px;padding:24px;margin:24px 0">
+  <div style="display:flex;gap:8px;background:#1a1a24;border-radius:8px;padding:10px">
+    <div style="flex:1;height:48px;border-radius:6px;background:#6366f1;display:flex;align-items:center;justify-content:center;font:600 12px/1 'JetBrains Mono',monospace;color:#fff">flex-grow: 1</div>
+    <div style="flex:2;height:48px;border-radius:6px;background:#818cf8;display:flex;align-items:center;justify-content:center;font:600 12px/1 'JetBrains Mono',monospace;color:#fff">flex-grow: 2</div>
+    <div style="flex:1;height:48px;border-radius:6px;background:#6366f1;display:flex;align-items:center;justify-content:center;font:600 12px/1 'JetBrains Mono',monospace;color:#fff">flex-grow: 1</div>
+  </div>
+  <div style="font:400 13px/1.5 Inter;color:#6b6b7b;margin-top:12px">The middle item gets twice the available space as either outer item.</div>
+</div>
+
+<h3>What does flex-basis do?</h3>
+
+<p><code>flex-basis</code> sets the item's starting size before any remaining space is distributed. Think of it as the "ideal size" the browser tries to achieve before growing or shrinking.</p>
+
+<pre><code>.item &#123;
+  flex-basis: 200px;  /* start at 200px, then grow/shrink from there */
+  flex-basis: auto;   /* use the item's content size as the starting point */
+  flex-basis: 0;      /* start from zero — all space is "extra" to distribute */
+&#125;</code></pre>
+
+<h3>What does <code>flex: 1</code> actually mean?</h3>
+
+<p><code>flex: 1</code> is the most-used shorthand, but its exact meaning is non-obvious. <code>flex: 1</code> expands to <code>flex: 1 1 0</code> — grow factor 1, shrink factor 1, <strong>basis of 0</strong>. The basis of 0 means every item starts from zero width, and all container space is distributed proportionally by grow factor. This makes all items the same size when they all have <code>flex: 1</code>.</p>
+
+<p>This is different from <code>flex: 1 1 auto</code>, where items start from their content size and only <em>remaining</em> space is distributed.</p>
+
+<pre><code>/* All items equal width: */
+.item &#123; flex: 1; &#125;        /* = flex: 1 1 0 — start from 0, share equally */
+
+/* Items proportional to content + share remaining space: */
+.item &#123; flex: 1 1 auto; &#125; /* start from content size, then share extra */
+
+/* Common sidebar layout: */
+.sidebar &#123; flex: 0 0 280px; &#125;  /* never grow or shrink — fixed 280px */
+.content  &#123; flex: 1; &#125;         /* take all remaining space */</code></pre>
+
+<h2>Practical layout patterns with live demos</h2>
+
+<h3>How do I build a responsive navigation bar?</h3>
+
+<div style="background:#0d0d12;border:1px solid #1e1e2e;border-radius:12px;padding:20px;margin:24px 0">
+  <nav style="display:flex;align-items:center;justify-content:space-between;background:#1a1a24;border-radius:8px;padding:12px 20px;gap:16px">
+    <a style="font:700 16px/1 Inter;color:#e6e6ee;text-decoration:none">Logo</a>
+    <div style="display:flex;gap:20px;align-items:center">
+      <a style="font:500 14px/1 Inter;color:#9b9bab;text-decoration:none">Home</a>
+      <a style="font:500 14px/1 Inter;color:#9b9bab;text-decoration:none">Blog</a>
+      <a style="font:500 14px/1 Inter;color:#9b9bab;text-decoration:none">Tools</a>
+    </div>
+    <button style="padding:8px 16px;border-radius:7px;background:#6366f1;border:none;font:600 13px/1 Inter;color:#fff;cursor:pointer">Sign Up</button>
+  </nav>
+</div>
+
+<pre><code>.navbar &#123;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+&#125;
+
+.nav-links &#123;
+  display: flex;
+  gap: 20px;
+&#125;
+
+/* The logo, links, and CTA stay on one row,
+   with space-between pushing logo left and CTA right. */</code></pre>
+
+<h3>How do I create a Holy Grail layout with Flexbox?</h3>
+
+<p>The Holy Grail layout — header, full-width; then sidebar, content, and optional second sidebar on one row; then footer — is a classic Flexbox pattern.</p>
+
+<div style="background:#0d0d12;border:1px solid #1e1e2e;border-radius:12px;padding:20px;margin:24px 0">
+  <div style="display:flex;flex-direction:column;gap:6px;font:600 12px/1 'JetBrains Mono',monospace">
+    <div style="background:#6366f1;border-radius:6px;padding:10px 14px;color:#fff">Header</div>
+    <div style="display:flex;gap:6px">
+      <div style="flex:0 0 100px;background:#4f46e5;border-radius:6px;padding:10px 14px;color:#c7d2fe">Sidebar</div>
+      <div style="flex:1;background:#1a1a24;border-radius:6px;padding:10px 14px;color:#e6e6ee">Main Content</div>
+    </div>
+    <div style="background:#6366f1;border-radius:6px;padding:10px 14px;color:#fff">Footer</div>
+  </div>
+</div>
+
+<pre><code>.page &#123;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+&#125;
+
+.main-area &#123;
+  display: flex;
+  flex: 1; /* fills remaining space between header and footer */
+&#125;
+
+.sidebar &#123;
+  flex: 0 0 280px; /* fixed width, never grow/shrink */
+&#125;
+
+.content &#123;
+  flex: 1; /* takes all remaining horizontal space */
+  min-width: 0; /* prevents overflow from long words — see common mistakes */
+&#125;</code></pre>
+
+<h3>How do I make a sticky footer with Flexbox?</h3>
+
+<pre><code>body &#123;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+&#125;
+
+main &#123;
+  flex: 1; /* pushes footer to the bottom on short pages */
+&#125;
+
+footer &#123;
+  /* no special sizing needed */
+&#125;</code></pre>
+
+<h2>When should you use Flexbox vs. CSS Grid?</h2>
+
+<p>The honest answer: use Flexbox for one-dimensional layouts (a row of items, a column of items), use Grid for two-dimensional layouts (items arranged in rows <em>and</em> columns simultaneously).</p>
+
+<p>Practical heuristics:</p>
+
+<ul>
+  <li><strong>Navigation bar, tag list, button row</strong> → Flexbox. Items flow in a line.</li>
+  <li><strong>Card grid where columns need to align vertically</strong> → Grid. You need rows and columns.</li>
+  <li><strong>Centering a single item</strong> → either works; Flexbox is two lines, Grid is also two lines.</li>
+  <li><strong>Responsive grid that reflows based on available width</strong> → Grid with <code>repeat(auto-fill, minmax(...))</code>.</li>
+  <li><strong>Complex page layout (header/sidebar/content/footer)</strong> → Grid for the outer shell, Flexbox for inner components.</li>
+</ul>
+
+<p>They are not competitors — most pages use both. Grid for the page skeleton, Flexbox for the components inside it.</p>
+
+<h2>What are the most common Flexbox mistakes?</h2>
+
+<h3>Forgetting min-width: 0 on flex items</h3>
+
+<p>Flex items default to <code>min-width: auto</code>, which prevents them from shrinking below their content size. This causes overflow when a child contains a long URL, a pre-formatted code block, or a table. The fix:</p>
+
+<pre><code>.flex-item &#123;
+  min-width: 0;  /* allows the item to shrink below content width */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; /* if you want truncation */
+&#125;</code></pre>
+
+<h3>Using margins instead of gap for spacing</h3>
+
+<pre><code>/* ❌ Adds unwanted right-margin after the last item */
+.item &#123; margin-right: 16px; &#125;
+
+/* ✅ No outer gaps, consistent spacing */
+.container &#123; gap: 16px; &#125;</code></pre>
+
+<h3>Expecting flex children to inherit flex properties</h3>
+
+<p>Flex properties on the container (<code>justify-content</code>, <code>align-items</code>) affect direct children only. Grandchildren are not flex items. If you need to control a nested element, apply <code>display: flex</code> to the direct parent of those elements.</p>
+
+<h3>Confusing align-items and align-content</h3>
+
+<p><code>align-items</code> aligns items within a single row (or column). <code>align-content</code> aligns the rows themselves when <code>flex-wrap</code> is active and there are multiple rows. <code>align-content</code> has no effect when all items fit on one line.</p>
+
+<h2>What is the browser compatibility for CSS Flexbox?</h2>
+
+<p>Flexbox has <a href="https://caniuse.com/flexbox" rel="noopener">99%+ global browser support</a> as of 2026. The unprefixed syntax has been supported since:</p>
+
+<ul>
+  <li>Chrome 29 (2013)</li>
+  <li>Firefox 28 (2014)</li>
+  <li>Safari 9 (2015)</li>
+  <li>Edge 12 (first release, 2015)</li>
+</ul>
+
+<p>No vendor prefixes (<code>-webkit-flex</code>, <code>-ms-flexbox</code>) are needed in any modern codebase. The only edge cases are very old WebView versions in certain mobile apps — if you need to support Android 4.x WebView, prefix. For all web targets in 2026, write unprefixed.</p>
+
+<div class="callout">
+  <p><strong>Try it live:</strong> Build flex containers visually and copy production-ready CSS with the <a href="/css-flexbox-generator" class="tool-cta">CSS Flexbox Generator →</a></p>
+</div>
+
+<div class="sources">
+  <h4>Sources</h4>
+  <ul>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout" rel="noopener">MDN — CSS Flexible Box Layout</a></li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/justify-content" rel="noopener">MDN — justify-content</a></li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/align-items" rel="noopener">MDN — align-items</a></li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/flex" rel="noopener">MDN — flex shorthand</a></li>
+    <li><a href="https://www.w3.org/TR/css-flexbox-1/" rel="noopener">W3C — CSS Flexbox Level 1 specification</a></li>
+    <li><a href="https://caniuse.com/flexbox" rel="noopener">Can I Use — Flexbox browser support</a></li>
+  </ul>
+</div>
+
+</BlogLayout>

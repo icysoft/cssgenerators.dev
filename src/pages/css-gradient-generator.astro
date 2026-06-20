@@ -9,8 +9,49 @@ const canonical = `${siteUrl}/css-gradient-generator`;
 const schema = {
   '@context': 'https://schema.org',
   '@graph': [
-    { '@type': 'WebApplication', name: 'CSS Gradient Generator', url: canonical, applicationCategory: 'DeveloperApplication', operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
-    { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl }, { '@type': 'ListItem', position: 2, name: 'Gradient Generator', item: canonical }] },
+    {
+      '@type': 'WebApplication',
+      '@id': `${canonical}#app`,
+      name: 'CSS Gradient Generator',
+      url: canonical,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Any',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      description: 'Free CSS gradient generator. Create linear, radial and conic gradients with unlimited color stops. Live preview and one-click CSS copy.',
+      creator: { '@id': 'https://cssgenerators.dev/#organization' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Gradient Generator', item: canonical },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What are the CSS gradient types?',
+          acceptedAnswer: { '@type': 'Answer', text: 'linear-gradient — colors transition along a straight line. Specify angle in degrees (0° = top to bottom, 90° = left to right). radial-gradient — colors radiate outward from a center point. conic-gradient — colors rotate around a center point, useful for pie charts and color wheels.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the CSS gradient syntax?',
+          acceptedAnswer: { '@type': 'Answer', text: 'background: linear-gradient(90deg, #6366f1 0%, #22d3ee 100%). Add more color stops by inserting additional color-position pairs: linear-gradient(90deg, #6366f1 0%, #f472b6 50%, #22d3ee 100%).' },
+        },
+        {
+          '@type': 'Question',
+          name: 'How do hard color stops work?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Create sharp transitions by setting two stops at the same position: linear-gradient(90deg, red 50%, blue 50%). This technique is used for striped backgrounds.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'How do you use a CSS gradient as a text fill?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Use background: linear-gradient(...); -webkit-background-clip: text; -webkit-text-fill-color: transparent for gradient text effects.' },
+        },
+      ],
+    },
   ],
 };
 ---
@@ -25,15 +66,19 @@ const schema = {
     <div style="padding:0 40px 40px"><Gradient client:load /></div>
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
-        <h2>CSS gradient types</h2>
+        <h2>What are the CSS gradient types?</h2>
         <p><strong>linear-gradient</strong> — colors transition along a straight line. Specify angle in degrees (0° = top to bottom, 90° = left to right). <strong>radial-gradient</strong> — colors radiate outward from a center point. <strong>conic-gradient</strong> — colors rotate around a center point (useful for pie charts and color wheels).</p>
-        <h2>CSS gradient syntax</h2>
+        <h2>What is the CSS gradient syntax?</h2>
         <p><code>background: linear-gradient(90deg, #6366f1 0%, #22d3ee 100%)</code>. Add more color stops by inserting additional color-position pairs: <code>linear-gradient(90deg, #6366f1 0%, #f472b6 50%, #22d3ee 100%)</code>.</p>
-        <h3>Hard color stops</h3>
+        <h3>How do hard color stops work?</h3>
         <p>Create sharp transitions by setting two stops at the same position: <code>linear-gradient(90deg, red 50%, blue 50%)</code>. This technique is used for striped backgrounds.</p>
-        <h3>Gradient as text fill</h3>
+        <h3>How do you use a CSS gradient as a text fill?</h3>
         <p>Use <code>background: linear-gradient(...); -webkit-background-clip: text; -webkit-text-fill-color: transparent</code> for gradient text effects.</p>
       </div>
+    </div>
+    <div style="padding:24px 40px 0;border-top:1px solid #1c1c26">
+      <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:12px">From the blog</div>
+      <a href="/blog/css-gradient-guide" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid #2a2a44;border-radius:8px;background:#131320;color:#a5b4fc;font:500 13.5px/1 Inter;text-decoration:none">CSS Gradient Guide: linear, radial and conic →</a>
     </div>
     <div style="padding:24px 40px 40px;border-top:1px solid #1c1c26">
       <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:16px">Other CSS Tools</div>

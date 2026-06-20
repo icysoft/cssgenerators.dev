@@ -9,8 +9,49 @@ const canonical = `${siteUrl}/css-drop-shadow-generator`;
 const schema = {
   '@context': 'https://schema.org',
   '@graph': [
-    { '@type': 'WebApplication', name: 'CSS Drop Shadow Generator', url: canonical, applicationCategory: 'DeveloperApplication', operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
-    { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl }, { '@type': 'ListItem', position: 2, name: 'Drop Shadow Generator', item: canonical }] },
+    {
+      '@type': 'WebApplication',
+      '@id': `${canonical}#app`,
+      name: 'CSS Drop Shadow Generator',
+      url: canonical,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Any',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      description: 'Free CSS filter drop-shadow generator. Unlike box-shadow, drop-shadow follows the element\'s actual shape — perfect for SVGs and transparent PNGs. Live preview and one-click copy.',
+      creator: { '@id': 'https://cssgenerators.dev/#organization' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Drop Shadow Generator', item: canonical },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is the difference between drop-shadow and box-shadow?',
+          acceptedAnswer: { '@type': 'Answer', text: 'filter: drop-shadow() computes the shadow from the element\'s alpha channel — it follows irregular shapes, SVG paths, and clip-path cutouts. box-shadow always uses the rectangular bounding box, ignoring transparent areas.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the CSS drop-shadow syntax?',
+          acceptedAnswer: { '@type': 'Answer', text: 'filter: drop-shadow(offset-x offset-y blur-radius color). Note: there is no spread radius and no inset option — these are features of box-shadow only.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'When should you use drop-shadow instead of box-shadow?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Use drop-shadow on SVG icons, PNG logos with transparent backgrounds, and any element using clip-path. The shadow will follow the contour rather than the box.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the browser compatibility for CSS drop-shadow?',
+          acceptedAnswer: { '@type': 'Answer', text: 'filter: drop-shadow() is supported in all modern browsers. For IE11, use box-shadow as a fallback.' },
+        },
+      ],
+    },
   ],
 };
 ---
@@ -25,15 +66,19 @@ const schema = {
     <div style="padding:0 40px 40px"><DropShadow client:load /></div>
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
-        <h2>drop-shadow vs box-shadow</h2>
+        <h2>What is the difference between drop-shadow and box-shadow?</h2>
         <p><code>filter: drop-shadow()</code> computes the shadow from the element's alpha channel — it follows irregular shapes, SVG paths, and clip-path cutouts. <code>box-shadow</code> always uses the rectangular bounding box, ignoring transparent areas.</p>
-        <h2>CSS drop-shadow syntax</h2>
+        <h2>What is the CSS drop-shadow syntax?</h2>
         <p><code>filter: drop-shadow(offset-x offset-y blur-radius color)</code>. Note: there is no spread radius and no inset option — these are features of box-shadow only.</p>
-        <h3>When to use drop-shadow</h3>
+        <h3>When should you use drop-shadow instead of box-shadow?</h3>
         <p>Use drop-shadow on SVG icons, PNG logos with transparent backgrounds, and any element using clip-path. The shadow will follow the contour rather than the box.</p>
-        <h3>Browser compatibility</h3>
+        <h3>What is the browser compatibility for CSS drop-shadow?</h3>
         <p><code>filter: drop-shadow()</code> is supported in all modern browsers. For IE11, use <code>box-shadow</code> as a fallback.</p>
       </div>
+    </div>
+    <div style="padding:24px 40px 0;border-top:1px solid #1c1c26">
+      <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:12px">From the blog</div>
+      <a href="/blog/css-shadow-guide" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid #2a2a44;border-radius:8px;background:#131320;color:#a5b4fc;font:500 13.5px/1 Inter;text-decoration:none">CSS Shadow Guide: box-shadow, drop-shadow, text-shadow →</a>
     </div>
     <div style="padding:24px 40px 40px;border-top:1px solid #1c1c26">
       <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:16px">Other CSS Tools</div>

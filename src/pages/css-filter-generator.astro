@@ -12,18 +12,50 @@ const schema = {
   '@graph': [
     {
       '@type': 'WebApplication',
+      '@id': `${canonical}#app`,
       name: 'CSS Filter Generator',
       url: canonical,
       applicationCategory: 'DeveloperApplication',
       operatingSystem: 'Any',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
       description: 'Free CSS filter generator with live preview. Adjust blur, brightness, contrast, grayscale, hue-rotate, saturate and sepia.',
+      creator: { '@id': 'https://cssgenerators.dev/#organization' },
     },
     {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl },
         { '@type': 'ListItem', position: 2, name: 'Filter Generator', item: canonical },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'How do you use the CSS filter generator?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Adjust the sliders for each filter function. The conic-gradient preview updates in real time so you can see how filters stack. Only non-default values are included in the generated CSS — if brightness is 100% (the default), it is omitted.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the CSS filter syntax?',
+          acceptedAnswer: { '@type': 'Answer', text: 'The filter property accepts a space-separated list of filter functions: filter: blur(4px) brightness(110%) contrast(120%). Functions are applied in order, left to right.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What are the available CSS filter functions?',
+          acceptedAnswer: { '@type': 'Answer', text: 'blur(px) — applies a Gaussian blur. brightness(%) — adjusts lightness (100% = original). contrast(%) — adjusts contrast. grayscale(%) — converts to grayscale. hue-rotate(deg) — rotates hue on the color wheel. opacity(%) — adjusts transparency. saturate(%) — adjusts color saturation. sepia(%) — applies a sepia tone.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the difference between CSS filter and backdrop-filter?',
+          acceptedAnswer: { '@type': 'Answer', text: 'The filter property applies to the element itself. backdrop-filter applies to everything behind the element — useful for frosted glass effects on overlays and modals.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the browser compatibility for CSS filter?',
+          acceptedAnswer: { '@type': 'Answer', text: 'CSS filter is supported in all modern browsers. No vendor prefixes are required in 2024+. The -webkit-filter prefix was required for Safari before version 9.1 (2015).' },
+        },
       ],
     },
   ],
@@ -52,23 +84,27 @@ const schema = {
 
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
-        <h2>How to use the CSS filter generator</h2>
+        <h2>How do you use the CSS filter generator?</h2>
         <p>Adjust the sliders for each filter function. The conic-gradient preview updates in real time so you can see how filters stack. Only non-default values are included in the generated CSS — if brightness is 100% (the default), it is omitted.</p>
 
-        <h2>CSS filter syntax</h2>
+        <h2>What is the CSS filter syntax?</h2>
         <p>The <code>filter</code> property accepts a space-separated list of filter functions: <code>filter: blur(4px) brightness(110%) contrast(120%)</code>. Functions are applied in order, left to right.</p>
 
-        <h3>Available filter functions</h3>
+        <h3>What are the available CSS filter functions?</h3>
         <p><strong>blur(px)</strong> — applies a Gaussian blur. <strong>brightness(%)</strong> — adjusts lightness (100% = original). <strong>contrast(%)</strong> — adjusts contrast. <strong>grayscale(%)</strong> — converts to grayscale. <strong>hue-rotate(deg)</strong> — rotates hue on the color wheel. <strong>opacity(%)</strong> — adjusts transparency (same as the opacity property). <strong>saturate(%)</strong> — adjusts color saturation. <strong>sepia(%)</strong> — applies a sepia tone.</p>
 
-        <h3>CSS filter vs backdrop-filter</h3>
+        <h3>What is the difference between CSS filter and backdrop-filter?</h3>
         <p>The <code>filter</code> property applies to the element itself. <code>backdrop-filter</code> applies to everything behind the element — useful for frosted glass effects on overlays and modals.</p>
 
-        <h3>Browser compatibility</h3>
+        <h3>What is the browser compatibility for CSS filter?</h3>
         <p>CSS <code>filter</code> is supported in all modern browsers. No vendor prefixes are required in 2024+. The <code>-webkit-filter</code> prefix was required for Safari before version 9.1 (2015).</p>
       </div>
     </div>
 
+    <div style="padding:24px 40px 0;border-top:1px solid #1c1c26">
+      <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:12px">From the blog</div>
+      <a href="/blog/css-filter-guide" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid #2a2a44;border-radius:8px;background:#131320;color:#a5b4fc;font:500 13.5px/1 Inter;text-decoration:none">CSS filter Guide: blur, brightness, drop-shadow and more →</a>
+    </div>
     <div style="padding:24px 40px 40px;border-top:1px solid #1c1c26">
       <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:16px">Other CSS Tools</div>
       <div style="display:flex;flex-wrap:wrap;gap:10px">

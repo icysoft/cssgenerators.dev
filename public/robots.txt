@@ -1,4 +1,30 @@
 User-agent: *
 Allow: /
 
+# AI search — indexation autorisée (citations, AI Overviews, Copilot)
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# AI training crawlers — bloqués (pas de bénéfice SEO)
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
 Sitemap: https://cssgenerators.dev/sitemap.xml

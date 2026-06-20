@@ -1,0 +1,76 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const siteUrl = 'https://cssgenerators.dev';
+---
+<Layout
+  title="Privacy Policy — CSS Generators | cssgenerators.dev"
+  description="Privacy policy for cssgenerators.dev. We use self-hosted Umami analytics (no cookies, no personal data). No sign-up required."
+  canonical={`${siteUrl}/privacy`}
+  robots="index, follow"
+>
+  <Header />
+
+  <main style="max-width:760px;margin:0 auto;padding:64px 40px 80px">
+    <nav style="font:400 13px/1 Inter;color:#6b6b7b;margin-bottom:32px">
+      <a href="/" style="color:#8a8a9a;text-decoration:none">Tools</a>
+      <span style="margin:0 8px;color:#3a3a4a">›</span>
+      <span style="color:#e6e6ee">Privacy Policy</span>
+    </nav>
+
+    <h1 style="font:800 38px/1.1 Inter;color:#f2f2f7;margin:0 0 12px;letter-spacing:-0.02em">Privacy Policy</h1>
+    <p style="font:400 13px/1 Inter;color:#6b6b7b;margin:0 0 48px;border-bottom:1px solid #1c1c26;padding-bottom:48px">Last updated: June 2026</p>
+
+    <div class="seo-content">
+      <h2>Who we are</h2>
+      <p>
+        cssgenerators.dev is operated by <strong style="color:#e6e6ee">Dinno SAS</strong>, a French simplified joint-stock company
+        (SIREN 812225373). Contact: <a href="mailto:contact@cssgenerators.dev" style="color:#818cf8;text-decoration:none">contact@cssgenerators.dev</a>
+      </p>
+
+      <h2>What data we collect</h2>
+      <p>
+        We collect <strong style="color:#e6e6ee">no personal data</strong>. The site requires no account, no login, and no form submission.
+        All CSS generators run entirely in your browser — no data is sent to our servers during tool use.
+      </p>
+
+      <h3>Analytics</h3>
+      <p>
+        We use <a href="https://umami.is" target="_blank" rel="noopener" style="color:#818cf8;text-decoration:none">Umami</a>,
+        a privacy-respecting, open-source analytics tool hosted on our own server. Umami collects:
+      </p>
+      <p>
+        — Page views and referrer (aggregated, not tied to individuals)<br>
+        — Browser type and operating system (aggregated)<br>
+        — Country of origin (derived from IP, not stored)
+      </p>
+      <p>
+        Umami does not use cookies, does not fingerprint your browser, and does not share data with third parties.
+        IP addresses are never stored. The analytics data is used solely to understand which tools are most used.
+      </p>
+
+      <h2>Third-party services</h2>
+      <p>
+        We load fonts from Google Fonts (fonts.googleapis.com). Google may log font requests in accordance with
+        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:#818cf8;text-decoration:none">Google's privacy policy</a>.
+        No other third-party services are used.
+      </p>
+
+      <h2>Cookies</h2>
+      <p>This site does not use cookies.</p>
+
+      <h2>Your rights (GDPR)</h2>
+      <p>
+        As we collect no personal data, there is nothing to access, rectify, or delete. If you have questions,
+        contact us at <a href="mailto:contact@cssgenerators.dev" style="color:#818cf8;text-decoration:none">contact@cssgenerators.dev</a>.
+      </p>
+
+      <h2>Changes to this policy</h2>
+      <p>We will update this page if our data practices change. The "last updated" date at the top reflects the current version.</p>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

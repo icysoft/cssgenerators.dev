@@ -1,0 +1,442 @@
+---
+import BlogLayout from '../../layouts/BlogLayout.astro';
+const siteUrl = 'https://cssgenerators.dev';
+const canonical = `${siteUrl}/blog/css-filter-guide`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      '@id': `${canonical}#article`,
+      headline: 'CSS filter and backdrop-filter: blur, brightness, drop-shadow and more',
+      description: 'A complete guide to every CSS filter function — blur, brightness, contrast, grayscale, hue-rotate, invert, saturate, sepia, drop-shadow — plus backdrop-filter for glassmorphism effects. Includes live demos and performance advice.',
+      url: canonical,
+      datePublished: '2026-06-20',
+      dateModified: '2026-06-20',
+      author: { '@type': 'Organization', name: 'Dinno SAS', url: siteUrl },
+      publisher: { '@id': `${siteUrl}/#organization` },
+      mainEntityOfPage: canonical,
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is the difference between CSS filter and backdrop-filter?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'filter applies visual effects to the element itself and all its children. backdrop-filter applies effects to the content rendered behind the element — the area visible through the element\'s background. To see a backdrop-filter effect, the element\'s background must have some transparency (rgba or transparent).',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the difference between filter: drop-shadow() and box-shadow?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'box-shadow always follows the rectangular bounding box of the element, regardless of its visual shape. filter: drop-shadow() follows the actual alpha channel of the element — so on a PNG with transparent areas or an SVG, drop-shadow traces the real shape. drop-shadow() does not support the spread-radius parameter that box-shadow supports.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can I combine multiple CSS filter functions?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. List multiple filter functions space-separated in a single filter property: filter: brightness(1.1) contrast(1.1) saturate(1.3). They are applied left to right, and order can affect the result. You cannot set filter twice on the same element — the second declaration overwrites the first.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is backdrop-filter supported in all browsers?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'backdrop-filter has good modern browser support. Safari has supported it since version 9 (2015) with the -webkit-backdrop-filter prefix. Firefox added support in version 70 (2019). All modern versions of Chrome, Edge, and Safari support it without a prefix, though the -webkit- prefix is still needed for older Safari. Always include both -webkit-backdrop-filter and backdrop-filter. No IE support.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Does CSS filter affect performance?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes, significantly. filter forces the browser to create a new stacking context and a compositing layer. blur() in particular is expensive because it samples neighboring pixels. backdrop-filter is even more costly. For animated filters, add will-change: filter to the element to promote it to a GPU layer before the animation starts. Avoid applying backdrop-filter to many elements simultaneously.',
+          },
+        },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Blog', item: `${siteUrl}/blog` },
+        { '@type': 'ListItem', position: 3, name: 'CSS filter guide', item: canonical },
+      ],
+    },
+  ],
+};
+---
+
+<BlogLayout
+  title="CSS filter and backdrop-filter: blur, brightness, drop-shadow and more — cssgenerators.dev"
+  description="A complete guide to every CSS filter function — blur, brightness, contrast, grayscale, hue-rotate, invert, saturate, sepia, drop-shadow — plus backdrop-filter for glassmorphism. Live demos included."
+  canonical={canonical}
+  datePublished="2026-06-20"
+  readingTime="12 min"
+  schema={schema}
+>
+
+<p>CSS <code>filter</code> brings Photoshop-grade image effects directly into the browser — no canvas, no JavaScript, no image editing pipeline. Blur, color shift, brightness, duotone: all rendered in real time by the GPU. And with <code>backdrop-filter</code>, you can apply those same effects to whatever is <em>behind</em> an element, which is how glassmorphism actually works.</p>
+
+<p>This guide covers every filter function, when to combine them, the critical difference between <code>filter</code> and <code>backdrop-filter</code>, real-world use cases with live demos, and the performance traps worth knowing before you ship.</p>
+
+<h2>What are CSS filters?</h2>
+
+<p>The <code>filter</code> property applies graphical effects to an element and all of its descendants. It uses the same effect functions as SVG filters but with a simpler, CSS-native syntax. Every filter function has a "no-op" default — the value that produces no visible change — which is useful to remember when building transitions.</p>
+
+<p>The syntax is:</p>
+
+<pre><code>filter: function1(value) function2(value) ...;</code></pre>
+
+<p>Multiple functions are separated by spaces and applied <strong>left to right</strong>. Unlike most CSS properties, you cannot split them across multiple declarations — a second <code>filter:</code> overwrites the first.</p>
+
+<h2>What does each CSS filter function do?</h2>
+
+<p>Here is every function in the specification, applied to the same gradient so you can compare them directly.</p>
+
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;background:#0d0d12;border:1px solid #1e1e2e;border-radius:12px;padding:24px;margin:28px 0">
+  {[
+    ['blur(4px)', 'blur(4px)'],
+    ['brightness(0.4)', 'brightness(0.4)'],
+    ['brightness(1.8)', 'brightness(1.8)'],
+    ['contrast(2.5)', 'contrast(2.5)'],
+    ['grayscale(100%)', 'grayscale(100%)'],
+    ['hue-rotate(120deg)', 'hue-rotate(120deg)'],
+    ['invert(100%)', 'invert(100%)'],
+    ['saturate(4)', 'saturate(4)'],
+    ['sepia(100%)', 'sepia(100%)'],
+  ].map(([label, f]) => (
+    <div style="text-align:center">
+      <div style={`width:100%;height:52px;border-radius:8px;background:linear-gradient(135deg,#6366f1,#22d3ee,#f472b6);filter:${f}`}></div>
+      <div style="font:500 10px/1.3 'JetBrains Mono',monospace;color:#6b6b7b;margin-top:7px;letter-spacing:.03em">{label}</div>
+    </div>
+  ))}
+</div>
+
+<h3>blur(radius)</h3>
+
+<p>Applies a Gaussian blur. The radius is in pixels or other length units — <code>0</code> produces no blur (the default). There is no maximum, but values above ~20px are rarely useful and increasingly expensive. Use <code>blur()</code> for loading skeletons, depth-of-field effects, or revealing content on hover.</p>
+
+<pre><code>filter: blur(0);      /* default — no blur */
+filter: blur(4px);    /* soft blur */
+filter: blur(20px);   /* heavy blur, good for skeleton screens */</code></pre>
+
+<h3>brightness(amount)</h3>
+
+<p>Values below <code>1</code> darken, values above <code>1</code> brighten. <code>0</code> = pure black, <code>2</code> = twice as bright. The default is <code>1</code>. Percentages also work: <code>brightness(50%)</code> = <code>brightness(0.5)</code>.</p>
+
+<pre><code>filter: brightness(1);    /* default */
+filter: brightness(0.5);  /* 50% darker */
+filter: brightness(1.5);  /* 50% brighter */</code></pre>
+
+<h3>contrast(amount)</h3>
+
+<p><code>0</code> = flat grey, <code>1</code> = unchanged, values above <code>1</code> increase contrast. Combining <code>contrast(1.1)</code> with <code>brightness(1.05)</code> is a classic photo enhancement combo.</p>
+
+<h3>grayscale(amount)</h3>
+
+<p><code>0</code> = full color (default), <code>1</code> or <code>100%</code> = fully desaturated. Intermediate values create partial desaturation. Great for "disabled" states or hover effects that reveal color.</p>
+
+<h3>hue-rotate(angle)</h3>
+
+<p>Rotates all hues around the color wheel. <code>0deg</code> = unchanged, <code>180deg</code> = opposite hues, <code>360deg</code> = back to start. Useful for color theming without changing images: apply <code>hue-rotate()</code> to a container to shift its entire color palette.</p>
+
+<pre><code>filter: hue-rotate(0deg);    /* unchanged */
+filter: hue-rotate(90deg);   /* shifted +90° on color wheel */
+filter: hue-rotate(180deg);  /* complementary colors */</code></pre>
+
+<h3>invert(amount)</h3>
+
+<p><code>0</code> = unchanged, <code>1</code> or <code>100%</code> = fully inverted (photo negative effect). Useful for dark mode image adjustments: <code>filter: invert(1) hue-rotate(180deg)</code> inverts an image while largely preserving its perceived colors.</p>
+
+<h3>opacity(amount)</h3>
+
+<p>Functionally similar to the <code>opacity</code> property, but with one important difference: <code>filter: opacity()</code> always creates a new compositing layer, which can improve animation smoothness but increases GPU memory. For static transparency, use the <code>opacity</code> property instead.</p>
+
+<h3>saturate(amount)</h3>
+
+<p><code>0</code> = fully desaturated (like grayscale), <code>1</code> = unchanged, values above <code>1</code> increase saturation. <code>saturate(3)</code> makes colors vivid and electric. Values below 1 create a muted, pastel effect.</p>
+
+<h3>sepia(amount)</h3>
+
+<p><code>0</code> = unchanged, <code>1</code> or <code>100%</code> = full warm brown sepia tone (vintage photo look). Intermediate values create a subtle warm color cast.</p>
+
+<h3>drop-shadow(offset-x offset-y blur color)</h3>
+
+<p>Unlike <code>box-shadow</code>, <code>drop-shadow</code> follows the actual alpha channel of the element — so on a transparent PNG or an SVG, it traces the real shape instead of the bounding box. It does not support <code>spread-radius</code> or <code>inset</code>.</p>
+
+<pre><code>filter: drop-shadow(0 4px 12px rgba(99, 102, 241, 0.6));</code></pre>
+
+<div style="background:#0d0d12;border:1px solid #1e1e2e;border-radius:12px;padding:32px;margin:28px 0;display:flex;flex-wrap:wrap;gap:40px;align-items:center;justify-content:center">
+  <div style="text-align:center">
+    <div style="width:70px;height:70px;background:linear-gradient(135deg,#6366f1,#22d3ee);clip-path:polygon(50% 0%,100% 38%,82% 100%,18% 100%,0% 38%);box-shadow:0 6px 18px rgba(99,102,241,.6);margin:0 auto"></div>
+    <div style="font:500 11px/1 'JetBrains Mono',monospace;color:#6b6b7b;margin-top:14px">box-shadow<br/>(follows bounding box)</div>
+  </div>
+  <div style="text-align:center">
+    <div style="width:70px;height:70px;background:linear-gradient(135deg,#6366f1,#22d3ee);clip-path:polygon(50% 0%,100% 38%,82% 100%,18% 100%,0% 38%);filter:drop-shadow(0 6px 18px rgba(99,102,241,.6));margin:0 auto"></div>
+    <div style="font:500 11px/1 'JetBrains Mono',monospace;color:#6b6b7b;margin-top:14px">filter: drop-shadow<br/>(follows actual shape)</div>
+  </div>
+</div>
+
+<p>The difference is visible on any non-rectangular element. <a href="/css-drop-shadow-generator">Try the drop-shadow generator</a> to build the syntax and copy it instantly.</p>
+
+<h2>How do you combine multiple CSS filter functions?</h2>
+
+<p>List them space-separated in a single <code>filter</code> declaration. Order matters: <code>brightness(2) grayscale(1)</code> brightens first, then desaturates — the grayscale sees a brighter input. Reversing the order can produce slightly different results with some function combinations.</p>
+
+<pre><code>/* Classic photo enhancement — "Instagram-style" */
+filter: brightness(1.05) contrast(1.1) saturate(1.25);
+
+/* Vintage photo */
+filter: sepia(0.6) contrast(1.1) brightness(0.9);
+
+/* Duotone: warm */
+filter: sepia(1) hue-rotate(330deg) saturate(4);
+
+/* Dark mode image invert (preserves perceived colors) */
+filter: invert(1) hue-rotate(180deg);</code></pre>
+
+<h4>Live: filter combinations</h4>
+
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;background:#0d0d12;border:1px solid #1e1e2e;border-radius:12px;padding:24px;margin:28px 0">
+  {[
+    ['No filter', 'none'],
+    ['Instagram', 'brightness(1.05) contrast(1.1) saturate(1.25)'],
+    ['Vintage', 'sepia(0.6) contrast(1.1) brightness(0.9)'],
+    ['Duotone warm', 'sepia(1) hue-rotate(330deg) saturate(4)'],
+  ].map(([label, f]) => (
+    <div style="text-align:center">
+      <div style={`width:100%;height:70px;border-radius:8px;background:linear-gradient(135deg,#6366f1 0%,#22d3ee 50%,#f472b6 100%);filter:${f}`}></div>
+      <div style="font:500 10px/1.3 'JetBrains Mono',monospace;color:#6b6b7b;margin-top:8px;letter-spacing:.02em">{label}</div>
+    </div>
+  ))}
+</div>
+
+<div class="callout">
+  <p><strong>Try it live:</strong> The <a href="/css-filter-generator">CSS filter generator</a> lets you combine all filter functions with sliders and copy the final declaration in one click.</p>
+</div>
+
+<h2>What is backdrop-filter and how is it different from filter?</h2>
+
+<p><code>filter</code> applies effects to the element and everything inside it. <code>backdrop-filter</code> applies effects to the area <em>behind</em> the element — everything rendered beneath it in the stacking context.</p>
+
+<p>For <code>backdrop-filter</code> to be visible, the element's background must have some transparency. A solid <code>background: #fff</code> would hide the blurred backdrop entirely.</p>
+
+<pre><code>/* filter — blurs the element itself */
+.card &#123; filter: blur(8px); &#125;
+
+/* backdrop-filter — blurs what's behind the element */
+.glass-card &#123;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); /* Safari */
+&#125;</code></pre>
+
+<h3>What is glassmorphism and how do you build it?</h3>
+
+<p>Glassmorphism is a UI style that mimics frosted glass — a panel with a slightly transparent background, a blur of the content behind it, and a subtle border. Three CSS properties make it work: <code>backdrop-filter: blur()</code>, <code>background: rgba()</code>, and <code>border: 1px solid rgba()</code>.</p>
+
+<div style="position:relative;width:100%;height:180px;background:linear-gradient(135deg,#6366f1 0%,#22d3ee 45%,#f472b6 100%);border-radius:12px;overflow:hidden;margin:28px 0">
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:calc(100% - 48px);background:rgba(255,255,255,.08);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:10px;border:1px solid rgba(255,255,255,.18);padding:22px 24px">
+    <div style="font:700 16px/1 Inter;color:#fff">Glassmorphism card</div>
+    <div style="font:400 13px/1.6 Inter;color:rgba(255,255,255,.65);margin-top:8px">backdrop-filter: blur(14px) &mdash; the blur applies to the gradient behind, not to this text.</div>
+  </div>
+</div>
+
+<pre><code>.glass &#123;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px); /* Safari */
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+&#125;
+
+/* Fallback when backdrop-filter is unsupported */
+@supports not (backdrop-filter: blur(1px)) &#123;
+  .glass &#123;
+    background: rgba(15, 15, 20, 0.85);
+  &#125;
+&#125;</code></pre>
+
+<p>The <code>@supports</code> rule is important. Without backdrop-filter, the nearly-transparent background makes text unreadable. The fallback increases opacity to ensure legibility regardless of what's behind the card.</p>
+
+<h2>How do you build a grayscale-to-color hover effect?</h2>
+
+<p>One of the most common filter use cases: images or elements that appear desaturated until hovered. With a CSS transition on the <code>filter</code> property, this is three lines of CSS.</p>
+
+<pre><code>.card-image &#123;
+  filter: grayscale(100%);
+  transition: filter 0.4s ease;
+&#125;
+
+.card-image:hover &#123;
+  filter: grayscale(0%);
+&#125;</code></pre>
+
+<style>
+  .fx-gray { filter: grayscale(100%); transition: filter 0.4s ease; cursor: pointer; }
+  .fx-gray:hover { filter: grayscale(0%); }
+</style>
+
+<div style="background:#0d0d12;border:1px solid #1e1e2e;border-radius:12px;padding:32px;margin:28px 0;text-align:center">
+  <div class="fx-gray" style="display:inline-block;width:180px;height:100px;background:linear-gradient(135deg,#6366f1,#22d3ee,#f472b6);border-radius:10px"></div>
+  <div style="font:500 11px/1 'JetBrains Mono',monospace;color:#6b6b7b;margin-top:14px">Hover to reveal color</div>
+</div>
+
+<p>The same pattern works in reverse for "focus" effects: full color by default, muted on hover to reduce visual noise in dense UI.</p>
+
+<h2>What is the duotone effect and how do you achieve it with CSS filters?</h2>
+
+<p>A duotone effect maps an image to two colors — a shadow color and a highlight color. With pure CSS, you can approximate it by chaining <code>sepia()</code>, <code>hue-rotate()</code>, and <code>saturate()</code>. This shifts the image into a sepia tone and then rotates and amplifies that hue.</p>
+
+<pre><code>/* Purple duotone */
+filter: sepia(1) hue-rotate(200deg) saturate(5);
+
+/* Gold duotone */
+filter: sepia(1) hue-rotate(330deg) saturate(4);
+
+/* Cyan duotone */
+filter: sepia(1) hue-rotate(130deg) saturate(5);</code></pre>
+
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;background:#0d0d12;border:1px solid #1e1e2e;border-radius:12px;padding:24px;margin:28px 0">
+  {[
+    ['Purple', 'sepia(1) hue-rotate(200deg) saturate(5)'],
+    ['Gold', 'sepia(1) hue-rotate(330deg) saturate(4)'],
+    ['Cyan', 'sepia(1) hue-rotate(130deg) saturate(5)'],
+  ].map(([label, f]) => (
+    <div style="text-align:center">
+      <div style={`width:100%;height:80px;border-radius:8px;background:linear-gradient(135deg,#aaa 0%,#fff 50%,#555 100%);filter:${f}`}></div>
+      <div style="font:500 10px/1.3 'JetBrains Mono',monospace;color:#6b6b7b;margin-top:8px">{label}</div>
+    </div>
+  ))}
+</div>
+
+<p>This is a CSS approximation — a true duotone requires blending modes or SVG filters for precise color control. But for UI accents and hero backgrounds it is fast and requires no image assets.</p>
+
+<h2>How do you use CSS blur() as a skeleton loader?</h2>
+
+<p>Blurring content while it loads — then transitioning to clear — is a progressively enhanced loading pattern that avoids layout shift and looks better than placeholder greys.</p>
+
+<pre><code>.content &#123;
+  filter: blur(8px);
+  transition: filter 0.5s ease;
+&#125;
+
+.content.loaded &#123;
+  filter: blur(0);
+&#125;</code></pre>
+
+<p>Apply a class via JavaScript when your content (image, API data) is ready. The transition from <code>blur(8px)</code> to <code>blur(0)</code> is smooth because the browser interpolates filter values natively.</p>
+
+<h2>How does CSS filter affect performance?</h2>
+
+<p>Every element with a non-none <code>filter</code> value creates a new stacking context and is promoted to a compositing layer. This means:</p>
+
+<ul>
+  <li><strong>Positive:</strong> filter-animated elements do not trigger repaints of surrounding content — they composite independently.</li>
+  <li><strong>Negative:</strong> each compositing layer consumes GPU memory and texture memory. Too many simultaneously is problematic on lower-end devices.</li>
+</ul>
+
+<p><code>blur()</code> is particularly expensive because it samples a radius of pixels around each output pixel. A large <code>blur(20px)</code> on a large element is one of the most GPU-intensive CSS operations you can trigger.</p>
+
+<pre><code>/* Promote to GPU layer before the animation starts */
+.will-animate-filter &#123;
+  will-change: filter;
+&#125;
+
+/* Remove will-change after animation to free GPU memory */
+element.addEventListener('transitionend', () => &#123;
+  element.style.willChange = 'auto';
+&#125;);</code></pre>
+
+<p><code>backdrop-filter</code> is even more expensive than <code>filter</code> because it must sample and process the rendered output of everything behind the element before compositing. Use it intentionally — one or two glassmorphism panels per page is fine; a modal overlay with backdrop-filter behind a list of cards with their own backdrop-filter is a performance trap.</p>
+
+<p>A concrete rule: measure first. Open DevTools Performance panel, record while hovering/animating, check for dropped frames. If you see compositing taking more than 2ms per frame, reduce blur radius or reduce the number of simultaneous filtered elements.</p>
+
+<h2>What is the browser compatibility for CSS filter and backdrop-filter?</h2>
+
+<p><code>filter</code> has near-universal support. All modern browsers have supported it since 2016. No vendor prefixes required.</p>
+
+<p><code>backdrop-filter</code> requires a prefix for Safari:</p>
+
+<pre><code>-webkit-backdrop-filter: blur(12px); /* Safari 9+ */
+backdrop-filter: blur(12px);         /* Chrome 76+, Edge 79+, Firefox 70+, Safari 18+ */</code></pre>
+
+<p>Always include both. Modern Safari (from version 18, 2024) supports the unprefixed version, but a significant share of Safari users is on older versions. The <code>-webkit-</code> prefix costs nothing and ensures support back to 2015.</p>
+
+<p>Internet Explorer does not support either property. If IE support is a requirement, apply a graceful fallback via <code>@supports</code>.</p>
+
+<p>Sources: <a href="https://caniuse.com/css-filters" target="_blank" rel="noopener">Can I Use — CSS filter</a>, <a href="https://caniuse.com/css-backdrop-filter" target="_blank" rel="noopener">Can I Use — backdrop-filter</a>.</p>
+
+<h2>Practical recipes: real-world filter patterns</h2>
+
+<h3>Image hover: color reveal</h3>
+<pre><code>.photo &#123; filter: grayscale(100%) brightness(0.9); transition: filter 0.4s ease; &#125;
+.photo:hover &#123; filter: none; &#125;</code></pre>
+
+<h3>Dark mode image inversion</h3>
+<pre><code>@media (prefers-color-scheme: dark) &#123;
+  img.invertible &#123; filter: invert(1) hue-rotate(180deg); &#125;
+&#125;</code></pre>
+<p>This inverts the lightness while largely preserving perceived hues — blue sky stays approximately blue. Works best on diagrams, illustrations, and screenshots with white backgrounds.</p>
+
+<h3>Colored drop-shadow on SVG icon</h3>
+<pre><code>.icon &#123;
+  filter: drop-shadow(0 4px 8px rgba(99, 102, 241, 0.7));
+&#125;
+/* box-shadow would cast a rectangle, not the icon shape */</code></pre>
+
+<div style="background:#0d0d12;border:1px solid #1e1e2e;border-radius:12px;padding:32px;margin:28px 0;text-align:center">
+  <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 6px 14px rgba(99,102,241,.75))">
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+  </svg>
+  <div style="font:500 11px/1 'JetBrains Mono',monospace;color:#6b6b7b;margin-top:14px">filter: drop-shadow on SVG</div>
+</div>
+
+<h3>Glassmorphism navigation bar</h3>
+<pre><code>.navbar &#123;
+  position: sticky;
+  top: 0;
+  background: rgba(10, 10, 16, 0.6);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+&#125;
+
+@supports not (backdrop-filter: blur(1px)) &#123;
+  .navbar &#123; background: rgba(10, 10, 16, 0.95); &#125;
+&#125;</code></pre>
+
+<p>The <code>saturate(180%)</code> alongside <code>blur()</code> prevents the blurred background from looking too grey and washed out — a common refinement used by macOS and iOS system UI.</p>
+
+<div style="margin:40px 0 32px;padding:28px;background:#131320;border-radius:12px;border:1px solid #2a2a44">
+  <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:14px">Build filter CSS visually</div>
+  <p style="font:400 14px/1.55 Inter;color:#9b9bab;margin:0 0 16px">Use the generators to experiment with values and copy production-ready CSS without writing the syntax by hand.</p>
+  <div style="display:flex;flex-wrap:wrap;gap:10px">
+    <a href="/css-filter-generator" class="tool-cta">→ CSS Filter Generator</a>
+    <a href="/css-drop-shadow-generator" class="tool-cta">→ Drop Shadow Generator</a>
+    <a href="/css-box-shadow-generator" class="tool-cta">→ Box Shadow Generator</a>
+  </div>
+</div>
+
+<div class="sources">
+  <h4>Sources</h4>
+  <ul>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/filter" target="_blank" rel="noopener">MDN — CSS filter</a></li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter" target="_blank" rel="noopener">MDN — CSS backdrop-filter</a></li>
+    <li><a href="https://caniuse.com/css-filters" target="_blank" rel="noopener">Can I Use — CSS filter</a></li>
+    <li><a href="https://caniuse.com/css-backdrop-filter" target="_blank" rel="noopener">Can I Use — CSS backdrop-filter</a></li>
+    <li><a href="https://www.w3.org/TR/filter-effects-1/" target="_blank" rel="noopener">W3C — Filter Effects Module Level 1</a></li>
+    <li><a href="https://developer.chrome.com/docs/devtools/performance/" target="_blank" rel="noopener">Chrome DevTools — Performance panel</a></li>
+  </ul>
+</div>
+
+</BlogLayout>
