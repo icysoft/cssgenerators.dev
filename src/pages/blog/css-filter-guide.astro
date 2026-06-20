@@ -50,7 +50,7 @@ const schema = {
           name: 'Is backdrop-filter supported in all browsers?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'backdrop-filter has good modern browser support. Safari has supported it since version 9 (2015) with the -webkit-backdrop-filter prefix. Firefox added support in version 70 (2019). All modern versions of Chrome, Edge, and Safari support it without a prefix, though the -webkit- prefix is still needed for older Safari. Always include both -webkit-backdrop-filter and backdrop-filter. No IE support.',
+            text: 'backdrop-filter has good modern browser support. Safari has supported it since version 9 (2015) with the -webkit-backdrop-filter prefix. Firefox added support in version 103 (2022). All modern versions of Chrome, Edge, and Safari support it without a prefix, though the -webkit- prefix is still needed for older Safari. Always include both -webkit-backdrop-filter and backdrop-filter. No IE support.',
           },
         },
         {
@@ -368,7 +368,7 @@ element.addEventListener('transitionend', () => &#123;
 <p><code>backdrop-filter</code> requires a prefix for Safari:</p>
 
 <pre><code>-webkit-backdrop-filter: blur(12px); /* Safari 9+ */
-backdrop-filter: blur(12px);         /* Chrome 76+, Edge 79+, Firefox 70+, Safari 18+ */</code></pre>
+backdrop-filter: blur(12px);         /* Chrome 76+, Edge 79+, Firefox 103+, Safari 18+ */</code></pre>
 
 <p>Always include both. Modern Safari (from version 18, 2024) supports the unprefixed version, but a significant share of Safari users is on older versions. The <code>-webkit-</code> prefix costs nothing and ensures support back to 2015.</p>
 

@@ -51,7 +51,7 @@ const schema = {
           name: 'What is the browser support for clip-path?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'The basic shape functions (inset, circle, ellipse, polygon) are supported in all modern browsers with 97%+ global coverage. The path() function (SVG paths as clip regions) requires Chrome 88+, Firefox 63+, and Safari 13.1+.',
+            text: 'The basic shape functions (inset, circle, ellipse, polygon) are supported in all modern browsers with 97%+ global coverage. The path() function (SVG paths as clip regions) requires Chrome 88+, Firefox 71+, and Safari 13.1+.',
           },
         },
         {
@@ -502,7 +502,7 @@ clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);</code></pre>
 
 <p>
   The <code>path()</code> function, which accepts an SVG path string as a clip shape, landed more recently:
-  Chrome 88 (January 2021), Firefox 63, and Safari 13.1 (Spring 2020). If you need to support older Safari versions,
+  Chrome 88 (January 2021), Firefox 71, and Safari 13.1 (Spring 2020). If you need to support older Safari versions,
   verify on <a href="https://caniuse.com/css-clip-path" target="_blank" rel="noopener">caniuse.com/css-clip-path</a>.
 </p>
 

@@ -33,7 +33,7 @@ const schema = {
         {
           '@type': 'Question',
           name: 'What are the CSS gradient types?',
-          acceptedAnswer: { '@type': 'Answer', text: 'linear-gradient — colors transition along a straight line. Specify angle in degrees (0° = top to bottom, 90° = left to right). radial-gradient — colors radiate outward from a center point. conic-gradient — colors rotate around a center point, useful for pie charts and color wheels.' },
+          acceptedAnswer: { '@type': 'Answer', text: 'linear-gradient — colors transition along a straight line. Specify angle in degrees (0° = bottom to top, 90° = left to right, 180° = top to bottom). radial-gradient — colors radiate outward from a center point. conic-gradient — colors rotate around a center point, useful for pie charts and color wheels.' },
         },
         {
           '@type': 'Question',
@@ -67,7 +67,7 @@ const schema = {
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
         <h2>What are the CSS gradient types?</h2>
-        <p><strong>linear-gradient</strong> — colors transition along a straight line. Specify angle in degrees (0° = top to bottom, 90° = left to right). <strong>radial-gradient</strong> — colors radiate outward from a center point. <strong>conic-gradient</strong> — colors rotate around a center point (useful for pie charts and color wheels).</p>
+        <p><strong>linear-gradient</strong> — colors transition along a straight line. Specify angle in degrees (0° = bottom to top, 90° = left to right, 180° = top to bottom). <strong>radial-gradient</strong> — colors radiate outward from a center point. <strong>conic-gradient</strong> — colors rotate around a center point (useful for pie charts and color wheels).</p>
         <h2>What is the CSS gradient syntax?</h2>
         <p><code>background: linear-gradient(90deg, #6366f1 0%, #22d3ee 100%)</code>. Add more color stops by inserting additional color-position pairs: <code>linear-gradient(90deg, #6366f1 0%, #f472b6 50%, #22d3ee 100%)</code>.</p>
         <h3>How do hard color stops work?</h3>
