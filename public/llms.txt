@@ -1,7 +1,7 @@
 # CSS Generators
 
 > Free online CSS generator tools for developers. Live preview, one-click copy. No sign-up required.
-> Built by Dinno SAS — https://cssgenerators.dev
+> Built by MCS — https://cssgenerators.dev
 
 ## Tools
 
@@ -21,4 +21,4 @@
 
 ## About
 
-CSS Generators is a suite of free, client-side CSS tools. All generators run entirely in the browser — no server, no sign-up, no tracking by third parties. Published by Dinno SAS (SIREN 812225373).
+CSS Generators is a suite of free, client-side CSS tools. All generators run entirely in the browser — no server, no sign-up, no tracking by third parties. Published by MCS (SIREN 106 942 600).
