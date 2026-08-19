@@ -1,0 +1,67 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const siteUrl = 'https://cssgenerators.dev';
+
+const tools = [
+  { name: 'Flexbox', slug: 'css-flexbox-generator' },
+  { name: 'Box Shadow', slug: 'css-box-shadow-generator' },
+  { name: 'Drop Shadow', slug: 'css-drop-shadow-generator' },
+  { name: 'Button', slug: 'css-button-generator' },
+  { name: 'Grid', slug: 'css-grid-generator' },
+  { name: 'Filter', slug: 'css-filter-generator' },
+  { name: 'Text Shadow', slug: 'css-text-shadow-generator' },
+  { name: 'Border', slug: 'css-border-generator' },
+  { name: 'Clip Path', slug: 'css-clip-path-generator' },
+  { name: 'Triangle', slug: 'css-triangle-generator' },
+  { name: 'Arrow', slug: 'css-arrow-generator' },
+  { name: 'Speech Bubble', slug: 'css-speech-bubble-generator' },
+  { name: 'Gradient', slug: 'css-gradient-generator' },
+];
+---
+<Layout
+  title="Page not found (404) — cssgenerators.dev"
+  description="This page does not exist. Browse the 13 free CSS generators available on cssgenerators.dev."
+  canonical={`${siteUrl}/404`}
+  robots="noindex, follow"
+>
+  <Header />
+
+  <main style="max-width:760px;margin:0 auto;padding:64px 40px 80px">
+    <p style="font:700 13px/1 'JetBrains Mono',monospace;color:#6366f1;margin:0 0 14px;letter-spacing:0.08em">404</p>
+
+    <h1 style="font:800 38px/1.1 Inter;color:#f2f2f7;margin:0 0 12px;letter-spacing:-0.02em">Page not found</h1>
+    <p style="font:400 16px/1.6 Inter;color:#9b9bab;margin:0 0 48px;border-bottom:1px solid #1c1c26;padding-bottom:48px">
+      The URL you followed does not exist on cssgenerators.dev. It may have been moved, or the link may be mistyped.
+    </p>
+
+    <div class="seo-content">
+      <h2>All CSS generators</h2>
+    </div>
+
+    <ul style="list-style:none;margin:0 0 40px;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px">
+      {tools.map((tool) => (
+        <li>
+          <a
+            href={`/${tool.slug}`}
+            style="display:block;padding:12px 14px;border:1px solid #2a2a38;border-radius:8px;background:#16161e;font:600 14px/1 Inter;color:#e6e6ee;text-decoration:none"
+          >
+            {tool.name}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="seo-content">
+      <p>
+        You can also head back to the <a href="/" style="color:#818cf8;text-decoration:none">tools index</a>,
+        read the <a href="/blog" style="color:#818cf8;text-decoration:none">CSS guides</a>,
+        or learn more <a href="/about" style="color:#818cf8;text-decoration:none">about this site</a>.
+      </p>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

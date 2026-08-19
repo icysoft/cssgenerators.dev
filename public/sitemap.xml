@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Sitemap index served at the canonical /sitemap.xml path declared in robots.txt.
+  @astrojs/sitemap emits its own index at /sitemap-index.xml plus one chunk per
+  45 000 URLs (/sitemap-0.xml, /sitemap-1.xml, ...); it cannot be told to name the
+  index "sitemap.xml", hence this static mirror. Add a <sitemap> entry here if the
+  build ever produces more than one chunk.
+-->
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>https://cssgenerators.dev/sitemap-0.xml</loc>
+  </sitemap>
+</sitemapindex>
