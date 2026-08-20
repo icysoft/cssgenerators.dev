@@ -1,0 +1,166 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BorderRadius from '../components/tools/BorderRadius';
+
+const siteUrl = 'https://cssgenerators.dev';
+const canonical = `${siteUrl}/css-border-radius-generator`;
+
+const faq = [
+  {
+    q: "How do you use the CSS border radius generator?",
+    a: "Pick a preset — Rounded, Pill, Circle, Leaf, Squircle or Blob — or drag the four corner sliders directly. Switch the unit between px and % to change how the radius is measured, untick Link all corners to shape each corner independently, and tick Elliptical corners to control the horizontal and vertical radii separately. The preview and the CSS update as you go.",
+  },
+  {
+    q: "What is the CSS border-radius syntax?",
+    a: "border-radius is a shorthand that rounds all four corners at once — border-radius: 12px is the common case. It accepts one to four values, plus an optional second group after a slash for elliptical corners. Each value can be a length (px, rem, em) or a percentage.",
+  },
+  {
+    q: "How do the one, two, three and four value shorthands work?",
+    a: "The values run clockwise starting from the top-left corner, which is the part most people get wrong. One value rounds all four corners equally. Two values set top-left with bottom-right, then top-right with bottom-left. Three values set top-left, then top-right with bottom-left, then bottom-right. Four values set top-left, top-right, bottom-right and bottom-left in that order — note that it is not the top, right, bottom, left order used by margin and padding.",
+  },
+  {
+    q: "How do you round only one corner in CSS?",
+    a: "Reach for the individual longhand properties instead of padding the shorthand with zeros: border-top-left-radius, border-top-right-radius, border-bottom-right-radius and border-bottom-left-radius. Writing border-top-left-radius: 24px states the intent far more clearly than border-radius: 24px 0 0 0, and it will not be silently clobbered when someone later edits the shorthand.",
+  },
+  {
+    q: "Should you use pixels or percentages for border-radius?",
+    a: "Use pixels when the curve should look the same whatever the element size — that is what you normally want for cards, inputs and buttons, because a percentage radius on a wide card produces a distractingly stretched corner. Use percentages when the curve should scale with the box. Horizontal radii resolve against the element width and vertical radii against its height, which has a consequence worth remembering: on a non-square element a single percentage already produces an elliptical corner, not a circular one. That is exactly why border-radius: 50% turns a square into a circle and any other box into an ellipse.",
+  },
+  {
+    q: "What are elliptical corners and the border-radius slash syntax?",
+    a: "A corner does not have to be a quarter circle. Everything before the slash sets the horizontal radii, everything after it sets the vertical radii: border-radius: 40px 10px 40px 10px / 10px 40px 10px 40px Each corner becomes a quarter ellipse, and because the two axes are independent you get eight values of control in total. This is the mechanism behind the organic blob shapes you see in modern landing pages — the Blob preset above uses percentages on both axes so the shape keeps its proportions as the element resizes.",
+  },
+  {
+    q: "How do you make a circle, a pill or a squircle?",
+    a: "For a circle, apply border-radius: 50% to an element with equal width and height. For a pill or capsule, use a radius larger than half the element height, conventionally border-radius: 9999px. You do not need to compute the exact value: when radii would overlap, the browser scales all of them down proportionally, so an arbitrarily large number resolves to a clean stadium shape at any height. A true squircle — the continuous-curvature shape used by iOS icons — is not reproducible with border-radius alone, because every corner it draws is a circular or elliptical arc. A generous percentage radius approximates it, which is what the Squircle preset does; the real thing needs corner-shape below, or an SVG path.",
+  },
+  {
+    q: "What is the CSS corner-shape property?",
+    a: "corner-shape changes what a corner is cut with rather than how large the cut is. It accepts round (the default), square, bevel, scoop, notch, squircle and the parametric superellipse() function, and it only takes effect where a border-radius is already set. It is worth knowing about and not worth shipping unguarded: the property is still experimental and explicitly not Baseline, meaning it does not work in some of the most widely used browsers. Treat it as progressive enhancement behind a @supports (corner-shape: scoop) query, so browsers without it fall back to the ordinary rounded corner rather than losing the shape entirely.",
+  },
+  {
+    q: "Does border-radius clip content and shrink the clickable area?",
+    a: "Two side effects catch people out. First, backgrounds and borders follow the curve but child content does not — an image or a table inside a rounded card will still square off the corners unless you add overflow: hidden to the parent. Second, border-radius trims the hit-testing area: the region outside the curve no longer receives pointer events. On a heavily rounded control that measurably eats into the touch target, so if you are working to a minimum tappable size, check that the remaining area still clears it rather than measuring the element's bounding box.",
+  },
+  {
+    q: "What is the browser compatibility for CSS border-radius?",
+    a: "border-radius works in every modern browser with no vendor prefixes, and has done since Internet Explorer 9 — the -webkit- and -moz- prefixes you still find in old snippets are dead weight. Percentages, the individual corner longhands and the elliptical slash syntax are all part of that same widely supported feature. Only corner-shape has limited availability.",
+  },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      '@id': `${canonical}#app`,
+      name: 'CSS Border Radius Generator',
+      url: canonical,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Any',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      description: 'Free online CSS border-radius generator with live preview. Round each corner independently, switch between px and %, build elliptical and blob shapes, and copy the CSS.',
+      creator: { '@id': 'https://cssgenerators.dev/#organization' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'CSS Generators', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Border Radius Generator', item: canonical },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faq.map(({ q, a }) => ({
+        '@type': 'Question',
+        name: q,
+        acceptedAnswer: { '@type': 'Answer', text: a },
+      })),
+    },
+  ],
+};
+---
+<Layout
+  title="CSS Border Radius Generator — Free Online Tool | cssgenerators.dev"
+  description="Generate CSS border-radius online. Round each corner independently, switch px or %, build pills, circles and elliptical blob shapes. Live preview, copy instantly."
+  canonical={canonical}
+  schema={schema}
+>
+  <Header />
+  <main>
+    <div style="padding:32px 40px 16px">
+      <div style="font:500 12.5px/1 Inter;color:#6b6b7b;margin-bottom:12px">
+        <a href="/" style="color:#8a8a9a;text-decoration:none">Tools</a>
+        <span style="color:#3a3a48"> / </span>
+        Border Radius
+      </div>
+      <h1 style="font:800 34px/1.1 Inter;color:#f2f2f7;margin:0 0 8px;letter-spacing:-0.02em">CSS Border Radius Generator</h1>
+      <p style="font:400 15.5px/1.5 Inter;color:#9b9bab;margin:0 0 32px;max-width:620px">Round every corner independently, switch between pixels and percentages, and build elliptical blob shapes with the slash syntax. Copy production-ready <code style="font-family:'JetBrains Mono',monospace;font-size:14px;background:#1a1a24;padding:2px 6px;border-radius:4px;color:#a5b4fc">border-radius</code> CSS instantly.</p>
+    </div>
+    <div style="padding:0 40px 40px">
+      <BorderRadius client:load />
+    </div>
+
+    <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
+      <div class="seo-content">
+        <h2>How do you use the CSS border radius generator?</h2>
+        <p>Pick a preset — Rounded, Pill, Circle, Leaf, Squircle or Blob — or drag the four corner sliders directly. Switch the unit between <code>px</code> and <code>%</code> to change how the radius is measured, untick <strong style="color:#e6e6ee">Link all corners</strong> to shape each corner independently, and tick <strong style="color:#e6e6ee">Elliptical corners</strong> to control the horizontal and vertical radii separately. The preview and the CSS update as you go.</p>
+
+        <h2>What is the CSS border-radius syntax?</h2>
+        <p><code>border-radius</code> is a shorthand that rounds all four corners at once — <code>border-radius: 12px</code> is the common case. It accepts one to four values, plus an optional second group after a slash for elliptical corners. Each value can be a length (<code>px</code>, <code>rem</code>, <code>em</code>) or a percentage.</p>
+
+        <h3>How do the one, two, three and four value shorthands work?</h3>
+        <p>The values run clockwise starting from the top-left corner, which is the part most people get wrong. One value rounds all four corners equally. Two values set top-left with bottom-right, then top-right with bottom-left. Three values set top-left, then top-right with bottom-left, then bottom-right. Four values set top-left, top-right, bottom-right and bottom-left in that order — note that it is <em>not</em> the top, right, bottom, left order used by <code>margin</code> and <code>padding</code>.</p>
+
+        <h3>How do you round only one corner in CSS?</h3>
+        <p>Reach for the individual longhand properties instead of padding the shorthand with zeros: <code>border-top-left-radius</code>, <code>border-top-right-radius</code>, <code>border-bottom-right-radius</code> and <code>border-bottom-left-radius</code>. Writing <code>border-top-left-radius: 24px</code> states the intent far more clearly than <code>border-radius: 24px 0 0 0</code>, and it will not be silently clobbered when someone later edits the shorthand.</p>
+
+        <h2>Should you use pixels or percentages for border-radius?</h2>
+        <p>Use pixels when the curve should look the same whatever the element size — that is what you normally want for cards, inputs and buttons, because a percentage radius on a wide card produces a distractingly stretched corner.</p>
+        <p>Use percentages when the curve should scale with the box. Horizontal radii resolve against the element <strong style="color:#e6e6ee">width</strong> and vertical radii against its <strong style="color:#e6e6ee">height</strong>, which has a consequence worth remembering: on a non-square element a single percentage already produces an elliptical corner, not a circular one. That is exactly why <code>border-radius: 50%</code> turns a square into a circle and any other box into an ellipse.</p>
+
+        <h2>What are elliptical corners and the border-radius slash syntax?</h2>
+        <p>A corner does not have to be a quarter circle. Everything before the slash sets the horizontal radii, everything after it sets the vertical radii:</p>
+        <p><code>border-radius: 40px 10px 40px 10px / 10px 40px 10px 40px</code></p>
+        <p>Each corner becomes a quarter <em>ellipse</em>, and because the two axes are independent you get eight values of control in total. This is the mechanism behind the organic blob shapes you see in modern landing pages — the Blob preset above uses percentages on both axes so the shape keeps its proportions as the element resizes.</p>
+
+        <h2>How do you make a circle, a pill or a squircle?</h2>
+        <p>For a <strong style="color:#e6e6ee">circle</strong>, apply <code>border-radius: 50%</code> to an element with equal width and height. For a <strong style="color:#e6e6ee">pill</strong> or capsule, use a radius larger than half the element height, conventionally <code>border-radius: 9999px</code>. You do not need to compute the exact value: when radii would overlap, the browser scales all of them down proportionally, so an arbitrarily large number resolves to a clean stadium shape at any height.</p>
+        <p>A true <strong style="color:#e6e6ee">squircle</strong> — the continuous-curvature shape used by iOS icons — is not reproducible with <code>border-radius</code> alone, because every corner it draws is a circular or elliptical arc. A generous percentage radius approximates it, which is what the Squircle preset does; the real thing needs <code>corner-shape</code> below, or an SVG path.</p>
+
+        <h2>What is the CSS corner-shape property?</h2>
+        <p><code>corner-shape</code> changes <em>what a corner is cut with</em> rather than how large the cut is. It accepts <code>round</code> (the default), <code>square</code>, <code>bevel</code>, <code>scoop</code>, <code>notch</code>, <code>squircle</code> and the parametric <code>superellipse()</code> function, and it only takes effect where a <code>border-radius</code> is already set.</p>
+        <p>It is worth knowing about and not worth shipping unguarded: the property is still experimental and explicitly <strong style="color:#e6e6ee">not Baseline</strong>, meaning it does not work in some of the most widely used browsers. Treat it as progressive enhancement behind a <code>@supports (corner-shape: scoop)</code> query, so browsers without it fall back to the ordinary rounded corner rather than losing the shape entirely.</p>
+
+        <h2>Does border-radius clip content and shrink the clickable area?</h2>
+        <p>Two side effects catch people out. First, backgrounds and borders follow the curve but <em>child content does not</em> — an image or a table inside a rounded card will still square off the corners unless you add <code>overflow: hidden</code> to the parent.</p>
+        <p>Second, <code>border-radius</code> trims the hit-testing area: the region outside the curve no longer receives pointer events. On a heavily rounded control that measurably eats into the touch target, so if you are working to a minimum tappable size, check that the <em>remaining</em> area still clears it rather than measuring the element's bounding box.</p>
+
+        <h2>What is the browser compatibility for CSS border-radius?</h2>
+        <p><code>border-radius</code> works in every modern browser with no vendor prefixes, and has done since Internet Explorer 9 — the <code>-webkit-</code> and <code>-moz-</code> prefixes you still find in old snippets are dead weight. Percentages, the individual corner longhands and the elliptical slash syntax are all part of that same widely supported feature. Only <code>corner-shape</code> has limited availability.</p>
+      </div>
+    </div>
+
+    <div style="padding:24px 40px 0;border-top:1px solid #1c1c26">
+      <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:12px">Related</div>
+      <a href="/css-border-generator" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid #2a2a44;border-radius:8px;background:#131320;color:#a5b4fc;font:500 13.5px/1 Inter;text-decoration:none">Need borders too? CSS Border Generator →</a>
+    </div>
+    <div style="padding:24px 40px 40px;border-top:1px solid #1c1c26">
+      <div style="font:600 15px/1 Inter;color:#e6e6ee;margin-bottom:16px">Other CSS Tools</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        {[
+          ['CSS Border', '/css-border-generator'],
+          ['Box Shadow', '/css-box-shadow-generator'],
+          ['CSS Button', '/css-button-generator'],
+          ['Clip Path', '/css-clip-path-generator'],
+          ['Gradient', '/css-gradient-generator'],
+        ].map(([name, href]) => (
+          <a href={href} style="padding:8px 16px;border:1px solid #2a2a38;border-radius:8px;background:#16161e;color:#c0c0d0;text-decoration:none;font:500 13px/1 Inter">{name}</a>
+        ))}
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>

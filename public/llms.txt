@@ -12,6 +12,7 @@
 - [CSS Grid Generator](https://cssgenerators.dev/css-grid-generator): Visual grid-template-columns and grid-template-rows builder with fr unit support.
 - [CSS Filter Generator](https://cssgenerators.dev/css-filter-generator): Combine blur, brightness, contrast, saturate, hue-rotate and more into a single filter: property.
 - [CSS Text Shadow Generator](https://cssgenerators.dev/css-text-shadow-generator): Multi-layer text-shadow generator with neon, retro and 3D presets.
+- [CSS Border Radius Generator](https://cssgenerators.dev/css-border-radius-generator): Round each corner independently in px or %, build pills, circles and elliptical blob shapes with the slash syntax.
 - [CSS Border Generator](https://cssgenerators.dev/css-border-generator): Configure border-style, border-width, border-color and border-radius with live preview.
 - [CSS Clip Path Generator](https://cssgenerators.dev/css-clip-path-generator): Generate clip-path: polygon() shapes visually with draggable points.
 - [CSS Triangle Generator](https://cssgenerators.dev/css-triangle-generator): Create pure-CSS triangles using the border trick or modern clip-path approach.

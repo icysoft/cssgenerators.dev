@@ -33,28 +33,53 @@ const schema = {
       mainEntity: [
         {
           '@type': 'Question',
-          name: 'How do you use the CSS text-shadow generator?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Select a preset (Neon Blue, Retro, 3D, etc.) or adjust the sliders manually. The horizontal offset moves the shadow left/right, the vertical offset moves it up/down, and blur radius controls how soft the shadow appears. The preview updates instantly.' },
+          name: "How do you use the CSS text-shadow generator?",
+          acceptedAnswer: { '@type': 'Answer', text: "Select a preset — Neon Blue, Retro, 3D and the rest — or drive the sliders yourself. The horizontal offset moves the shadow left and right, the vertical offset moves it up and down, and the blur radius controls how soft the edge is. The preview updates on every change, and the CSS panel always shows exactly what you will paste." },
         },
         {
           '@type': 'Question',
-          name: 'What is the CSS text-shadow syntax?',
-          acceptedAnswer: { '@type': 'Answer', text: 'The text-shadow property accepts: text-shadow: offset-x offset-y blur-radius color. You can stack multiple shadows by comma-separating them, which is how neon glow effects are created.' },
+          name: "What is the CSS text-shadow syntax?",
+          acceptedAnswer: { '@type': 'Answer', text: "The property takes text-shadow: offset-x offset-y blur-radius color. Only the two offsets are required — text-shadow: 2px 2px red is valid and gives a hard-edged shadow with no blur. The color may come first or last; both orders parse, though putting it last is the common convention." },
         },
         {
           '@type': 'Question',
-          name: 'How do you create a neon text shadow effect in CSS?',
-          acceptedAnswer: { '@type': 'Answer', text: 'To create a neon glow, set horizontal and vertical offsets to 0 and use a vivid color like cyan (#22d3ee) or pink (#f472b6). Stack two shadows — one with a small blur and one with a larger blur — for a more realistic glow effect.' },
+          name: "What do the offset, blur and color values actually do?",
+          acceptedAnswer: { '@type': 'Answer', text: "The horizontal offset shifts the shadow along the X axis: positive moves it right, negative moves it left. The vertical offset does the same on the Y axis, positive moving it down. The blur radius spreads the shadow outwards — zero gives a crisp duplicate of the glyph, and larger values fade it into a halo. It cannot be negative. Unlike box-shadow, there is no spread value. If you want a bigger shadow you increase the blur or stack more layers; you cannot inflate the glyph itself." },
         },
         {
           '@type': 'Question',
-          name: 'How do you create a retro or 3D text shadow in CSS?',
-          acceptedAnswer: { '@type': 'Answer', text: 'For a retro effect, set a small positive offset on both axes (e.g. 3px 3px) with blur at 0. For a 3D layered effect, stack multiple shadows at incremental offsets using the same or progressively darker color.' },
+          name: "How do you stack multiple text shadows?",
+          acceptedAnswer: { '@type': 'Answer', text: "Comma-separate them. Shadows paint front to back in the order written, so the first in the list sits on top and the last sits furthest behind: text-shadow: 0 0 6px cyan, 0 0 18px cyan. Every visually interesting text effect on this page is built this way — a single shadow can only ever be one flat offset copy." },
         },
         {
           '@type': 'Question',
-          name: 'What is the browser compatibility for CSS text-shadow?',
-          acceptedAnswer: { '@type': 'Answer', text: 'text-shadow has 97%+ browser support and works in all modern browsers — Chrome, Firefox, Safari, and Edge — without vendor prefixes.' },
+          name: "How do you create a neon glow effect in CSS?",
+          acceptedAnswer: { '@type': 'Answer', text: "Set both offsets to zero so the glow sits symmetrically around the glyph, pick a vivid color such as cyan (#22d3ee) or pink (#f472b6), and stack at least two copies: a tight one with a small blur for the bright core, and a wide one with a large blur for the falloff. Adding a third, wider layer at a lower alpha sells the effect further. Light text on a dark background is what makes it read as neon rather than as a smudge." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you create a retro or 3D text shadow?",
+          acceptedAnswer: { '@type': 'Answer', text: "For the flat retro look, use a small positive offset on both axes with the blur at zero — text-shadow: 3px 3px 0 #f472b6 — so the shadow reads as a hard offset duplicate. For extruded 3D, stack several zero-blur shadows at incrementing offsets: 1px, 2px, 3px and so on, each one step further, using the same color or a progressively darker one. The stack of hard copies forms the illusion of a solid side face." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you outline text with text-shadow?",
+          acceptedAnswer: { '@type': 'Answer', text: "Place four zero-blur shadows one pixel out in each direction: text-shadow: 1px 0 0 black, -1px 0 0 black, 0 1px 0 black, 0 -1px 0 black. It is a workable trick, but it is an approximation — the diagonals stay thin, and the cost grows as you thicken the outline. When a real outline is what you want, -webkit-text-stroke paired with paint-order: stroke fill draws a true stroke that keeps the glyph shape intact. Keep text-shadow for glows and offsets, where it is genuinely the right tool." },
+        },
+        {
+          '@type': 'Question',
+          name: "What is the difference between text-shadow and box-shadow?",
+          acceptedAnswer: { '@type': 'Answer', text: "text-shadow follows the shape of the glyphs; box-shadow follows the element’s rectangular border box, rounded corners included. Putting box-shadow on a heading shadows the invisible block the text sits in, not the letters. The two also differ in syntax: box-shadow adds a spread value and an inset keyword, neither of which exists for text. There is no inset text shadow — the usual approximation is a light shadow below and a dark one above." },
+        },
+        {
+          '@type': 'Question',
+          name: "Does text-shadow hurt performance or readability?",
+          acceptedAnswer: { '@type': 'Answer', text: "Large blur radii are the expensive part, because the browser rasterizes the blur on every repaint. A heavy multi-layer glow on a body paragraph, or on text that animates or scrolls, is where it becomes noticeable; on a handful of headings it is free in practice. Legibility deserves more attention than performance here. A shadow reduces the effective contrast between the glyph and its background, so it is easy to build something striking that fails a contrast check. Verify the contrast ratio of the text against the background it actually sits on, and treat a heavy glow as decoration for display type rather than something to apply to reading copy." },
+        },
+        {
+          '@type': 'Question',
+          name: "What is the browser compatibility for CSS text-shadow?",
+          acceptedAnswer: { '@type': 'Answer', text: "text-shadow is supported in every modern browser without vendor prefixes and has been for well over a decade — Chrome, Firefox, Safari and Edge all handle multiple comma-separated shadows identically. The one adjacent property to check before shipping is -webkit-text-stroke, which is still prefixed everywhere despite being broadly available." },
         },
       ],
     },
@@ -85,19 +110,39 @@ const schema = {
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
         <h2>How do you use the CSS text-shadow generator?</h2>
-        <p>Select a preset (Neon Blue, Retro, 3D, etc.) or adjust the sliders manually. The horizontal offset moves the shadow left/right, the vertical offset moves it up/down, and blur radius controls how soft the shadow appears. The preview updates instantly.</p>
+        <p>Select a preset — Neon Blue, Retro, 3D and the rest — or drive the sliders yourself. The horizontal offset moves the shadow left and right, the vertical offset moves it up and down, and the blur radius controls how soft the edge is. The preview updates on every change, and the CSS panel always shows exactly what you will paste.</p>
 
         <h2>What is the CSS text-shadow syntax?</h2>
-        <p>The <code>text-shadow</code> property accepts: <code>text-shadow: offset-x offset-y blur-radius color</code>. You can stack multiple shadows by comma-separating them, which is how neon glow effects are created.</p>
+        <p>The property takes <code>text-shadow: offset-x offset-y blur-radius color</code>. Only the two offsets are required — <code>text-shadow: 2px 2px red</code> is valid and gives a hard-edged shadow with no blur. The color may come first or last; both orders parse, though putting it last is the common convention.</p>
 
-        <h3>How do you create a neon text shadow effect in CSS?</h3>
-        <p>To create a neon glow, set horizontal and vertical offsets to 0 and use a vivid color like cyan (<code>#22d3ee</code>) or pink (<code>#f472b6</code>). Stack two shadows — one with a small blur and one with a larger blur — for a more realistic glow effect.</p>
+        <h3>What do the offset, blur and color values actually do?</h3>
+        <p>The <strong style="color:#e6e6ee">horizontal offset</strong> shifts the shadow along the X axis: positive moves it right, negative moves it left. The <strong style="color:#e6e6ee">vertical offset</strong> does the same on the Y axis, positive moving it down. The <strong style="color:#e6e6ee">blur radius</strong> spreads the shadow outwards — zero gives a crisp duplicate of the glyph, and larger values fade it into a halo. It cannot be negative.</p>
+        <p>Unlike <code>box-shadow</code>, there is no spread value. If you want a bigger shadow you increase the blur or stack more layers; you cannot inflate the glyph itself.</p>
 
-        <h3>How do you create a retro or 3D text shadow in CSS?</h3>
-        <p>For a retro effect, set a small positive offset on both axes (e.g. 3px 3px) with blur at 0. For a 3D layered effect, stack multiple shadows at incremental offsets using the same or progressively darker color.</p>
+        <h2>How do you stack multiple text shadows?</h2>
+        <p>Comma-separate them. Shadows paint front to back in the order written, so the first in the list sits on top and the last sits furthest behind: <code>text-shadow: 0 0 6px cyan, 0 0 18px cyan</code>. Every visually interesting text effect on this page is built this way — a single shadow can only ever be one flat offset copy.</p>
 
-        <h3>What is the browser compatibility for CSS text-shadow?</h3>
-        <p><code>text-shadow</code> has 97%+ browser support and works in all modern browsers — Chrome, Firefox, Safari, and Edge — without vendor prefixes.</p>
+        <h3>How do you create a neon glow effect in CSS?</h3>
+        <p>Set both offsets to zero so the glow sits symmetrically around the glyph, pick a vivid color such as cyan (<code>#22d3ee</code>) or pink (<code>#f472b6</code>), and stack at least two copies: a tight one with a small blur for the bright core, and a wide one with a large blur for the falloff. Adding a third, wider layer at a lower alpha sells the effect further. Light text on a dark background is what makes it read as neon rather than as a smudge.</p>
+
+        <h3>How do you create a retro or 3D text shadow?</h3>
+        <p>For the flat retro look, use a small positive offset on both axes with the blur at zero — <code>text-shadow: 3px 3px 0 #f472b6</code> — so the shadow reads as a hard offset duplicate.</p>
+        <p>For extruded 3D, stack several zero-blur shadows at incrementing offsets: 1px, 2px, 3px and so on, each one step further, using the same color or a progressively darker one. The stack of hard copies forms the illusion of a solid side face.</p>
+
+        <h2>How do you outline text with text-shadow?</h2>
+        <p>Place four zero-blur shadows one pixel out in each direction: <code>text-shadow: 1px 0 0 black, -1px 0 0 black, 0 1px 0 black, 0 -1px 0 black</code>. It is a workable trick, but it is an approximation — the diagonals stay thin, and the cost grows as you thicken the outline.</p>
+        <p>When a real outline is what you want, <code>-webkit-text-stroke</code> paired with <code>paint-order: stroke fill</code> draws a true stroke that keeps the glyph shape intact. Keep <code>text-shadow</code> for glows and offsets, where it is genuinely the right tool.</p>
+
+        <h2>What is the difference between text-shadow and box-shadow?</h2>
+        <p><code>text-shadow</code> follows the shape of the glyphs; <code>box-shadow</code> follows the element’s rectangular border box, rounded corners included. Putting <code>box-shadow</code> on a heading shadows the invisible block the text sits in, not the letters.</p>
+        <p>The two also differ in syntax: <code>box-shadow</code> adds a spread value and an <code>inset</code> keyword, neither of which exists for text. There is no inset text shadow — the usual approximation is a light shadow below and a dark one above.</p>
+
+        <h2>Does text-shadow hurt performance or readability?</h2>
+        <p>Large blur radii are the expensive part, because the browser rasterizes the blur on every repaint. A heavy multi-layer glow on a body paragraph, or on text that animates or scrolls, is where it becomes noticeable; on a handful of headings it is free in practice.</p>
+        <p>Legibility deserves more attention than performance here. A shadow reduces the effective contrast between the glyph and its background, so it is easy to build something striking that fails a contrast check. Verify the contrast ratio of the text against the background it actually sits on, and treat a heavy glow as decoration for display type rather than something to apply to reading copy.</p>
+
+        <h2>What is the browser compatibility for CSS text-shadow?</h2>
+        <p><code>text-shadow</code> is supported in every modern browser without vendor prefixes and has been for well over a decade — Chrome, Firefox, Safari and Edge all handle multiple comma-separated shadows identically. The one adjacent property to check before shipping is <code>-webkit-text-stroke</code>, which is still prefixed everywhere despite being broadly available.</p>
       </div>
     </div>
 

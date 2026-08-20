@@ -32,23 +32,58 @@ const schema = {
       mainEntity: [
         {
           '@type': 'Question',
-          name: 'How do CSS triangles work?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Setting an element to width: 0; height: 0 and applying a colored border on one side while making adjacent borders transparent creates a triangle. The size of the triangle is controlled by the border width.' },
+          name: "How do CSS triangles work?",
+          acceptedAnswer: { '@type': 'Answer', text: "The trick exploits how browsers join borders. Give an element width: 0; height: 0 and it has no content box at all, so its four borders meet each other directly — and where two borders meet, the browser cuts the seam at 45 degrees. Make three of those borders transparent and the fourth is left as a triangle. That is the whole mechanism. The triangle is a border, which is why its size is set by border widths rather than by width and height." },
         },
         {
           '@type': 'Question',
-          name: 'What is the CSS triangle syntax?',
-          acceptedAnswer: { '@type': 'Answer', text: 'For an upward-pointing triangle: border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 30px solid #6366f1. Swap border-bottom for border-top to point down, etc.' },
+          name: "What is the CSS triangle syntax?",
+          acceptedAnswer: { '@type': 'Answer', text: "For a triangle pointing up: border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 30px solid #6366f1. The colored border is the one opposite the direction the triangle points, which is the part that trips people up — the bottom border produces an upward triangle." },
         },
         {
           '@type': 'Question',
-          name: 'How do you create diagonal CSS triangles?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Diagonal (corner) triangles use only two borders instead of three. For a top-right triangle: border-top: 40px solid #6366f1; border-left: 40px solid transparent.' },
+          name: "How do you point a triangle in each direction?",
+          acceptedAnswer: { '@type': 'Answer', text: "Move the color to the opposite side and make the other two transparent. Color the border-bottom to point up, border-top to point down, border-right to point left, and border-left to point right. In each case the two borders you keep transparent are the ones perpendicular to that axis, and their width sets how wide the base is." },
         },
         {
           '@type': 'Question',
-          name: 'What is the modern CSS alternative to the border triangle trick?',
-          acceptedAnswer: { '@type': 'Answer', text: 'In modern CSS, clip-path: polygon(50% 0%, 0% 100%, 100% 100%) is a simpler alternative that also lets you add background colors, gradients and borders to the triangle.' },
+          name: "How do you create diagonal corner triangles?",
+          acceptedAnswer: { '@type': 'Answer', text: "Corner triangles use two borders instead of three. For a triangle filling the top-right corner: border-top: 40px solid #6366f1; border-right: 40px solid transparent. With only two borders meeting, the single 45-degree seam becomes the hypotenuse, giving a right triangle rather than an isosceles one — which is what you want for ribbons and corner badges." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you control the size and proportions of a CSS triangle?",
+          acceptedAnswer: { '@type': 'Answer', text: "The two transparent borders set the half-base, and the colored border sets the height. So a triangle with 20px left and right borders has a 40px base, and its height is whatever you give the colored border. That makes the common shapes easy to hit deliberately. For an isosceles triangle, just use equal transparent borders — any height. For a right triangle, drop one of the transparent borders to zero. For an equilateral triangle the height must be the half-base multiplied by the square root of 3, roughly 1.732 — so 20px side borders need a 35px colored border, not 40px." },
+        },
+        {
+          '@type': 'Question',
+          name: "What is the modern clip-path alternative to the border trick?",
+          acceptedAnswer: { '@type': 'Answer', text: "One declaration replaces the whole thing: clip-path: polygon(50% 0%, 0% 100%, 100% 100%) on an element that has a real width and height. The three coordinate pairs are the apex, the bottom-left corner and the bottom-right corner, so changing the direction is a matter of moving points rather than reasoning about which border to color." },
+        },
+        {
+          '@type': 'Question',
+          name: "When should you use the border trick and when should you use clip-path?",
+          acceptedAnswer: { '@type': 'Answer', text: "Use clip-path whenever the triangle needs to be anything other than flat color. Because the element keeps a genuine box, you can give it a background gradient, a background image, or a transition — a border triangle can only ever be one solid color, since it is a border. The border trick still earns its place for tiny decorative carets generated with ::before and ::after, where there is no content to clip and the technique is universally supported. It is also the only one of the two that works without the element having dimensions." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you add a shadow to a CSS triangle?",
+          acceptedAnswer: { '@type': 'Answer', text: "Not with box-shadow. The border box of a border-trick triangle is the full bounding rectangle, so box-shadow draws a rectangular shadow around a shape that looks triangular — a mismatch that is immediately visible. Use filter: drop-shadow(0 2px 3px rgba(0,0,0,.4)) instead. It works off the rendered alpha channel, so it traces the actual visible triangle. The same applies to clip-path triangles, where box-shadow is clipped away entirely along with everything else outside the polygon." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you use a CSS triangle as a tooltip or dropdown caret?",
+          acceptedAnswer: { '@type': 'Answer', text: "Attach it to a pseudo-element rather than adding markup. Give the tooltip position: relative, then add a ::after with content: \"\", position: absolute, and the border declarations for a downward triangle. Position it with top: 100% and left: 50%, then pull it back by half its base with a negative margin or a translate so it centers properly. Match the colored border to the tooltip background rather than to its border color, and remember the caret does not inherit the parent background — if the tooltip background changes on hover, the caret needs the same rule." },
+        },
+        {
+          '@type': 'Question',
+          name: "Why does my CSS triangle look blurry or jagged?",
+          acceptedAnswer: { '@type': 'Answer', text: "Almost always subpixel rendering. Fractional border widths, a parent with a fractional position, or a transform that lands the element off the pixel grid all force the browser to antialias the 45-degree seam, and the diagonal edge is where that shows worst. Use whole-pixel border widths, and check that no ancestor is nudging the element onto a half pixel. If the triangle is large or is being scaled or rotated, switch to clip-path — it antialiases the edge more cleanly than a border seam does." },
+        },
+        {
+          '@type': 'Question',
+          name: "What is the browser compatibility for CSS triangles?",
+          acceptedAnswer: { '@type': 'Answer', text: "The border technique has no compatibility story to speak of: it relies on border rendering that has behaved this way in every browser for as long as CSS has had borders, and it needs no prefixes. clip-path with polygon() is supported across all current browsers unprefixed, so both approaches are safe today — the choice between them is about what you need the triangle to do, not about support." },
         },
       ],
     },
@@ -67,13 +102,43 @@ const schema = {
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
         <h2>How do CSS triangles work?</h2>
-        <p>Setting an element to <code>width: 0; height: 0</code> and applying a colored border on one side while making adjacent borders transparent creates a triangle. The size of the triangle is controlled by the border width.</p>
+        <p>The trick exploits how browsers join borders. Give an element <code>width: 0; height: 0</code> and it has no content box at all, so its four borders meet each other directly — and where two borders meet, the browser cuts the seam at 45 degrees. Make three of those borders transparent and the fourth is left as a triangle.</p>
+        <p>That is the whole mechanism. The triangle is a border, which is why its size is set by border widths rather than by width and height.</p>
+
         <h2>What is the CSS triangle syntax?</h2>
-        <p>For an upward-pointing triangle: <code>border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 30px solid #6366f1</code>. Swap <code>border-bottom</code> for <code>border-top</code> to point down, etc.</p>
-        <h3>How do you create diagonal CSS triangles?</h3>
-        <p>Diagonal (corner) triangles use only two borders instead of three. For a top-right triangle: <code>border-top: 40px solid #6366f1; border-left: 40px solid transparent</code>.</p>
-        <h3>What is the modern CSS alternative to the border triangle trick?</h3>
-        <p>In modern CSS, <code>clip-path: polygon(50% 0%, 0% 100%, 100% 100%)</code> is a simpler alternative that also lets you add background colors, gradients and borders to the triangle.</p>
+        <p>For a triangle pointing up: <code>border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 30px solid #6366f1</code>. The colored border is the one <em>opposite</em> the direction the triangle points, which is the part that trips people up — the bottom border produces an upward triangle.</p>
+
+        <h3>How do you point a triangle in each direction?</h3>
+        <p>Move the color to the opposite side and make the other two transparent. Color the <code>border-bottom</code> to point up, <code>border-top</code> to point down, <code>border-right</code> to point left, and <code>border-left</code> to point right. In each case the two borders you keep transparent are the ones perpendicular to that axis, and their width sets how wide the base is.</p>
+
+        <h3>How do you create diagonal corner triangles?</h3>
+        <p>Corner triangles use two borders instead of three. For a triangle filling the top-right corner: <code>border-top: 40px solid #6366f1; border-right: 40px solid transparent</code>. With only two borders meeting, the single 45-degree seam becomes the hypotenuse, giving a right triangle rather than an isosceles one — which is what you want for ribbons and corner badges.</p>
+
+        <h2>How do you control the size and proportions of a CSS triangle?</h2>
+        <p>The two transparent borders set the half-base, and the colored border sets the height. So a triangle with 20px left and right borders has a 40px base, and its height is whatever you give the colored border.</p>
+        <p>That makes the common shapes easy to hit deliberately. For an <strong style="color:#e6e6ee">isosceles</strong> triangle, just use equal transparent borders — any height. For a <strong style="color:#e6e6ee">right</strong> triangle, drop one of the transparent borders to zero. For an <strong style="color:#e6e6ee">equilateral</strong> triangle the height must be the half-base multiplied by the square root of 3, roughly 1.732 — so 20px side borders need a 35px colored border, not 40px.</p>
+
+        <h2>What is the modern clip-path alternative to the border trick?</h2>
+        <p>One declaration replaces the whole thing: <code>clip-path: polygon(50% 0%, 0% 100%, 100% 100%)</code> on an element that has a real width and height. The three coordinate pairs are the apex, the bottom-left corner and the bottom-right corner, so changing the direction is a matter of moving points rather than reasoning about which border to color.</p>
+
+        <h3>When should you use the border trick and when should you use clip-path?</h3>
+        <p>Use <code>clip-path</code> whenever the triangle needs to be anything other than flat color. Because the element keeps a genuine box, you can give it a background gradient, a background image, or a transition — a border triangle can only ever be one solid color, since it <em>is</em> a border.</p>
+        <p>The border trick still earns its place for tiny decorative carets generated with <code>::before</code> and <code>::after</code>, where there is no content to clip and the technique is universally supported. It is also the only one of the two that works without the element having dimensions.</p>
+
+        <h2>How do you add a shadow to a CSS triangle?</h2>
+        <p>Not with <code>box-shadow</code>. The border box of a border-trick triangle is the full bounding rectangle, so <code>box-shadow</code> draws a rectangular shadow around a shape that looks triangular — a mismatch that is immediately visible.</p>
+        <p>Use <code>filter: drop-shadow(0 2px 3px rgba(0,0,0,.4))</code> instead. It works off the rendered alpha channel, so it traces the actual visible triangle. The same applies to clip-path triangles, where <code>box-shadow</code> is clipped away entirely along with everything else outside the polygon.</p>
+
+        <h2>How do you use a CSS triangle as a tooltip or dropdown caret?</h2>
+        <p>Attach it to a pseudo-element rather than adding markup. Give the tooltip <code>position: relative</code>, then add a <code>::after</code> with <code>content: ""</code>, <code>position: absolute</code>, and the border declarations for a downward triangle. Position it with <code>top: 100%</code> and <code>left: 50%</code>, then pull it back by half its base with a negative margin or a translate so it centers properly.</p>
+        <p>Match the colored border to the tooltip background rather than to its border color, and remember the caret does not inherit the parent background — if the tooltip background changes on hover, the caret needs the same rule.</p>
+
+        <h2>Why does my CSS triangle look blurry or jagged?</h2>
+        <p>Almost always subpixel rendering. Fractional border widths, a parent with a fractional position, or a transform that lands the element off the pixel grid all force the browser to antialias the 45-degree seam, and the diagonal edge is where that shows worst.</p>
+        <p>Use whole-pixel border widths, and check that no ancestor is nudging the element onto a half pixel. If the triangle is large or is being scaled or rotated, switch to <code>clip-path</code> — it antialiases the edge more cleanly than a border seam does.</p>
+
+        <h2>What is the browser compatibility for CSS triangles?</h2>
+        <p>The border technique has no compatibility story to speak of: it relies on border rendering that has behaved this way in every browser for as long as CSS has had borders, and it needs no prefixes. <code>clip-path</code> with <code>polygon()</code> is supported across all current browsers unprefixed, so both approaches are safe today — the choice between them is about what you need the triangle to do, not about support.</p>
       </div>
     </div>
     <div style="padding:24px 40px 0;border-top:1px solid #1c1c26">

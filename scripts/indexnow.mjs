@@ -23,6 +23,7 @@ const URLS = [
   `https://${HOST}/css-button-generator`,
   `https://${HOST}/css-grid-generator`,
   `https://${HOST}/css-border-generator`,
+  `https://${HOST}/css-border-radius-generator`,
   `https://${HOST}/css-clip-path-generator`,
   `https://${HOST}/css-triangle-generator`,
   `https://${HOST}/css-arrow-generator`,

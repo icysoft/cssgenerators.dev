@@ -33,28 +33,48 @@ const schema = {
       mainEntity: [
         {
           '@type': 'Question',
-          name: 'How do you use the CSS filter generator?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Adjust the sliders for each filter function. The conic-gradient preview updates in real time so you can see how filters stack. Only non-default values are included in the generated CSS — if brightness is 100% (the default), it is omitted.' },
+          name: "How do you use the CSS filter generator?",
+          acceptedAnswer: { '@type': 'Answer', text: "Move the slider for each filter function and watch the preview update. Only values that differ from the default end up in the generated CSS — if brightness sits at 100 percent it is left out entirely, because brightness(100%) does nothing and only makes the declaration longer." },
         },
         {
           '@type': 'Question',
-          name: 'What is the CSS filter syntax?',
-          acceptedAnswer: { '@type': 'Answer', text: 'The filter property accepts a space-separated list of filter functions: filter: blur(4px) brightness(110%) contrast(120%). Functions are applied in order, left to right.' },
+          name: "What is the CSS filter syntax?",
+          acceptedAnswer: { '@type': 'Answer', text: "The property takes a space-separated list of filter functions, applied left to right: filter: blur(4px) brightness(110%) contrast(120%). There are no commas — a comma is a syntax error here and will invalidate the whole declaration. Setting filter: none removes any inherited or previously set filter." },
         },
         {
           '@type': 'Question',
-          name: 'What are the available CSS filter functions?',
-          acceptedAnswer: { '@type': 'Answer', text: 'blur(px) — applies a Gaussian blur. brightness(%) — adjusts lightness (100% = original). contrast(%) — adjusts contrast. grayscale(%) — converts to grayscale. hue-rotate(deg) — rotates hue on the color wheel. opacity(%) — adjusts transparency. saturate(%) — adjusts color saturation. sepia(%) — applies a sepia tone.' },
+          name: "What are the available CSS filter functions?",
+          acceptedAnswer: { '@type': 'Answer', text: "blur(px) applies a Gaussian blur. brightness(%) adjusts lightness, where 100% is the original and 0% is black. contrast(%) pushes tones towards or away from mid grey. grayscale(%) desaturates. hue-rotate(deg) rotates every color around the color wheel. invert(%) flips the colors. opacity(%) fades the element. saturate(%) intensifies or mutes color. sepia(%) applies a warm tone. drop-shadow() casts a shadow that follows the element outline. Percentages and decimals are interchangeable for the proportional functions: grayscale(100%) and grayscale(1) are the same thing. Several of them also accept values above 100% to push past the original." },
         },
         {
           '@type': 'Question',
-          name: 'What is the difference between CSS filter and backdrop-filter?',
-          acceptedAnswer: { '@type': 'Answer', text: 'The filter property applies to the element itself. backdrop-filter applies to everything behind the element — useful for frosted glass effects on overlays and modals.' },
+          name: "Does the order of CSS filter functions matter?",
+          acceptedAnswer: { '@type': 'Answer', text: "Yes, and this is the single most common source of confusion. Each function receives the output of the one before it, so filter: blur(4px) brightness(150%) brightens an already-blurred image, while filter: brightness(150%) blur(4px) blurs an already-brightened one. The two produce visibly different results. The effect is most obvious when you combine blur() with anything that changes tone, and when drop-shadow() is in the list — a drop shadow placed first traces the original shape, whereas one placed after a blur traces the blurred, softened silhouette." },
         },
         {
           '@type': 'Question',
-          name: 'What is the browser compatibility for CSS filter?',
-          acceptedAnswer: { '@type': 'Answer', text: 'CSS filter is supported in all modern browsers. No vendor prefixes are required in 2024+. The -webkit-filter prefix was required for Safari before version 9.1 (2016).' },
+          name: "What is the difference between filter and backdrop-filter?",
+          acceptedAnswer: { '@type': 'Answer', text: "filter processes the element and its contents. backdrop-filter leaves the element alone and processes everything painted behind it, which is what produces frosted-glass panels, translucent navigation bars and modal overlays. The catch is that backdrop-filter does nothing visible unless the element is at least partly see-through. A fully opaque background covers the blurred backdrop completely, so pair it with a translucent background such as rgba(255,255,255,.6) and let the blur show through." },
+        },
+        {
+          '@type': 'Question',
+          name: "How does filter: drop-shadow() differ from box-shadow?",
+          acceptedAnswer: { '@type': 'Answer', text: "box-shadow follows the border box, rounded corners included, and knows nothing about what is drawn inside it. drop-shadow() works from the rendered alpha channel, so it traces the actual visible shape — the transparent parts of a PNG, the polygon left by a clip-path, or a pure-CSS triangle. That makes drop-shadow() the right choice for any non-rectangular element and the wrong choice for a plain card, where box-shadow is cheaper and offers a spread value and an inset keyword that drop-shadow() does not have." },
+        },
+        {
+          '@type': 'Question',
+          name: "Why does filter break position: fixed inside an element?",
+          acceptedAnswer: { '@type': 'Answer', text: "Because any filter other than none makes the element a containing block for its absolutely and fixed-positioned descendants. A child with position: fixed inside a filtered ancestor stops being positioned relative to the viewport and starts being positioned relative to that ancestor, so fixed headers, modals and dropdowns suddenly scroll away or clip. A filter also creates a new stacking context, which can reorder how z-index resolves between the filtered element and its siblings. Neither behavior is a bug, and neither is avoidable while the filter is applied — if a filtered wrapper is breaking a fixed child, move the filter onto a different element rather than trying to work around it." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you animate CSS filters without hurting performance?",
+          acceptedAnswer: { '@type': 'Answer', text: "Filters animate smoothly, but not all of them cost the same. opacity() is close to free; blur() is the expensive one, because the browser re-rasterizes a Gaussian blur on every frame and the cost scales with both the radius and the area being blurred. Keep animated blur radii small, keep the blurred element small, and prefer transitioning a filter on a compact overlay rather than on a full-page container. Adding will-change: filter ahead of the animation lets the browser promote the layer in advance, but leave it on permanently and you trade the stutter for sustained memory use." },
+        },
+        {
+          '@type': 'Question',
+          name: "What is the browser compatibility for CSS filter?",
+          acceptedAnswer: { '@type': 'Answer', text: "The filter property and all of its functions are supported unprefixed in every current browser; the -webkit-filter prefix has not been necessary since Safari 9.1 and is safe to drop from old stylesheets. backdrop-filter is the one to check rather than assume — it arrived considerably later and is still worth guarding with a @supports (backdrop-filter: blur(1px)) query when the design depends on it." },
         },
       ],
     },
@@ -85,19 +105,37 @@ const schema = {
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
         <h2>How do you use the CSS filter generator?</h2>
-        <p>Adjust the sliders for each filter function. The conic-gradient preview updates in real time so you can see how filters stack. Only non-default values are included in the generated CSS — if brightness is 100% (the default), it is omitted.</p>
+        <p>Move the slider for each filter function and watch the preview update. Only values that differ from the default end up in the generated CSS — if brightness sits at 100 percent it is left out entirely, because <code>brightness(100%)</code> does nothing and only makes the declaration longer.</p>
 
         <h2>What is the CSS filter syntax?</h2>
-        <p>The <code>filter</code> property accepts a space-separated list of filter functions: <code>filter: blur(4px) brightness(110%) contrast(120%)</code>. Functions are applied in order, left to right.</p>
+        <p>The property takes a space-separated list of filter functions, applied left to right: <code>filter: blur(4px) brightness(110%) contrast(120%)</code>. There are no commas — a comma is a syntax error here and will invalidate the whole declaration. Setting <code>filter: none</code> removes any inherited or previously set filter.</p>
 
         <h3>What are the available CSS filter functions?</h3>
-        <p><strong>blur(px)</strong> — applies a Gaussian blur. <strong>brightness(%)</strong> — adjusts lightness (100% = original). <strong>contrast(%)</strong> — adjusts contrast. <strong>grayscale(%)</strong> — converts to grayscale. <strong>hue-rotate(deg)</strong> — rotates hue on the color wheel. <strong>opacity(%)</strong> — adjusts transparency (same as the opacity property). <strong>saturate(%)</strong> — adjusts color saturation. <strong>sepia(%)</strong> — applies a sepia tone.</p>
+        <p><strong style="color:#e6e6ee">blur(px)</strong> applies a Gaussian blur. <strong style="color:#e6e6ee">brightness(%)</strong> adjusts lightness, where 100% is the original and 0% is black. <strong style="color:#e6e6ee">contrast(%)</strong> pushes tones towards or away from mid grey. <strong style="color:#e6e6ee">grayscale(%)</strong> desaturates. <strong style="color:#e6e6ee">hue-rotate(deg)</strong> rotates every color around the color wheel. <strong style="color:#e6e6ee">invert(%)</strong> flips the colors. <strong style="color:#e6e6ee">opacity(%)</strong> fades the element. <strong style="color:#e6e6ee">saturate(%)</strong> intensifies or mutes color. <strong style="color:#e6e6ee">sepia(%)</strong> applies a warm tone. <strong style="color:#e6e6ee">drop-shadow()</strong> casts a shadow that follows the element outline.</p>
+        <p>Percentages and decimals are interchangeable for the proportional functions: <code>grayscale(100%)</code> and <code>grayscale(1)</code> are the same thing. Several of them also accept values above 100% to push past the original.</p>
 
-        <h3>What is the difference between CSS filter and backdrop-filter?</h3>
-        <p>The <code>filter</code> property applies to the element itself. <code>backdrop-filter</code> applies to everything behind the element — useful for frosted glass effects on overlays and modals.</p>
+        <h2>Does the order of CSS filter functions matter?</h2>
+        <p>Yes, and this is the single most common source of confusion. Each function receives the output of the one before it, so <code>filter: blur(4px) brightness(150%)</code> brightens an already-blurred image, while <code>filter: brightness(150%) blur(4px)</code> blurs an already-brightened one. The two produce visibly different results.</p>
+        <p>The effect is most obvious when you combine <code>blur()</code> with anything that changes tone, and when <code>drop-shadow()</code> is in the list — a drop shadow placed first traces the original shape, whereas one placed after a blur traces the blurred, softened silhouette.</p>
 
-        <h3>What is the browser compatibility for CSS filter?</h3>
-        <p>CSS <code>filter</code> is supported in all modern browsers. No vendor prefixes are required in 2024+. The <code>-webkit-filter</code> prefix was required for Safari before version 9.1 (2016).</p>
+        <h2>What is the difference between filter and backdrop-filter?</h2>
+        <p><code>filter</code> processes the element and its contents. <code>backdrop-filter</code> leaves the element alone and processes everything painted <em>behind</em> it, which is what produces frosted-glass panels, translucent navigation bars and modal overlays.</p>
+        <p>The catch is that <code>backdrop-filter</code> does nothing visible unless the element is at least partly see-through. A fully opaque background covers the blurred backdrop completely, so pair it with a translucent background such as <code>rgba(255,255,255,.6)</code> and let the blur show through.</p>
+
+        <h2>How does filter: drop-shadow() differ from box-shadow?</h2>
+        <p><code>box-shadow</code> follows the border box, rounded corners included, and knows nothing about what is drawn inside it. <code>drop-shadow()</code> works from the rendered alpha channel, so it traces the actual visible shape — the transparent parts of a PNG, the polygon left by a <code>clip-path</code>, or a pure-CSS triangle.</p>
+        <p>That makes <code>drop-shadow()</code> the right choice for any non-rectangular element and the wrong choice for a plain card, where <code>box-shadow</code> is cheaper and offers a spread value and an <code>inset</code> keyword that <code>drop-shadow()</code> does not have.</p>
+
+        <h2>Why does filter break position: fixed inside an element?</h2>
+        <p>Because any <code>filter</code> other than <code>none</code> makes the element a <strong style="color:#e6e6ee">containing block</strong> for its absolutely and fixed-positioned descendants. A child with <code>position: fixed</code> inside a filtered ancestor stops being positioned relative to the viewport and starts being positioned relative to that ancestor, so fixed headers, modals and dropdowns suddenly scroll away or clip.</p>
+        <p>A filter also creates a new stacking context, which can reorder how <code>z-index</code> resolves between the filtered element and its siblings. Neither behavior is a bug, and neither is avoidable while the filter is applied — if a filtered wrapper is breaking a fixed child, move the filter onto a different element rather than trying to work around it.</p>
+
+        <h2>How do you animate CSS filters without hurting performance?</h2>
+        <p>Filters animate smoothly, but not all of them cost the same. <code>opacity()</code> is close to free; <code>blur()</code> is the expensive one, because the browser re-rasterizes a Gaussian blur on every frame and the cost scales with both the radius and the area being blurred.</p>
+        <p>Keep animated blur radii small, keep the blurred element small, and prefer transitioning a filter on a compact overlay rather than on a full-page container. Adding <code>will-change: filter</code> ahead of the animation lets the browser promote the layer in advance, but leave it on permanently and you trade the stutter for sustained memory use.</p>
+
+        <h2>What is the browser compatibility for CSS filter?</h2>
+        <p>The <code>filter</code> property and all of its functions are supported unprefixed in every current browser; the <code>-webkit-filter</code> prefix has not been necessary since Safari 9.1 and is safe to drop from old stylesheets. <code>backdrop-filter</code> is the one to check rather than assume — it arrived considerably later and is still worth guarding with a <code>@supports (backdrop-filter: blur(1px))</code> query when the design depends on it.</p>
       </div>
     </div>
 

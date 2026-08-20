@@ -16,6 +16,7 @@ Free online CSS generator tools for front-end developers. Live preview, one clic
 | Button | `/css-button-generator` | generate button css |
 | Grid | `/css-grid-generator` | css grid generator |
 | Border | `/css-border-generator` | css border generator |
+| Border Radius | `/css-border-radius-generator` | border radius generator |
 | Clip Path | `/css-clip-path-generator` | clip path css generator |
 | Triangle | `/css-triangle-generator` | css triangle generator |
 | Arrow | `/css-arrow-generator` | css arrow generator |
@@ -55,7 +56,7 @@ After deploying, submit all URLs to search engines:
 npm run indexnow
 ```
 
-Submits 14 URLs to [IndexNow](https://www.indexnow.org) (relayed to Bing, Yandex, Seznam).
+Submits 15 URLs to [IndexNow](https://www.indexnow.org) (relayed to Bing, Yandex, Seznam).
 
 ## License
 
