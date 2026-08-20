@@ -32,23 +32,48 @@ const schema = {
       mainEntity: [
         {
           '@type': 'Question',
-          name: 'What is the difference between drop-shadow and box-shadow?',
-          acceptedAnswer: { '@type': 'Answer', text: 'filter: drop-shadow() computes the shadow from the element\'s alpha channel — it follows irregular shapes, SVG paths, and clip-path cutouts. box-shadow always uses the rectangular bounding box, ignoring transparent areas.' },
+          name: "How do you use the CSS drop shadow generator?",
+          acceptedAnswer: { '@type': 'Answer', text: "Adjust the offset, blur and color and watch the shadow trace the shape rather than the box. The preview deliberately uses a non-rectangular element, because that is where drop-shadow() differs from box-shadow and where it is worth using at all." },
         },
         {
           '@type': 'Question',
-          name: 'What is the CSS drop-shadow syntax?',
-          acceptedAnswer: { '@type': 'Answer', text: 'filter: drop-shadow(offset-x offset-y blur-radius color). Note: there is no spread radius and no inset option — these are features of box-shadow only.' },
+          name: "What is the filter: drop-shadow syntax?",
+          acceptedAnswer: { '@type': 'Answer', text: "drop-shadow() is a filter function, so it is used as filter: drop-shadow(0 4px 6px rgba(0,0,0,.4)). It takes an x offset, a y offset, an optional blur radius and a color. There is no spread value and no inset keyword — both exist for box-shadow and neither has an equivalent here. If you need a shadow that is larger than the element or drawn inside it, drop-shadow() is the wrong tool." },
         },
         {
           '@type': 'Question',
-          name: 'When should you use drop-shadow instead of box-shadow?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Use drop-shadow on SVG icons, PNG logos with transparent backgrounds, and any element using clip-path. The shadow will follow the contour rather than the box.' },
+          name: "How does drop-shadow differ from box-shadow?",
+          acceptedAnswer: { '@type': 'Answer', text: "box-shadow is a property that draws around the element’s border box, rounded corners included. drop-shadow() is a filter that works from the rendered alpha channel, so it follows whatever is actually visible. On a plain rectangular card the two look identical and box-shadow is the better choice. On a transparent PNG, an SVG icon, a clipped shape or a pure-CSS triangle, box-shadow draws a rectangle around your shape and drop-shadow() is the only one that does the right thing." },
         },
         {
           '@type': 'Question',
-          name: 'What is the browser compatibility for CSS drop-shadow?',
-          acceptedAnswer: { '@type': 'Answer', text: 'filter: drop-shadow() is supported in all modern browsers. For IE11, use box-shadow as a fallback.' },
+          name: "How do you stack multiple drop shadows?",
+          acceptedAnswer: { '@type': 'Answer', text: "Not with commas. Commas are how box-shadow stacks layers, but filter takes a space-separated list of functions, so multiple shadows are chained: filter: drop-shadow(0 1px 1px black) drop-shadow(0 4px 8px black). Each one is applied to the result of the previous, so the second shadow traces the first shadow’s silhouette as well as the element. That compounding is what makes chained drop shadows look heavier than the equivalent box-shadow layers, and why two is usually enough." },
+        },
+        {
+          '@type': 'Question',
+          name: "Does drop-shadow work on transparent images and SVG?",
+          acceptedAnswer: { '@type': 'Answer', text: "That is its main reason to exist. Applied to a transparent PNG or an inline SVG, it traces the artwork rather than the image box, which is how you put a shadow under a logo or an icon without baking it into the asset. It works on text too, following the glyph outlines — though for text alone text-shadow is cheaper and offers the same control." },
+        },
+        {
+          '@type': 'Question',
+          name: "Why does drop-shadow have no spread value?",
+          acceptedAnswer: { '@type': 'Answer', text: "Because there is no box to grow. Spread inflates a rectangle before blurring it, which is a well-defined operation on a border box but not on an arbitrary alpha channel — expanding a silhouette outward is a genuinely harder problem than expanding a rectangle. To fake a thicker shadow, chain two or three drop-shadow() calls with slightly different offsets, or increase the blur and reduce the alpha." },
+        },
+        {
+          '@type': 'Question',
+          name: "Does drop-shadow affect layout or stacking?",
+          acceptedAnswer: { '@type': 'Answer', text: "It takes no space in the layout, like any shadow. But because it is a filter, it brings the filter side effects with it: the element gets a new stacking context, and it becomes a containing block for absolutely and fixed-positioned descendants. That last part is the one that bites. A fixed-position child inside an element carrying a drop-shadow() stops being positioned against the viewport and starts being positioned against that element. If a dropdown or modal starts behaving strangely, check whether an ancestor picked up a filter." },
+        },
+        {
+          '@type': 'Question',
+          name: "Is drop-shadow slower than box-shadow?",
+          acceptedAnswer: { '@type': 'Answer', text: "Generally yes. box-shadow draws a known rectangle, while drop-shadow() has to read the rendered alpha channel and blur that — more work, and more still when several are chained since each processes the previous result. On a handful of icons the difference is irrelevant. On a long list, on something animating, or on a large blurred area it is worth measuring, and worth using box-shadow wherever the element is actually rectangular." },
+        },
+        {
+          '@type': 'Question',
+          name: "What is the browser compatibility for filter: drop-shadow?",
+          acceptedAnswer: { '@type': 'Answer', text: "filter and drop-shadow() are supported unprefixed in every current browser. The -webkit-filter prefix stopped being necessary after Safari 9.1 and can be removed. Because an unsupported filter is simply ignored, the fallback is an element with no shadow rather than a broken layout." },
         },
       ],
     },
@@ -66,14 +91,39 @@ const schema = {
     <div style="padding:0 40px 40px"><DropShadow client:load /></div>
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
-        <h2>What is the difference between drop-shadow and box-shadow?</h2>
-        <p><code>filter: drop-shadow()</code> computes the shadow from the element's alpha channel — it follows irregular shapes, SVG paths, and clip-path cutouts. <code>box-shadow</code> always uses the rectangular bounding box, ignoring transparent areas.</p>
-        <h2>What is the CSS drop-shadow syntax?</h2>
-        <p><code>filter: drop-shadow(offset-x offset-y blur-radius color)</code>. Note: there is no spread radius and no inset option — these are features of box-shadow only.</p>
-        <h3>When should you use drop-shadow instead of box-shadow?</h3>
-        <p>Use drop-shadow on SVG icons, PNG logos with transparent backgrounds, and any element using clip-path. The shadow will follow the contour rather than the box.</p>
-        <h3>What is the browser compatibility for CSS drop-shadow?</h3>
-        <p><code>filter: drop-shadow()</code> is supported in all modern browsers. For IE11, use <code>box-shadow</code> as a fallback.</p>
+        <h2>How do you use the CSS drop shadow generator?</h2>
+        <p>Adjust the offset, blur and color and watch the shadow trace the shape rather than the box. The preview deliberately uses a non-rectangular element, because that is where <code>drop-shadow()</code> differs from <code>box-shadow</code> and where it is worth using at all.</p>
+
+        <h2>What is the filter: drop-shadow syntax?</h2>
+        <p><code>drop-shadow()</code> is a filter function, so it is used as <code>filter: drop-shadow(0 4px 6px rgba(0,0,0,.4))</code>. It takes an x offset, a y offset, an optional blur radius and a color.</p>
+        <p>There is no spread value and no <code>inset</code> keyword — both exist for <code>box-shadow</code> and neither has an equivalent here. If you need a shadow that is larger than the element or drawn inside it, <code>drop-shadow()</code> is the wrong tool.</p>
+
+        <h2>How does drop-shadow differ from box-shadow?</h2>
+        <p><code>box-shadow</code> is a property that draws around the element’s border box, rounded corners included. <code>drop-shadow()</code> is a filter that works from the rendered alpha channel, so it follows whatever is actually visible.</p>
+        <p>On a plain rectangular card the two look identical and <code>box-shadow</code> is the better choice. On a transparent PNG, an SVG icon, a clipped shape or a pure-CSS triangle, <code>box-shadow</code> draws a rectangle around your shape and <code>drop-shadow()</code> is the only one that does the right thing.</p>
+
+        <h3>How do you stack multiple drop shadows?</h3>
+        <p>Not with commas. Commas are how <code>box-shadow</code> stacks layers, but <code>filter</code> takes a space-separated list of functions, so multiple shadows are chained: <code>filter: drop-shadow(0 1px 1px black) drop-shadow(0 4px 8px black)</code>.</p>
+        <p>Each one is applied to the result of the previous, so the second shadow traces the first shadow’s silhouette as well as the element. That compounding is what makes chained drop shadows look heavier than the equivalent box-shadow layers, and why two is usually enough.</p>
+
+        <h2>Does drop-shadow work on transparent images and SVG?</h2>
+        <p>That is its main reason to exist. Applied to a transparent PNG or an inline SVG, it traces the artwork rather than the image box, which is how you put a shadow under a logo or an icon without baking it into the asset.</p>
+        <p>It works on text too, following the glyph outlines — though for text alone <code>text-shadow</code> is cheaper and offers the same control.</p>
+
+        <h2>Why does drop-shadow have no spread value?</h2>
+        <p>Because there is no box to grow. Spread inflates a rectangle before blurring it, which is a well-defined operation on a border box but not on an arbitrary alpha channel — expanding a silhouette outward is a genuinely harder problem than expanding a rectangle.</p>
+        <p>To fake a thicker shadow, chain two or three <code>drop-shadow()</code> calls with slightly different offsets, or increase the blur and reduce the alpha.</p>
+
+        <h2>Does drop-shadow affect layout or stacking?</h2>
+        <p>It takes no space in the layout, like any shadow. But because it is a filter, it brings the filter side effects with it: the element gets a new stacking context, and it becomes a containing block for absolutely and fixed-positioned descendants.</p>
+        <p>That last part is the one that bites. A fixed-position child inside an element carrying a <code>drop-shadow()</code> stops being positioned against the viewport and starts being positioned against that element. If a dropdown or modal starts behaving strangely, check whether an ancestor picked up a filter.</p>
+
+        <h2>Is drop-shadow slower than box-shadow?</h2>
+        <p>Generally yes. <code>box-shadow</code> draws a known rectangle, while <code>drop-shadow()</code> has to read the rendered alpha channel and blur that — more work, and more still when several are chained since each processes the previous result.</p>
+        <p>On a handful of icons the difference is irrelevant. On a long list, on something animating, or on a large blurred area it is worth measuring, and worth using <code>box-shadow</code> wherever the element is actually rectangular.</p>
+
+        <h2>What is the browser compatibility for filter: drop-shadow?</h2>
+        <p><code>filter</code> and <code>drop-shadow()</code> are supported unprefixed in every current browser. The <code>-webkit-filter</code> prefix stopped being necessary after Safari 9.1 and can be removed. Because an unsupported filter is simply ignored, the fallback is an element with no shadow rather than a broken layout.</p>
       </div>
     </div>
     <div style="padding:24px 40px 0;border-top:1px solid #1c1c26">

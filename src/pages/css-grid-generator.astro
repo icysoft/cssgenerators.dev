@@ -32,23 +32,53 @@ const schema = {
       mainEntity: [
         {
           '@type': 'Question',
-          name: 'How do you use the CSS grid generator?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Use the sliders to set the number of columns and rows, then adjust the column and row gaps. You can also type directly in the grid-template-columns field to use fr units, minmax(), auto, or fixed pixel values.' },
+          name: "How do you use the CSS grid generator?",
+          acceptedAnswer: { '@type': 'Answer', text: "Set the number of columns and rows and adjust each track’s size, then set the gap. The preview renders the actual grid so you can see how fr units divide the space. The generated CSS is the container rule — the children need no rules at all unless you want to place them explicitly." },
         },
         {
           '@type': 'Question',
-          name: 'What are the CSS Grid fundamentals?',
-          acceptedAnswer: { '@type': 'Answer', text: 'display: grid turns any element into a grid container. grid-template-columns defines the column track sizes — 1fr 1fr 1fr creates three equal columns. column-gap and row-gap set the gutter between tracks (shorthand: gap).' },
+          name: "What is the CSS grid syntax?",
+          acceptedAnswer: { '@type': 'Answer', text: "A grid starts with display: grid plus track definitions: grid-template-columns and grid-template-rows. Each value in the list defines one track, so grid-template-columns: 200px 1fr 200px creates three columns with a flexible middle. repeat() saves writing the same value over and over — repeat(3, 1fr) is identical to 1fr 1fr 1fr — and gap sets the spacing between tracks." },
         },
         {
           '@type': 'Question',
-          name: 'What is the fr unit in CSS Grid?',
-          acceptedAnswer: { '@type': 'Answer', text: 'fr stands for "fractional unit" — it distributes available space proportionally. 1fr 2fr 1fr creates a 3-column layout where the middle column is twice as wide as the others.' },
+          name: "What does the fr unit do?",
+          acceptedAnswer: { '@type': 'Answer', text: "fr distributes the space left over after fixed-size tracks, padding and gaps have been accounted for. In grid-template-columns: 200px 1fr 2fr the last two tracks split the remainder one third to two thirds. It is not the same as a percentage: 1fr works from remaining space and accounts for the gap, so a three-column repeat(3, 1fr) grid with a gap fits exactly, while repeat(3, 33.33%) overflows once you add one." },
         },
         {
           '@type': 'Question',
-          name: 'What is the difference between CSS Grid and Flexbox?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Use Grid for 2D layouts (rows AND columns). Use Flexbox for 1D layouts (either a row OR a column). They complement each other — a grid item can itself be a flex container.' },
+          name: "What is the difference between auto-fit and auto-fill?",
+          acceptedAnswer: { '@type': 'Answer', text: "Both create as many tracks as will fit, and they behave identically until the grid has more room than it has items. At that point auto-fill keeps the empty tracks it created, so the existing items stay at their track width and leave a gap on the right. auto-fit collapses the empty tracks to zero, letting the real items stretch to fill the row. So auto-fit when items should expand to use the space, auto-fill when the column rhythm should be preserved even if it means empty slots." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you build a responsive grid without media queries?",
+          acceptedAnswer: { '@type': 'Answer', text: "The single most useful line in CSS grid is grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)). It says: fit as many columns as possible, never let one be narrower than 240px, and share out any leftover space evenly. That one declaration reflows a card grid from four columns to one across every screen size with no breakpoints at all. Use min() inside the minmax — minmax(min(240px, 100%), 1fr) — if the container can ever be narrower than the minimum, which prevents overflow on very small screens." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you place items on a grid?",
+          acceptedAnswer: { '@type': 'Answer', text: "Grid lines are numbered from 1, so grid-column: 1 / 3 places an item from line 1 to line 3, spanning two columns. The span keyword is usually clearer: grid-column: span 2 spans two tracks wherever the item happens to land. Negative numbers count from the end, which makes grid-column: 1 / -1 the reliable way to say \"full width\" without knowing how many columns there are." },
+        },
+        {
+          '@type': 'Question',
+          name: "What are named grid areas?",
+          acceptedAnswer: { '@type': 'Answer', text: "grid-template-areas lets you draw the layout as text: rows of quoted strings where each name marks a cell. Children are then placed with grid-area: header and the browser works out the coordinates. It is the most readable way to express a page skeleton, and rearranging the layout at a breakpoint means rewriting the picture rather than recalculating line numbers. A dot stands in for an empty cell." },
+        },
+        {
+          '@type': 'Question',
+          name: "What is subgrid and can you use it?",
+          acceptedAnswer: { '@type': 'Answer', text: "Normally a nested grid creates its own independent tracks, so cards in a row cannot align their internal parts with each other. grid-template-columns: subgrid makes the child adopt the parent’s tracks instead, so every card’s title, body and footer line up across the row even when the text lengths differ. Subgrid has been Baseline widely available since September 2023, so it is safe to use in production rather than something to plan around." },
+        },
+        {
+          '@type': 'Question',
+          name: "When should you use grid instead of flexbox?",
+          acceptedAnswer: { '@type': 'Answer', text: "Use grid when you know the structure and want the layout to impose it — page skeletons, card grids, anything where things must line up in two directions. Use flexbox when the content should decide, along a single axis. A useful test: if you find yourself setting widths on flex children to make columns line up across rows, you want grid. If you are fighting grid to make items size themselves naturally, you want flexbox. Most real pages use both, with grid outside and flex inside." },
+        },
+        {
+          '@type': 'Question',
+          name: "What is the browser compatibility for CSS grid?",
+          acceptedAnswer: { '@type': 'Answer', text: "CSS grid is supported in every current browser without prefixes, and has been stable for years — repeat(), minmax(), auto-fit, named areas and gap included. Subgrid is the newest widely available piece, Baseline since September 2023. The old -ms-grid syntax targets a browser that is no longer supported and can be dropped." },
         },
       ],
     },
@@ -67,13 +97,42 @@ const schema = {
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
         <h2>How do you use the CSS grid generator?</h2>
-        <p>Use the sliders to set the number of columns and rows, then adjust the column and row gaps. You can also type directly in the <code>grid-template-columns</code> field to use <code>fr</code> units, <code>minmax()</code>, <code>auto</code>, or fixed pixel values.</p>
-        <h2>What are the CSS Grid fundamentals?</h2>
-        <p><code>display: grid</code> turns any element into a grid container. <code>grid-template-columns</code> defines the column track sizes — <code>1fr 1fr 1fr</code> creates three equal columns. <code>column-gap</code> and <code>row-gap</code> set the gutter between tracks (shorthand: <code>gap</code>).</p>
-        <h3>What is the fr unit in CSS Grid?</h3>
-        <p><code>fr</code> stands for "fractional unit" — it distributes available space proportionally. <code>1fr 2fr 1fr</code> creates a 3-column layout where the middle column is twice as wide as the others.</p>
-        <h3>What is the difference between CSS Grid and Flexbox?</h3>
-        <p>Use Grid for 2D layouts (rows AND columns). Use Flexbox for 1D layouts (either a row OR a column). They complement each other — a grid item can itself be a flex container.</p>
+        <p>Set the number of columns and rows and adjust each track’s size, then set the gap. The preview renders the actual grid so you can see how <code>fr</code> units divide the space. The generated CSS is the container rule — the children need no rules at all unless you want to place them explicitly.</p>
+
+        <h2>What is the CSS grid syntax?</h2>
+        <p>A grid starts with <code>display: grid</code> plus track definitions: <code>grid-template-columns</code> and <code>grid-template-rows</code>. Each value in the list defines one track, so <code>grid-template-columns: 200px 1fr 200px</code> creates three columns with a flexible middle.</p>
+        <p><code>repeat()</code> saves writing the same value over and over — <code>repeat(3, 1fr)</code> is identical to <code>1fr 1fr 1fr</code> — and <code>gap</code> sets the spacing between tracks.</p>
+
+        <h3>What does the fr unit do?</h3>
+        <p><code>fr</code> distributes the space left over after fixed-size tracks, padding and gaps have been accounted for. In <code>grid-template-columns: 200px 1fr 2fr</code> the last two tracks split the remainder one third to two thirds.</p>
+        <p>It is not the same as a percentage: <code>1fr</code> works from remaining space and accounts for the gap, so a three-column <code>repeat(3, 1fr)</code> grid with a gap fits exactly, while <code>repeat(3, 33.33%)</code> overflows once you add one.</p>
+
+        <h2>What is the difference between auto-fit and auto-fill?</h2>
+        <p>Both create as many tracks as will fit, and they behave identically until the grid has more room than it has items. At that point <code>auto-fill</code> keeps the empty tracks it created, so the existing items stay at their track width and leave a gap on the right. <code>auto-fit</code> collapses the empty tracks to zero, letting the real items stretch to fill the row.</p>
+        <p>So <code>auto-fit</code> when items should expand to use the space, <code>auto-fill</code> when the column rhythm should be preserved even if it means empty slots.</p>
+
+        <h3>How do you build a responsive grid without media queries?</h3>
+        <p>The single most useful line in CSS grid is <code>grid-template-columns: repeat(auto-fit, minmax(240px, 1fr))</code>. It says: fit as many columns as possible, never let one be narrower than 240px, and share out any leftover space evenly.</p>
+        <p>That one declaration reflows a card grid from four columns to one across every screen size with no breakpoints at all. Use <code>min()</code> inside the minmax — <code>minmax(min(240px, 100%), 1fr)</code> — if the container can ever be narrower than the minimum, which prevents overflow on very small screens.</p>
+
+        <h2>How do you place items on a grid?</h2>
+        <p>Grid lines are numbered from 1, so <code>grid-column: 1 / 3</code> places an item from line 1 to line 3, spanning two columns. The <code>span</code> keyword is usually clearer: <code>grid-column: span 2</code> spans two tracks wherever the item happens to land.</p>
+        <p>Negative numbers count from the end, which makes <code>grid-column: 1 / -1</code> the reliable way to say "full width" without knowing how many columns there are.</p>
+
+        <h3>What are named grid areas?</h3>
+        <p><code>grid-template-areas</code> lets you draw the layout as text: rows of quoted strings where each name marks a cell. Children are then placed with <code>grid-area: header</code> and the browser works out the coordinates.</p>
+        <p>It is the most readable way to express a page skeleton, and rearranging the layout at a breakpoint means rewriting the picture rather than recalculating line numbers. A dot stands in for an empty cell.</p>
+
+        <h2>What is subgrid and can you use it?</h2>
+        <p>Normally a nested grid creates its own independent tracks, so cards in a row cannot align their internal parts with each other. <code>grid-template-columns: subgrid</code> makes the child adopt the parent’s tracks instead, so every card’s title, body and footer line up across the row even when the text lengths differ.</p>
+        <p>Subgrid has been Baseline widely available since September 2023, so it is safe to use in production rather than something to plan around.</p>
+
+        <h2>When should you use grid instead of flexbox?</h2>
+        <p>Use grid when you know the structure and want the layout to impose it — page skeletons, card grids, anything where things must line up in two directions. Use flexbox when the content should decide, along a single axis.</p>
+        <p>A useful test: if you find yourself setting widths on flex children to make columns line up across rows, you want grid. If you are fighting grid to make items size themselves naturally, you want flexbox. Most real pages use both, with grid outside and flex inside.</p>
+
+        <h2>What is the browser compatibility for CSS grid?</h2>
+        <p>CSS grid is supported in every current browser without prefixes, and has been stable for years — <code>repeat()</code>, <code>minmax()</code>, <code>auto-fit</code>, named areas and <code>gap</code> included. Subgrid is the newest widely available piece, Baseline since September 2023. The old <code>-ms-grid</code> syntax targets a browser that is no longer supported and can be dropped.</p>
       </div>
     </div>
     <div style="padding:24px 40px 40px;border-top:1px solid #1c1c26">

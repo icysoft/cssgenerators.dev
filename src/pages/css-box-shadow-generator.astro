@@ -34,27 +34,52 @@ const schema = {
         {
           '@type': 'Question',
           name: "How do you use the box-shadow CSS generator?",
-          acceptedAnswer: { '@type': 'Answer', text: "Adjust the sliders for horizontal offset, vertical offset, blur radius and spread radius. Use the color picker to set the shadow color and adjust opacity. Add multiple layers with the \"Add shadow layer\" button — shadows stack from first (top) to last (bottom)." },
+          acceptedAnswer: { '@type': 'Answer', text: "Drag the sliders for offset, blur, spread and color, and add layers with the add button. Each layer is a separate shadow, and the preview composites them in real time. The CSS panel shows the exact declaration to paste — including the comma between layers, which is where hand-written multi-layer shadows usually break." },
         },
         {
           '@type': 'Question',
           name: "What is the CSS box-shadow syntax?",
-          acceptedAnswer: { '@type': 'Answer', text: "box-shadow: offset-x offset-y blur-radius spread-radius color. Add inset before the offsets for an inner shadow. Comma-separate multiple shadows: box-shadow: 0 2px 4px rgba(0,0,0,.3), 0 8px 16px rgba(0,0,0,.1)." },
+          acceptedAnswer: { '@type': 'Answer', text: "The property takes box-shadow: offset-x offset-y blur-radius spread-radius color. Only the two offsets are required. The optional inset keyword flips the shadow inside the element, and multiple shadows are comma-separated. The order of the four lengths is fixed and unlabelled, which is the main source of mistakes: the third number is always blur and the fourth is always spread, so box-shadow: 0 4px 12px has no spread at all." },
+        },
+        {
+          '@type': 'Question',
+          name: "What does the spread radius do?",
+          acceptedAnswer: { '@type': 'Answer', text: "Spread grows or shrinks the shadow before the blur is applied. A positive spread makes the shadow larger than the element on every side; a negative spread pulls it in, which is the trick behind shadows that appear to sit tightly underneath a card rather than haloing around it. Pairing a small negative spread with a large blur — something like 0 12px 24px -8px — is what makes a shadow read as depth rather than as a grey glow." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you stack multiple box shadows?",
+          acceptedAnswer: { '@type': 'Answer', text: "Separate them with commas: box-shadow: 0 1px 2px rgba(0,0,0,.1), 0 8px 24px rgba(0,0,0,.1). They paint front to back, so the first shadow in the list sits closest to the element and the last one sits furthest behind. There is no practical limit on the number of layers, but each one costs a paint, so keep long stacks off elements that animate or repeat many times on a page." },
         },
         {
           '@type': 'Question',
           name: "What is the smooth shadow technique?",
-          acceptedAnswer: { '@type': 'Answer', text: "A natural-looking shadow uses 4–5 layers with progressively larger offsets and decreasing opacity. The \"Smooth shadow\" feature generates this automatically — a technique popularized by shadows.brumm.af." },
+          acceptedAnswer: { '@type': 'Answer', text: "A single shadow with a big blur looks flat because real light falls off gradually. The fix is to stack several shadows with progressively larger offsets and blurs and progressively lower alpha — for instance four layers going from 0 1px 1px at 7 percent opacity out to 0 16px 16px at the same or lower alpha. The result reads as a soft, natural shadow rather than a grey smear, and it is the difference between a card that looks designed and one that looks defaulted. The technique was popularized by shadows.brumm.af." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you create an inner shadow in CSS?",
+          acceptedAnswer: { '@type': 'Answer', text: "Add the inset keyword and the shadow is drawn inside the padding box instead of outside it: box-shadow: inset 0 2px 4px rgba(0,0,0,.3). This is how you get pressed buttons, inset wells and the recessed look on form fields. Inset and outset shadows can be mixed in the same declaration, so a control can have an inner highlight and an outer drop shadow at once." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you draw a border with box-shadow?",
+          acceptedAnswer: { '@type': 'Answer', text: "A shadow with zero offset and zero blur but a positive spread is a ring: box-shadow: 0 0 0 2px #6366f1. Unlike a real border it takes up no space in the layout, so adding or removing it on hover or focus will never shift the surrounding content. It also follows border-radius automatically, and you can stack rings of increasing spread to build a multi-color focus indicator. This is the standard technique for focus rings that need to sit outside an element without disturbing it." },
         },
         {
           '@type': 'Question',
           name: "What is the difference between box-shadow and drop-shadow?",
-          acceptedAnswer: { '@type': 'Answer', text: "box-shadow always follows the rectangular bounding box of the element (including border-radius). filter: drop-shadow() follows the actual visual shape — useful for SVGs and PNGs with transparency." },
+          acceptedAnswer: { '@type': 'Answer', text: "box-shadow follows the element’s border box, rounded corners included, and ignores what is drawn inside it. filter: drop-shadow() works from the rendered alpha channel, so it traces the visible shape — a transparent PNG, an SVG icon, or a clipped element. For a rectangular card box-shadow is the cheaper and more capable choice, since it offers spread and inset which drop-shadow() does not have. For anything non-rectangular it is the wrong tool and will draw a rectangle around your shape." },
+        },
+        {
+          '@type': 'Question',
+          name: "Does box-shadow affect layout?",
+          acceptedAnswer: { '@type': 'Answer', text: "No. Shadows are painted outside the box model and take up no space, so they never push siblings around or change an element’s dimensions. That is why they can overflow a container and why a parent with overflow: hidden will clip them. It also means a shadow can be added on hover without any risk of reflow, unlike a border, which does change the box size unless you compensate with padding or use box-sizing: border-box." },
         },
         {
           '@type': 'Question',
           name: "What is the browser compatibility for CSS box-shadow?",
-          acceptedAnswer: { '@type': 'Answer', text: "box-shadow has 99%+ browser support. The -webkit-box-shadow prefix was required for Safari <5.1 (2011) and is no longer needed." },
+          acceptedAnswer: { '@type': 'Answer', text: "box-shadow has essentially universal support and needs no vendor prefixes — the -webkit-box-shadow prefix has not been necessary since Safari 5.1 and can be deleted from any stylesheet still carrying it. Multiple shadows, inset, negative spread and shadows on rounded corners are all part of the same long-supported feature." },
         },
       ],
     },
@@ -85,19 +110,42 @@ const schema = {
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
         <h2>How do you use the box-shadow CSS generator?</h2>
-        <p>Adjust the sliders for horizontal offset, vertical offset, blur radius and spread radius. Use the color picker to set the shadow color and adjust opacity. Add multiple layers with the "Add shadow layer" button — shadows stack from first (top) to last (bottom).</p>
+        <p>Drag the sliders for offset, blur, spread and color, and add layers with the add button. Each layer is a separate shadow, and the preview composites them in real time. The CSS panel shows the exact declaration to paste — including the comma between layers, which is where hand-written multi-layer shadows usually break.</p>
 
         <h2>What is the CSS box-shadow syntax?</h2>
-        <p><code>box-shadow: offset-x offset-y blur-radius spread-radius color</code>. Add <code>inset</code> before the offsets for an inner shadow. Comma-separate multiple shadows: <code>box-shadow: 0 2px 4px rgba(0,0,0,.3), 0 8px 16px rgba(0,0,0,.1)</code>.</p>
+        <p>The property takes <code>box-shadow: offset-x offset-y blur-radius spread-radius color</code>. Only the two offsets are required. The optional <code>inset</code> keyword flips the shadow inside the element, and multiple shadows are comma-separated.</p>
+        <p>The order of the four lengths is fixed and unlabelled, which is the main source of mistakes: the third number is always blur and the fourth is always spread, so <code>box-shadow: 0 4px 12px</code> has no spread at all.</p>
+
+        <h3>What does the spread radius do?</h3>
+        <p>Spread grows or shrinks the shadow before the blur is applied. A positive spread makes the shadow larger than the element on every side; a negative spread pulls it in, which is the trick behind shadows that appear to sit tightly underneath a card rather than haloing around it.</p>
+        <p>Pairing a small negative spread with a large blur — something like <code>0 12px 24px -8px</code> — is what makes a shadow read as depth rather than as a grey glow.</p>
+
+        <h2>How do you stack multiple box shadows?</h2>
+        <p>Separate them with commas: <code>box-shadow: 0 1px 2px rgba(0,0,0,.1), 0 8px 24px rgba(0,0,0,.1)</code>. They paint front to back, so the first shadow in the list sits closest to the element and the last one sits furthest behind.</p>
+        <p>There is no practical limit on the number of layers, but each one costs a paint, so keep long stacks off elements that animate or repeat many times on a page.</p>
 
         <h3>What is the smooth shadow technique?</h3>
-        <p>A natural-looking shadow uses 4–5 layers with progressively larger offsets and decreasing opacity. The "Smooth shadow" feature generates this automatically — a technique popularized by <a href="https://shadows.brumm.af" style="color:#a5b4fc">shadows.brumm.af</a>.</p>
+        <p>A single shadow with a big blur looks flat because real light falls off gradually. The fix is to stack several shadows with progressively larger offsets and blurs and progressively lower alpha — for instance four layers going from <code>0 1px 1px</code> at 7 percent opacity out to <code>0 16px 16px</code> at the same or lower alpha.</p>
+        <p>The result reads as a soft, natural shadow rather than a grey smear, and it is the difference between a card that looks designed and one that looks defaulted. The technique was popularized by <a href="https://shadows.brumm.af" style="color:#a5b4fc">shadows.brumm.af</a>.</p>
 
-        <h3>What is the difference between box-shadow and drop-shadow?</h3>
-        <p><code>box-shadow</code> always follows the rectangular bounding box of the element (including border-radius). <code>filter: drop-shadow()</code> follows the actual visual shape — useful for SVGs and PNGs with transparency.</p>
+        <h2>How do you create an inner shadow in CSS?</h2>
+        <p>Add the <code>inset</code> keyword and the shadow is drawn inside the padding box instead of outside it: <code>box-shadow: inset 0 2px 4px rgba(0,0,0,.3)</code>. This is how you get pressed buttons, inset wells and the recessed look on form fields.</p>
+        <p>Inset and outset shadows can be mixed in the same declaration, so a control can have an inner highlight and an outer drop shadow at once.</p>
 
-        <h3>What is the browser compatibility for CSS box-shadow?</h3>
-        <p><code>box-shadow</code> has 99%+ browser support. The <code>-webkit-box-shadow</code> prefix was required for Safari &lt;5.1 (2011) and is no longer needed.</p>
+        <h2>How do you draw a border with box-shadow?</h2>
+        <p>A shadow with zero offset and zero blur but a positive spread is a ring: <code>box-shadow: 0 0 0 2px #6366f1</code>. Unlike a real border it takes up no space in the layout, so adding or removing it on hover or focus will never shift the surrounding content.</p>
+        <p>It also follows <code>border-radius</code> automatically, and you can stack rings of increasing spread to build a multi-color focus indicator. This is the standard technique for focus rings that need to sit outside an element without disturbing it.</p>
+
+        <h2>What is the difference between box-shadow and drop-shadow?</h2>
+        <p><code>box-shadow</code> follows the element’s border box, rounded corners included, and ignores what is drawn inside it. <code>filter: drop-shadow()</code> works from the rendered alpha channel, so it traces the visible shape — a transparent PNG, an SVG icon, or a clipped element.</p>
+        <p>For a rectangular card <code>box-shadow</code> is the cheaper and more capable choice, since it offers spread and <code>inset</code> which <code>drop-shadow()</code> does not have. For anything non-rectangular it is the wrong tool and will draw a rectangle around your shape.</p>
+
+        <h2>Does box-shadow affect layout?</h2>
+        <p>No. Shadows are painted outside the box model and take up no space, so they never push siblings around or change an element’s dimensions. That is why they can overflow a container and why a parent with <code>overflow: hidden</code> will clip them.</p>
+        <p>It also means a shadow can be added on hover without any risk of reflow, unlike a border, which does change the box size unless you compensate with padding or use <code>box-sizing: border-box</code>.</p>
+
+        <h2>What is the browser compatibility for CSS box-shadow?</h2>
+        <p><code>box-shadow</code> has essentially universal support and needs no vendor prefixes — the <code>-webkit-box-shadow</code> prefix has not been necessary since Safari 5.1 and can be deleted from any stylesheet still carrying it. Multiple shadows, <code>inset</code>, negative spread and shadows on rounded corners are all part of the same long-supported feature.</p>
       </div>
     </div>
 

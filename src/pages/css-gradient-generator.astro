@@ -32,23 +32,48 @@ const schema = {
       mainEntity: [
         {
           '@type': 'Question',
+          name: "How do you use the CSS gradient generator?",
+          acceptedAnswer: { '@type': 'Answer', text: "Choose the gradient type, then add and drag color stops. For a linear gradient the angle control sets the direction; for radial and conic the center point matters most. Every change updates the preview and the CSS together, so you can copy at any point." },
+        },
+        {
+          '@type': 'Question',
           name: "What are the CSS gradient types?",
-          acceptedAnswer: { '@type': 'Answer', text: "linear-gradient — colors transition along a straight line. Specify angle in degrees (0° = bottom to top, 90° = left to right, 180° = top to bottom). radial-gradient — colors radiate outward from a center point. conic-gradient — colors rotate around a center point (useful for pie charts and color wheels)." },
+          acceptedAnswer: { '@type': 'Answer', text: "linear-gradient transitions colors along a straight line, with the angle given in degrees — 0deg runs bottom to top, 90deg left to right, 180deg top to bottom. radial-gradient radiates outward from a center point, either as a circle or an ellipse. conic-gradient sweeps colors around a center point, which is what makes pie charts and color wheels possible in pure CSS. All three have repeating- variants that tile the stop pattern outward instead of stopping at the last color." },
         },
         {
           '@type': 'Question',
           name: "What is the CSS gradient syntax?",
-          acceptedAnswer: { '@type': 'Answer', text: "background: linear-gradient(90deg, #6366f1 0%, #22d3ee 100%). Add more color stops by inserting additional color-position pairs: linear-gradient(90deg, #6366f1 0%, #f472b6 50%, #22d3ee 100%)." },
+          acceptedAnswer: { '@type': 'Answer', text: "A gradient is an image, not a color, so it goes wherever an image goes — usually background: linear-gradient(90deg, #6366f1, #22d3ee). That also means it cannot be used with the color property, and it will not appear if background-color is set afterwards in the same shorthand. Each color can be followed by a position, and a gradient with no positions distributes its stops evenly." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do color stops and positions work?",
+          acceptedAnswer: { '@type': 'Answer', text: "A stop position tells the browser where that color reaches full strength: linear-gradient(90deg, red 0%, yellow 30%, blue 100%) compresses the red-to-yellow transition into the first third. Positions can be lengths as well as percentages. You can also give one color two positions to define a band, and inserting a bare percentage between two colors shifts the midpoint of their blend without adding a color." },
         },
         {
           '@type': 'Question',
           name: "How do hard color stops work?",
-          acceptedAnswer: { '@type': 'Answer', text: "Create sharp transitions by setting two stops at the same position: linear-gradient(90deg, red 50%, blue 50%). This technique is used for striped backgrounds." },
+          acceptedAnswer: { '@type': 'Answer', text: "Give two adjacent stops the same position and the blend has nowhere to happen, so the colors meet at a hard edge: linear-gradient(90deg, #6366f1 50%, #22d3ee 50%) is a two-color split, not a fade. Repeat the pattern and you have stripes without an image. Combined with repeating-linear-gradient this is how CSS-only stripes, checkerboards and progress-bar textures are built." },
+        },
+        {
+          '@type': 'Question',
+          name: "Why does my gradient look muddy or grey in the middle?",
+          acceptedAnswer: { '@type': 'Answer', text: "Because gradients interpolate in sRGB by default, and the straight line between two saturated colors in that space passes through a desaturated middle. Blue to yellow is the classic case: the midpoint comes out grey rather than green. Modern CSS lets you name a better interpolation space with the in keyword — linear-gradient(in oklab, blue, yellow) keeps the midpoint vivid. Support for the color-space syntax is still uneven across browsers, so treat it as an enhancement behind a @supports query, or place an explicit middle color stop, which fixes the problem everywhere." },
         },
         {
           '@type': 'Question',
           name: "How do you use a CSS gradient as a text fill?",
-          acceptedAnswer: { '@type': 'Answer', text: "Use background: linear-gradient(...); -webkit-background-clip: text; -webkit-text-fill-color: transparent for gradient text effects." },
+          acceptedAnswer: { '@type': 'Answer', text: "Set the gradient as the background, then clip it to the glyphs: background: linear-gradient(90deg, #818cf8, #22d3ee) with background-clip: text and a transparent text fill. The -webkit- prefixed forms of both are still needed for the widest support. Because the text becomes transparent, check the result against your background — gradient text frequently fails contrast checks that the original solid color passed, and it should be reserved for display type rather than reading copy." },
+        },
+        {
+          '@type': 'Question',
+          name: "Can you animate a CSS gradient?",
+          acceptedAnswer: { '@type': 'Answer', text: "Not by transitioning between two gradients — they are images, and browsers cannot interpolate one into another. The standard workaround is to make the background much larger than the element with background-size: 200% 100% and animate background-position, which slides the gradient across and reads as movement. For a genuine color animation, register a custom property with @property so the browser knows it holds a color and can interpolate it, then build the gradient from that variable." },
+        },
+        {
+          '@type': 'Question',
+          name: "What is the browser compatibility for CSS gradients?",
+          acceptedAnswer: { '@type': 'Answer', text: "Linear and radial gradients are supported everywhere without prefixes; conic gradients are supported across all current browsers and are the newest of the three. The old -webkit-linear-gradient and filter-based fallbacks target browsers that are long gone. The two pieces worth checking are the in oklab interpolation syntax and background-clip: text, which still wants its prefixed form." },
         },
       ],
     },
@@ -66,14 +91,39 @@ const schema = {
     <div style="padding:0 40px 40px"><Gradient client:load /></div>
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
+        <h2>How do you use the CSS gradient generator?</h2>
+        <p>Choose the gradient type, then add and drag color stops. For a linear gradient the angle control sets the direction; for radial and conic the center point matters most. Every change updates the preview and the CSS together, so you can copy at any point.</p>
+
         <h2>What are the CSS gradient types?</h2>
-        <p><strong>linear-gradient</strong> — colors transition along a straight line. Specify angle in degrees (0° = bottom to top, 90° = left to right, 180° = top to bottom). <strong>radial-gradient</strong> — colors radiate outward from a center point. <strong>conic-gradient</strong> — colors rotate around a center point (useful for pie charts and color wheels).</p>
+        <p><code>linear-gradient</code> transitions colors along a straight line, with the angle given in degrees — 0deg runs bottom to top, 90deg left to right, 180deg top to bottom. <code>radial-gradient</code> radiates outward from a center point, either as a circle or an ellipse. <code>conic-gradient</code> sweeps colors around a center point, which is what makes pie charts and color wheels possible in pure CSS.</p>
+        <p>All three have <code>repeating-</code> variants that tile the stop pattern outward instead of stopping at the last color.</p>
+
         <h2>What is the CSS gradient syntax?</h2>
-        <p><code>background: linear-gradient(90deg, #6366f1 0%, #22d3ee 100%)</code>. Add more color stops by inserting additional color-position pairs: <code>linear-gradient(90deg, #6366f1 0%, #f472b6 50%, #22d3ee 100%)</code>.</p>
+        <p>A gradient is an image, not a color, so it goes wherever an image goes — usually <code>background: linear-gradient(90deg, #6366f1, #22d3ee)</code>. That also means it cannot be used with the <code>color</code> property, and it will not appear if <code>background-color</code> is set afterwards in the same shorthand.</p>
+        <p>Each color can be followed by a position, and a gradient with no positions distributes its stops evenly.</p>
+
+        <h3>How do color stops and positions work?</h3>
+        <p>A stop position tells the browser where that color reaches full strength: <code>linear-gradient(90deg, red 0%, yellow 30%, blue 100%)</code> compresses the red-to-yellow transition into the first third. Positions can be lengths as well as percentages.</p>
+        <p>You can also give one color two positions to define a band, and inserting a bare percentage between two colors shifts the midpoint of their blend without adding a color.</p>
+
         <h3>How do hard color stops work?</h3>
-        <p>Create sharp transitions by setting two stops at the same position: <code>linear-gradient(90deg, red 50%, blue 50%)</code>. This technique is used for striped backgrounds.</p>
-        <h3>How do you use a CSS gradient as a text fill?</h3>
-        <p>Use <code>background: linear-gradient(...); -webkit-background-clip: text; -webkit-text-fill-color: transparent</code> for gradient text effects.</p>
+        <p>Give two adjacent stops the same position and the blend has nowhere to happen, so the colors meet at a hard edge: <code>linear-gradient(90deg, #6366f1 50%, #22d3ee 50%)</code> is a two-color split, not a fade.</p>
+        <p>Repeat the pattern and you have stripes without an image. Combined with <code>repeating-linear-gradient</code> this is how CSS-only stripes, checkerboards and progress-bar textures are built.</p>
+
+        <h2>Why does my gradient look muddy or grey in the middle?</h2>
+        <p>Because gradients interpolate in sRGB by default, and the straight line between two saturated colors in that space passes through a desaturated middle. Blue to yellow is the classic case: the midpoint comes out grey rather than green.</p>
+        <p>Modern CSS lets you name a better interpolation space with the <code>in</code> keyword — <code>linear-gradient(in oklab, blue, yellow)</code> keeps the midpoint vivid. Support for the color-space syntax is still uneven across browsers, so treat it as an enhancement behind a <code>@supports</code> query, or place an explicit middle color stop, which fixes the problem everywhere.</p>
+
+        <h2>How do you use a CSS gradient as a text fill?</h2>
+        <p>Set the gradient as the background, then clip it to the glyphs: <code>background: linear-gradient(90deg, #818cf8, #22d3ee)</code> with <code>background-clip: text</code> and a transparent text fill. The <code>-webkit-</code> prefixed forms of both are still needed for the widest support.</p>
+        <p>Because the text becomes transparent, check the result against your background — gradient text frequently fails contrast checks that the original solid color passed, and it should be reserved for display type rather than reading copy.</p>
+
+        <h2>Can you animate a CSS gradient?</h2>
+        <p>Not by transitioning between two gradients — they are images, and browsers cannot interpolate one into another. The standard workaround is to make the background much larger than the element with <code>background-size: 200% 100%</code> and animate <code>background-position</code>, which slides the gradient across and reads as movement.</p>
+        <p>For a genuine color animation, register a custom property with <code>@property</code> so the browser knows it holds a color and can interpolate it, then build the gradient from that variable.</p>
+
+        <h2>What is the browser compatibility for CSS gradients?</h2>
+        <p>Linear and radial gradients are supported everywhere without prefixes; conic gradients are supported across all current browsers and are the newest of the three. The old <code>-webkit-linear-gradient</code> and filter-based fallbacks target browsers that are long gone. The two pieces worth checking are the <code>in oklab</code> interpolation syntax and <code>background-clip: text</code>, which still wants its prefixed form.</p>
       </div>
     </div>
     <div style="padding:24px 40px 0;border-top:1px solid #1c1c26">

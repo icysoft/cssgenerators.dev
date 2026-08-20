@@ -32,23 +32,53 @@ const schema = {
       mainEntity: [
         {
           '@type': 'Question',
-          name: 'How do you generate button CSS?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Pick a preset style (Modern, Flat, Outline, Glassmorphism, Gradient, or Retro) then fine-tune any property. Hover over the live preview to see the hover state. The CSS output includes both .button and .button:hover rules.' },
+          name: "How do you use the CSS button generator?",
+          acceptedAnswer: { '@type': 'Answer', text: "Start from a preset — gradient, glassmorphism, outline and the rest — then adjust padding, radius, colors and the hover state. The preview is a real button, so you can hover it and see the transition exactly as it will behave in a page. The generated CSS covers the base state and the hover state together." },
         },
         {
           '@type': 'Question',
-          name: 'What are the CSS button properties?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Key properties for styling buttons: background (solid or gradient), color (text), border-radius (corner rounding), padding (inner spacing), border (outline), box-shadow (depth), and transition (smooth hover animation).' },
+          name: "What CSS properties make up a button?",
+          acceptedAnswer: { '@type': 'Answer', text: "A button is mostly six declarations: padding for the tap area, background, border or border-radius for the shape, color and font for the label, and cursor: pointer for the affordance. Two more are worth setting explicitly on a real button element, because user agent styles get in the way: font: inherit, since buttons do not inherit page typography by default, and border: none when you are supplying your own background." },
         },
         {
           '@type': 'Question',
-          name: 'How does a glassmorphism button work in CSS?',
-          acceptedAnswer: { '@type': 'Answer', text: 'The glass preset uses backdrop-filter: blur() with a semi-transparent background and subtle border to create a frosted-glass effect. Works best over coloured or blurred backgrounds.' },
+          name: "How do you style hover, focus and active states?",
+          acceptedAnswer: { '@type': 'Answer', text: "Three pseudo-classes cover the interaction: :hover while the pointer is over the button, :active while it is being pressed, and :focus-visible when it is focused in a way that deserves a visible indicator. A press state that shifts the button down a pixel or darkens the background gives the control a physical quality that hover alone does not. Keep the change small — the point is feedback, not animation." },
         },
         {
           '@type': 'Question',
-          name: 'What accessibility requirements apply to CSS buttons?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Ensure your button has sufficient color contrast (WCAG AA requires 4.5:1 for normal text). Use cursor: pointer so the cursor changes on hover. The generated CSS already includes this.' },
+          name: "Why use :focus-visible instead of :focus?",
+          acceptedAnswer: { '@type': 'Answer', text: ":focus matches whenever the element has focus, including after a mouse click, which is why designers used to remove focus rings: they looked like a bug on click. Removing them breaks keyboard navigation entirely, leaving people who tab through a page with no idea where they are. :focus-visible resolves the conflict by matching only when the browser judges a visible indicator is warranted, which in practice means keyboard focus rather than mouse clicks. Style :focus-visible, and never write outline: none without providing a replacement indicator." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you make an accessible button?",
+          acceptedAnswer: { '@type': 'Answer', text: "Use a real button element. A styled div gets none of the behavior for free — no keyboard activation, no role, no participation in tab order — and rebuilding all of that correctly with ARIA is far more work than restyling the native element. Beyond the element, three things matter: the label must clear the contrast ratio against the button background, not the page background; the target should be large enough to hit comfortably on touch, which usually means padding rather than a fixed height; and the visible label should say what the button does." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you style a disabled button?",
+          acceptedAnswer: { '@type': 'Answer', text: "The :disabled pseudo-class styles it, typically with reduced opacity and cursor: not-allowed. The trap is contrast: dropping opacity to 0.5 also drops the label’s contrast ratio, and disabled controls still need to be readable enough to understand what is unavailable. Prefer a deliberately chosen muted color pair over a blanket opacity, and remember that disabled buttons are not focusable, so a form that disables its submit button gives keyboard users nothing to land on and no explanation." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you add a gradient or glassmorphism button?",
+          acceptedAnswer: { '@type': 'Answer', text: "A gradient button is background: linear-gradient(135deg, #6366f1, #22d3ee) in place of a flat color. Because you cannot transition between two gradients directly, animate the effect by shifting background-position on an oversized gradient instead. Glassmorphism needs a translucent background plus backdrop-filter: blur(12px), and it only reads as glass when there is something behind it to blur. A thin light border and a subtle inner highlight sell the effect." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you animate a button smoothly?",
+          acceptedAnswer: { '@type': 'Answer', text: "Transition only the properties that actually change, rather than transition: all, which forces the browser to watch every property and can produce surprising animations when an unrelated rule changes. Something like transition: background-color .2s ease, transform .12s ease is enough. Prefer transform and opacity for movement, since they are handled by the compositor and do not trigger layout. Wrap non-essential motion in a prefers-reduced-motion query so people who have asked their system for less animation get a static button." },
+        },
+        {
+          '@type': 'Question',
+          name: "Should you use a button or a link?",
+          acceptedAnswer: { '@type': 'Answer', text: "A button performs an action on the current page; an anchor navigates to a URL. The visual style is irrelevant to that choice — a link can look like a button and often should. The distinction is functional: links can be opened in a new tab, copied and bookmarked, and are announced as links by screen readers. Using an anchor with no href as a fake button removes it from keyboard navigation, and using a button for navigation loses everything a URL provides." },
+        },
+        {
+          '@type': 'Question',
+          name: "What is the browser compatibility for CSS buttons?",
+          acceptedAnswer: { '@type': 'Answer', text: "Everything here is broadly supported: border-radius, gradients, transitions, :hover, :active and :disabled have worked for many years. :focus-visible is supported across all current browsers. backdrop-filter, used for glassmorphism, arrived later and is worth guarding with a @supports query if the design depends on it." },
         },
       ],
     },
@@ -66,14 +96,43 @@ const schema = {
     <div style="padding:0 40px 40px"><ButtonGen client:load /></div>
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
-        <h2>How do you generate button CSS?</h2>
-        <p>Pick a preset style (Modern, Flat, Outline, Glassmorphism, Gradient, or Retro) then fine-tune any property. Hover over the live preview to see the hover state. The CSS output includes both <code>.button</code> and <code>.button:hover</code> rules.</p>
-        <h2>What are the CSS button properties?</h2>
-        <p>Key properties for styling buttons: <code>background</code> (solid or gradient), <code>color</code> (text), <code>border-radius</code> (corner rounding), <code>padding</code> (inner spacing), <code>border</code> (outline), <code>box-shadow</code> (depth), and <code>transition</code> (smooth hover animation).</p>
-        <h3>How does a glassmorphism button work in CSS?</h3>
-        <p>The glass preset uses <code>backdrop-filter: blur()</code> with a semi-transparent background and subtle border to create a frosted-glass effect. Works best over coloured or blurred backgrounds.</p>
-        <h3>What accessibility requirements apply to CSS buttons?</h3>
-        <p>Ensure your button has sufficient color contrast (WCAG AA requires 4.5:1 for normal text). Use <code>cursor: pointer</code> so the cursor changes on hover. The generated CSS already includes this.</p>
+        <h2>How do you use the CSS button generator?</h2>
+        <p>Start from a preset — gradient, glassmorphism, outline and the rest — then adjust padding, radius, colors and the hover state. The preview is a real button, so you can hover it and see the transition exactly as it will behave in a page. The generated CSS covers the base state and the hover state together.</p>
+
+        <h2>What CSS properties make up a button?</h2>
+        <p>A button is mostly six declarations: <code>padding</code> for the tap area, <code>background</code>, <code>border</code> or <code>border-radius</code> for the shape, <code>color</code> and <code>font</code> for the label, and <code>cursor: pointer</code> for the affordance.</p>
+        <p>Two more are worth setting explicitly on a real <code>button</code> element, because user agent styles get in the way: <code>font: inherit</code>, since buttons do not inherit page typography by default, and <code>border: none</code> when you are supplying your own background.</p>
+
+        <h2>How do you style hover, focus and active states?</h2>
+        <p>Three pseudo-classes cover the interaction: <code>:hover</code> while the pointer is over the button, <code>:active</code> while it is being pressed, and <code>:focus-visible</code> when it is focused in a way that deserves a visible indicator.</p>
+        <p>A press state that shifts the button down a pixel or darkens the background gives the control a physical quality that hover alone does not. Keep the change small — the point is feedback, not animation.</p>
+
+        <h3>Why use :focus-visible instead of :focus?</h3>
+        <p><code>:focus</code> matches whenever the element has focus, including after a mouse click, which is why designers used to remove focus rings: they looked like a bug on click. Removing them breaks keyboard navigation entirely, leaving people who tab through a page with no idea where they are.</p>
+        <p><code>:focus-visible</code> resolves the conflict by matching only when the browser judges a visible indicator is warranted, which in practice means keyboard focus rather than mouse clicks. Style <code>:focus-visible</code>, and never write <code>outline: none</code> without providing a replacement indicator.</p>
+
+        <h2>How do you make an accessible button?</h2>
+        <p>Use a real <code>button</code> element. A styled <code>div</code> gets none of the behavior for free — no keyboard activation, no role, no participation in tab order — and rebuilding all of that correctly with ARIA is far more work than restyling the native element.</p>
+        <p>Beyond the element, three things matter: the label must clear the contrast ratio against the button background, not the page background; the target should be large enough to hit comfortably on touch, which usually means padding rather than a fixed height; and the visible label should say what the button does.</p>
+
+        <h3>How do you style a disabled button?</h3>
+        <p>The <code>:disabled</code> pseudo-class styles it, typically with reduced opacity and <code>cursor: not-allowed</code>. The trap is contrast: dropping opacity to 0.5 also drops the label’s contrast ratio, and disabled controls still need to be readable enough to understand what is unavailable.</p>
+        <p>Prefer a deliberately chosen muted color pair over a blanket opacity, and remember that disabled buttons are not focusable, so a form that disables its submit button gives keyboard users nothing to land on and no explanation.</p>
+
+        <h2>How do you add a gradient or glassmorphism button?</h2>
+        <p>A gradient button is <code>background: linear-gradient(135deg, #6366f1, #22d3ee)</code> in place of a flat color. Because you cannot transition between two gradients directly, animate the effect by shifting <code>background-position</code> on an oversized gradient instead.</p>
+        <p>Glassmorphism needs a translucent background plus <code>backdrop-filter: blur(12px)</code>, and it only reads as glass when there is something behind it to blur. A thin light border and a subtle inner highlight sell the effect.</p>
+
+        <h2>How do you animate a button smoothly?</h2>
+        <p>Transition only the properties that actually change, rather than <code>transition: all</code>, which forces the browser to watch every property and can produce surprising animations when an unrelated rule changes. Something like <code>transition: background-color .2s ease, transform .12s ease</code> is enough.</p>
+        <p>Prefer <code>transform</code> and <code>opacity</code> for movement, since they are handled by the compositor and do not trigger layout. Wrap non-essential motion in a <code>prefers-reduced-motion</code> query so people who have asked their system for less animation get a static button.</p>
+
+        <h2>Should you use a button or a link?</h2>
+        <p>A <code>button</code> performs an action on the current page; an anchor navigates to a URL. The visual style is irrelevant to that choice — a link can look like a button and often should.</p>
+        <p>The distinction is functional: links can be opened in a new tab, copied and bookmarked, and are announced as links by screen readers. Using an anchor with no <code>href</code> as a fake button removes it from keyboard navigation, and using a button for navigation loses everything a URL provides.</p>
+
+        <h2>What is the browser compatibility for CSS buttons?</h2>
+        <p>Everything here is broadly supported: <code>border-radius</code>, gradients, transitions, <code>:hover</code>, <code>:active</code> and <code>:disabled</code> have worked for many years. <code>:focus-visible</code> is supported across all current browsers. <code>backdrop-filter</code>, used for glassmorphism, arrived later and is worth guarding with a <code>@supports</code> query if the design depends on it.</p>
       </div>
     </div>
     <div style="padding:24px 40px 40px;border-top:1px solid #1c1c26">

@@ -32,23 +32,48 @@ const schema = {
       mainEntity: [
         {
           '@type': 'Question',
-          name: 'What is CSS clip-path?',
-          acceptedAnswer: { '@type': 'Answer', text: 'The clip-path property clips (masks) an element to a specific shape. Everything outside the shape becomes invisible. The most versatile value is polygon(), which accepts a list of x/y coordinate pairs as percentages.' },
+          name: "How do you use the CSS clip-path generator?",
+          acceptedAnswer: { '@type': 'Answer', text: "Pick a preset shape or drag the points directly on the preview. Each point is a coordinate pair in the generated polygon(), and the CSS updates as you move them. Add points for more complex outlines — the more points, the more precise the silhouette." },
         },
         {
           '@type': 'Question',
-          name: 'What is the CSS clip-path syntax?',
-          acceptedAnswer: { '@type': 'Answer', text: 'clip-path: polygon(x1 y1, x2 y2, ...). Coordinates are percentages of the element\'s bounding box. clip-path: circle(50%) clips to a circle. clip-path: ellipse(50% 30%) clips to an ellipse.' },
+          name: "What is the CSS clip-path syntax?",
+          acceptedAnswer: { '@type': 'Answer', text: "clip-path takes a shape function and hides everything outside it. The basic shapes are inset() for a rectangle with optional rounded corners, circle(), ellipse() and polygon() for arbitrary outlines. A circular avatar is clip-path: circle(50%), which is more predictable than border-radius: 50% when the element is not square, since the circle is genuinely circular rather than an ellipse." },
         },
         {
           '@type': 'Question',
-          name: 'What are the common clip-path polygon shapes?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Triangle: polygon(50% 0%, 0% 100%, 100% 100%). Star: 10-point polygon with alternating inner/outer radii. Hexagon: 6-point polygon. Each is available as a preset in this generator.' },
+          name: "How does the polygon function work?",
+          acceptedAnswer: { '@type': 'Answer', text: "polygon() takes a list of comma-separated coordinate pairs, each an x and a y measured from the element’s top-left corner. Percentages resolve against the element’s own width and height, so a shape written in percentages scales with the box. A triangle is three pairs: polygon(50% 0%, 0% 100%, 100% 100%) — apex, bottom-left, bottom-right. The points are joined in the order written and the shape closes automatically, so listing them out of order produces a self-intersecting result rather than an error." },
         },
         {
           '@type': 'Question',
-          name: 'How do you animate clip-path in CSS?',
-          acceptedAnswer: { '@type': 'Answer', text: 'CSS can animate between two clip-path: polygon() values as long as they have the same number of points. Use transition: clip-path 0.3s ease for smooth morphing effects on hover.' },
+          name: "How do you animate a clip-path?",
+          acceptedAnswer: { '@type': 'Answer', text: "Two polygon() values only interpolate if they have the same number of points, listed in the same order. A three-point shape will not transition into a four-point shape — the browser falls back to a hard swap. The workaround is to pad the simpler shape with duplicate points so both sides have equal counts. Two coincident points sit on top of each other and are invisible, but they give the animation something to interpolate towards." },
+        },
+        {
+          '@type': 'Question',
+          name: "What is the difference between clip-path and mask?",
+          acceptedAnswer: { '@type': 'Answer', text: "clip-path is a hard geometric cut: a pixel is either inside the path or gone, with only antialiasing at the edge. mask works from an image’s alpha channel, so it can fade gradually and produce soft or textured edges. Use clip-path for defined shapes with crisp edges, and mask when you want a gradient fade-out or an irregular texture. A mask with a gradient is the standard way to fade an image into the page background." },
+        },
+        {
+          '@type': 'Question',
+          name: "Does clip-path affect clicks, shadows and overflow?",
+          acceptedAnswer: { '@type': 'Answer', text: "Yes to all three, and it catches people out. The clipped-away region stops receiving pointer events, so the corners of a clipped button are genuinely not clickable — usually what you want, occasionally a surprise. More disruptively, box-shadow is clipped along with everything else outside the path, so a shape with a shadow appears to have no shadow at all. Use filter: drop-shadow() on the element or a wrapper instead, since it works from the rendered result and traces the clipped silhouette." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you make common shapes with clip-path?",
+          acceptedAnswer: { '@type': 'Answer', text: "A circular avatar is circle(50%). A chevron or arrow is a six-point polygon. A diagonal section divider is a four-point polygon with two corners pulled off the horizontal, which is how those angled page bands are built without images. For a shape that must stay proportional, write the points in percentages; for one that must keep a fixed edge thickness regardless of element size, mix in pixel values, since coordinates accept both." },
+        },
+        {
+          '@type': 'Question',
+          name: "Can you use an SVG path as a clip-path?",
+          acceptedAnswer: { '@type': 'Answer', text: "Yes, in two ways. clip-path: path(\"M0 0 L100 0 ...\") takes SVG path data directly, which handles curves that polygon() cannot express. You can also reference a clip path defined in SVG markup with clip-path: url(#my-clip). The trade-off is that path() only accepts absolute units, so it does not scale with the element the way a percentage-based polygon does. For responsive shapes, a polygon in percentages remains the more practical choice." },
+        },
+        {
+          '@type': 'Question',
+          name: "What is the browser compatibility for CSS clip-path?",
+          acceptedAnswer: { '@type': 'Answer', text: "The basic shape functions — inset(), circle(), ellipse() and polygon() — are supported across all current browsers unprefixed and are safe in production. path() arrived later but is also broadly available now. Since a failed clip-path simply leaves the element unclipped rather than breaking the layout, it degrades gracefully by default." },
         },
       ],
     },
@@ -66,14 +91,39 @@ const schema = {
     <div style="padding:0 40px 40px"><ClipPath client:load /></div>
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
-        <h2>What is CSS clip-path?</h2>
-        <p>The <code>clip-path</code> property clips (masks) an element to a specific shape. Everything outside the shape becomes invisible. The most versatile value is <code>polygon()</code>, which accepts a list of x/y coordinate pairs as percentages.</p>
+        <h2>How do you use the CSS clip-path generator?</h2>
+        <p>Pick a preset shape or drag the points directly on the preview. Each point is a coordinate pair in the generated <code>polygon()</code>, and the CSS updates as you move them. Add points for more complex outlines — the more points, the more precise the silhouette.</p>
+
         <h2>What is the CSS clip-path syntax?</h2>
-        <p><code>clip-path: polygon(x1 y1, x2 y2, ...)</code>. Coordinates are percentages of the element's bounding box. <code>clip-path: circle(50%)</code> clips to a circle. <code>clip-path: ellipse(50% 30%)</code> clips to an ellipse.</p>
-        <h3>What are the common clip-path polygon shapes?</h3>
-        <p><strong>Triangle</strong>: <code>polygon(50% 0%, 0% 100%, 100% 100%)</code>. <strong>Star</strong>: 10-point polygon with alternating inner/outer radii. <strong>Hexagon</strong>: 6-point polygon. Each is available as a preset in this generator.</p>
-        <h3>How do you animate clip-path in CSS?</h3>
-        <p>CSS can animate between two <code>clip-path: polygon()</code> values as long as they have the same number of points. Use <code>transition: clip-path 0.3s ease</code> for smooth morphing effects on hover.</p>
+        <p><code>clip-path</code> takes a shape function and hides everything outside it. The basic shapes are <code>inset()</code> for a rectangle with optional rounded corners, <code>circle()</code>, <code>ellipse()</code> and <code>polygon()</code> for arbitrary outlines.</p>
+        <p>A circular avatar is <code>clip-path: circle(50%)</code>, which is more predictable than <code>border-radius: 50%</code> when the element is not square, since the circle is genuinely circular rather than an ellipse.</p>
+
+        <h3>How does the polygon function work?</h3>
+        <p><code>polygon()</code> takes a list of comma-separated coordinate pairs, each an x and a y measured from the element’s top-left corner. Percentages resolve against the element’s own width and height, so a shape written in percentages scales with the box.</p>
+        <p>A triangle is three pairs: <code>polygon(50% 0%, 0% 100%, 100% 100%)</code> — apex, bottom-left, bottom-right. The points are joined in the order written and the shape closes automatically, so listing them out of order produces a self-intersecting result rather than an error.</p>
+
+        <h2>How do you animate a clip-path?</h2>
+        <p>Two <code>polygon()</code> values only interpolate if they have the same number of points, listed in the same order. A three-point shape will not transition into a four-point shape — the browser falls back to a hard swap.</p>
+        <p>The workaround is to pad the simpler shape with duplicate points so both sides have equal counts. Two coincident points sit on top of each other and are invisible, but they give the animation something to interpolate towards.</p>
+
+        <h2>What is the difference between clip-path and mask?</h2>
+        <p><code>clip-path</code> is a hard geometric cut: a pixel is either inside the path or gone, with only antialiasing at the edge. <code>mask</code> works from an image’s alpha channel, so it can fade gradually and produce soft or textured edges.</p>
+        <p>Use <code>clip-path</code> for defined shapes with crisp edges, and <code>mask</code> when you want a gradient fade-out or an irregular texture. A mask with a gradient is the standard way to fade an image into the page background.</p>
+
+        <h2>Does clip-path affect clicks, shadows and overflow?</h2>
+        <p>Yes to all three, and it catches people out. The clipped-away region stops receiving pointer events, so the corners of a clipped button are genuinely not clickable — usually what you want, occasionally a surprise.</p>
+        <p>More disruptively, <code>box-shadow</code> is clipped along with everything else outside the path, so a shape with a shadow appears to have no shadow at all. Use <code>filter: drop-shadow()</code> on the element or a wrapper instead, since it works from the rendered result and traces the clipped silhouette.</p>
+
+        <h2>How do you make common shapes with clip-path?</h2>
+        <p>A circular avatar is <code>circle(50%)</code>. A chevron or arrow is a six-point polygon. A diagonal section divider is a four-point polygon with two corners pulled off the horizontal, which is how those angled page bands are built without images.</p>
+        <p>For a shape that must stay proportional, write the points in percentages; for one that must keep a fixed edge thickness regardless of element size, mix in pixel values, since coordinates accept both.</p>
+
+        <h2>Can you use an SVG path as a clip-path?</h2>
+        <p>Yes, in two ways. <code>clip-path: path("M0 0 L100 0 ...")</code> takes SVG path data directly, which handles curves that <code>polygon()</code> cannot express. You can also reference a clip path defined in SVG markup with <code>clip-path: url(#my-clip)</code>.</p>
+        <p>The trade-off is that <code>path()</code> only accepts absolute units, so it does not scale with the element the way a percentage-based polygon does. For responsive shapes, a polygon in percentages remains the more practical choice.</p>
+
+        <h2>What is the browser compatibility for CSS clip-path?</h2>
+        <p>The basic shape functions — <code>inset()</code>, <code>circle()</code>, <code>ellipse()</code> and <code>polygon()</code> — are supported across all current browsers unprefixed and are safe in production. <code>path()</code> arrived later but is also broadly available now. Since a failed <code>clip-path</code> simply leaves the element unclipped rather than breaking the layout, it degrades gracefully by default.</p>
       </div>
     </div>
     <div style="padding:24px 40px 0;border-top:1px solid #1c1c26">

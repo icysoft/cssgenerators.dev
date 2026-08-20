@@ -32,23 +32,53 @@ const schema = {
       mainEntity: [
         {
           '@type': 'Question',
-          name: 'What are the CSS border properties?',
-          acceptedAnswer: { '@type': 'Answer', text: 'The border shorthand sets width, style and color in one declaration: border: 2px solid #6366f1. You can also set individual sides: border-top, border-right, border-bottom, border-left.' },
+          name: "How do you use the CSS border generator?",
+          acceptedAnswer: { '@type': 'Answer', text: "Pick a border style, set the width and color, then adjust the corner radius. The preview shows all four sides together. If you only need rounded corners without a visible border, the dedicated border radius generator gives you per-corner and elliptical control that this tool does not." },
         },
         {
           '@type': 'Question',
-          name: 'What are the CSS border styles?',
-          acceptedAnswer: { '@type': 'Answer', text: 'solid — continuous line. dashed — series of short dashes. dotted — series of dots. double — two parallel solid lines. groove/ridge — 3D effects that use the border-color. inset/outset — make the element appear embedded or raised.' },
+          name: "What is the CSS border syntax?",
+          acceptedAnswer: { '@type': 'Answer', text: "border is shorthand for three properties in any order: border: 2px solid #6366f1 sets width, style and color at once. The individual longhands are border-width, border-style and border-color. The style is the load-bearing part. Width and color both have usable defaults — medium and the element’s currentColor — but the default style is none, so a border with no style declared draws nothing at all." },
         },
         {
           '@type': 'Question',
-          name: 'How does border-radius work in CSS?',
-          acceptedAnswer: { '@type': 'Answer', text: 'border-radius: 8px rounds all four corners equally. Use individual corner values for asymmetric shapes: border-radius: 10px 5px 20px 0 (top-left, top-right, bottom-right, bottom-left).' },
+          name: "Why is my border not showing up?",
+          acceptedAnswer: { '@type': 'Answer', text: "Almost always because border-style is missing. Writing border-width: 2px; border-color: red without a style produces no border, silently, because the initial style is none. The other common cause is a zero-width or transparent border inherited from a reset, or an element with no height. Setting the shorthand — which always includes a style — avoids the whole class of problem." },
         },
         {
           '@type': 'Question',
-          name: 'How do you create a pill shape with CSS border-radius?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Set border-radius: 9999px to create a pill/capsule shape that works at any element width.' },
+          name: "What are the CSS border-style values?",
+          acceptedAnswer: { '@type': 'Answer', text: "There are eight visible styles plus two invisible ones. solid, dashed and dotted are self-explanatory. double draws two lines with a gap, sized so the total equals the border width. groove, ridge, inset and outset fake a bevel by darkening and lightening the color, and look distinctly dated outside of retro designs. none and hidden both draw nothing and differ only in table border-conflict resolution, where hidden wins over neighbouring borders." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you style one side of a border?",
+          acceptedAnswer: { '@type': 'Answer', text: "Each side has its own shorthand — border-top, border-right, border-bottom, border-left — and each of those has width, style and color longhands. A bottom rule under a heading is border-bottom: 1px solid #1c1c26. A common pattern is a full border plus one override: declare border: 1px solid first and then border-left: 4px solid for an accent stripe. Order matters, since the shorthand resets everything it covers." },
+        },
+        {
+          '@type': 'Question',
+          name: "Do borders change the size of an element?",
+          acceptedAnswer: { '@type': 'Answer', text: "Under the default box-sizing: content-box, yes: a border adds to the element’s rendered width and height, so adding one on hover shifts the layout. With box-sizing: border-box — which most stylesheets set globally — padding and border are absorbed into the declared width instead. If you still need a hover ring with no layout impact at all, use a box-shadow with spread, which is painted outside the box model entirely." },
+        },
+        {
+          '@type': 'Question',
+          name: "What is the difference between border and outline?",
+          acceptedAnswer: { '@type': 'Answer', text: "A border is part of the box model and occupies space. An outline is drawn outside it, takes no space, and therefore never causes a reflow — which is exactly why it is the default focus indicator. Outlines also cannot be styled per side. In current browsers an outline does follow border-radius, so it no longer draws a rectangle around a rounded button the way it once did, and outline-offset lets you push it away from the edge." },
+        },
+        {
+          '@type': 'Question',
+          name: "What are logical border properties?",
+          acceptedAnswer: { '@type': 'Answer', text: "border-inline-start and border-block-start replace left and top with directions relative to the writing mode. In left-to-right English border-inline-start is the left border; in a right-to-left language it becomes the right one automatically. For anything that might be translated, the logical forms save maintaining a mirrored stylesheet. They are supported across all current browsers." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you create a gradient border?",
+          acceptedAnswer: { '@type': 'Answer', text: "border-color only accepts colors, so a gradient border needs a workaround. The cleanest modern approach uses two backgrounds with background-clip: a solid one clipped to the padding box and a gradient clipped to the border box, with a transparent border letting the gradient show through. The alternative is border-image, which accepts a gradient directly via border-image-source, but it does not follow border-radius — so it is unsuitable for anything with rounded corners." },
+        },
+        {
+          '@type': 'Question',
+          name: "What is the browser compatibility for CSS borders?",
+          acceptedAnswer: { '@type': 'Answer', text: "Borders are as old as CSS and need no compatibility thought — all styles, per-side properties and border-radius are universally supported without prefixes. Logical properties and background-clip are newer but available in all current browsers." },
         },
       ],
     },
@@ -66,14 +96,43 @@ const schema = {
     <div style="padding:0 40px 40px"><Border client:load /></div>
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
-        <h2>What are the CSS border properties?</h2>
-        <p>The <code>border</code> shorthand sets width, style and color in one declaration: <code>border: 2px solid #6366f1</code>. You can also set individual sides: <code>border-top</code>, <code>border-right</code>, <code>border-bottom</code>, <code>border-left</code>.</p>
-        <h2>What are the CSS border styles?</h2>
-        <p><strong>solid</strong> — continuous line. <strong>dashed</strong> — series of short dashes. <strong>dotted</strong> — series of dots. <strong>double</strong> — two parallel solid lines. <strong>groove/ridge</strong> — 3D effects that use the border-color. <strong>inset/outset</strong> — make the element appear embedded or raised.</p>
-        <h3>How does border-radius work in CSS?</h3>
-        <p><code>border-radius: 8px</code> rounds all four corners equally. Use individual corner values for asymmetric shapes: <code>border-radius: 10px 5px 20px 0</code> (top-left, top-right, bottom-right, bottom-left).</p>
-        <h3>How do you create a pill shape with CSS border-radius?</h3>
-        <p>Set <code>border-radius: 9999px</code> to create a pill/capsule shape that works at any element width.</p>
+        <h2>How do you use the CSS border generator?</h2>
+        <p>Pick a border style, set the width and color, then adjust the corner radius. The preview shows all four sides together. If you only need rounded corners without a visible border, the dedicated border radius generator gives you per-corner and elliptical control that this tool does not.</p>
+
+        <h2>What is the CSS border syntax?</h2>
+        <p><code>border</code> is shorthand for three properties in any order: <code>border: 2px solid #6366f1</code> sets width, style and color at once. The individual longhands are <code>border-width</code>, <code>border-style</code> and <code>border-color</code>.</p>
+        <p>The style is the load-bearing part. Width and color both have usable defaults — medium and the element’s <code>currentColor</code> — but the default style is <code>none</code>, so a border with no style declared draws nothing at all.</p>
+
+        <h3>Why is my border not showing up?</h3>
+        <p>Almost always because <code>border-style</code> is missing. Writing <code>border-width: 2px; border-color: red</code> without a style produces no border, silently, because the initial style is <code>none</code>.</p>
+        <p>The other common cause is a zero-width or transparent border inherited from a reset, or an element with no height. Setting the shorthand — which always includes a style — avoids the whole class of problem.</p>
+
+        <h2>What are the CSS border-style values?</h2>
+        <p>There are eight visible styles plus two invisible ones. <code>solid</code>, <code>dashed</code> and <code>dotted</code> are self-explanatory. <code>double</code> draws two lines with a gap, sized so the total equals the border width. <code>groove</code>, <code>ridge</code>, <code>inset</code> and <code>outset</code> fake a bevel by darkening and lightening the color, and look distinctly dated outside of retro designs.</p>
+        <p><code>none</code> and <code>hidden</code> both draw nothing and differ only in table border-conflict resolution, where <code>hidden</code> wins over neighbouring borders.</p>
+
+        <h2>How do you style one side of a border?</h2>
+        <p>Each side has its own shorthand — <code>border-top</code>, <code>border-right</code>, <code>border-bottom</code>, <code>border-left</code> — and each of those has width, style and color longhands. A bottom rule under a heading is <code>border-bottom: 1px solid #1c1c26</code>.</p>
+        <p>A common pattern is a full border plus one override: declare <code>border: 1px solid</code> first and then <code>border-left: 4px solid</code> for an accent stripe. Order matters, since the shorthand resets everything it covers.</p>
+
+        <h2>Do borders change the size of an element?</h2>
+        <p>Under the default <code>box-sizing: content-box</code>, yes: a border adds to the element’s rendered width and height, so adding one on hover shifts the layout.</p>
+        <p>With <code>box-sizing: border-box</code> — which most stylesheets set globally — padding and border are absorbed into the declared width instead. If you still need a hover ring with no layout impact at all, use a <code>box-shadow</code> with spread, which is painted outside the box model entirely.</p>
+
+        <h2>What is the difference between border and outline?</h2>
+        <p>A border is part of the box model and occupies space. An <code>outline</code> is drawn outside it, takes no space, and therefore never causes a reflow — which is exactly why it is the default focus indicator.</p>
+        <p>Outlines also cannot be styled per side. In current browsers an outline does follow <code>border-radius</code>, so it no longer draws a rectangle around a rounded button the way it once did, and <code>outline-offset</code> lets you push it away from the edge.</p>
+
+        <h2>What are logical border properties?</h2>
+        <p><code>border-inline-start</code> and <code>border-block-start</code> replace left and top with directions relative to the writing mode. In left-to-right English <code>border-inline-start</code> is the left border; in a right-to-left language it becomes the right one automatically.</p>
+        <p>For anything that might be translated, the logical forms save maintaining a mirrored stylesheet. They are supported across all current browsers.</p>
+
+        <h2>How do you create a gradient border?</h2>
+        <p><code>border-color</code> only accepts colors, so a gradient border needs a workaround. The cleanest modern approach uses two backgrounds with <code>background-clip</code>: a solid one clipped to the padding box and a gradient clipped to the border box, with a transparent border letting the gradient show through.</p>
+        <p>The alternative is <code>border-image</code>, which accepts a gradient directly via <code>border-image-source</code>, but it does not follow <code>border-radius</code> — so it is unsuitable for anything with rounded corners.</p>
+
+        <h2>What is the browser compatibility for CSS borders?</h2>
+        <p>Borders are as old as CSS and need no compatibility thought — all styles, per-side properties and <code>border-radius</code> are universally supported without prefixes. Logical properties and <code>background-clip</code> are newer but available in all current browsers.</p>
       </div>
     </div>
     <div style="padding:24px 40px 40px;border-top:1px solid #1c1c26">

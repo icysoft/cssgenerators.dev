@@ -33,22 +33,42 @@ const schema = {
         {
           '@type': 'Question',
           name: "How do CSS arrows work?",
-          acceptedAnswer: { '@type': 'Answer', text: "A CSS chevron arrow uses two borders on a square element — border-top and border-right — then rotates the element with transform: rotate() to point in the desired direction." },
+          acceptedAnswer: { '@type': 'Answer', text: "A chevron arrow is a square element with only two borders — say border-top and border-right — rotated with transform: rotate(). The two borders form a right angle, and rotating that angle points it wherever you need. Because it is built from borders on an empty element, it needs no markup beyond a single span, or no markup at all if you build it on a ::after pseudo-element." },
         },
         {
           '@type': 'Question',
           name: "What are the CSS arrow direction rotation angles?",
-          acceptedAnswer: { '@type': 'Answer', text: "Right: rotate(45deg). Down: rotate(135deg). Left: rotate(225deg). Up: rotate(315deg). Diagonal arrows use 0°, 90°, 180°, 270°." },
+          acceptedAnswer: { '@type': 'Answer', text: "With border-top and border-right set, the angle bracket points up-right at rest. Rotate 45 degrees to point right, 135 to point down, 225 to point left and 315 to point up. Leave the rotation at 0, 90, 180 or 270 degrees instead and you get the diagonal arrows, which are what you want for corner indicators and expand controls." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you size a CSS arrow correctly?",
+          acceptedAnswer: { '@type': 'Answer', text: "Two values control it independently: the element’s width and height set the arm length, and border-width sets the stroke thickness. A 10px square with a 2px border gives a small, light chevron; the same square with a 4px border reads as bold. Keep the element square unless you deliberately want an asymmetric arrow, and use whole pixels — fractional border widths on a rotated element land off the pixel grid and render soft." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you center an arrow after rotating it?",
+          acceptedAnswer: { '@type': 'Answer', text: "Rotation happens around the element’s center by default, but the visible chevron is not centered inside its own box — it occupies the top-right corner. So an arrow that looks centered before rotation drifts afterwards. The fix is to nudge it back with a translate in the same transform, as in transform: rotate(45deg) translate(-2px, 2px), or to position it with flexbox on the parent and accept a small optical offset. Setting transform-origin is rarely the right lever here — it changes the pivot, not the imbalance." },
         },
         {
           '@type': 'Question',
           name: "How do you style a CSS arrow?",
-          acceptedAnswer: { '@type': 'Answer', text: "Add border-radius: 2px to the corners for a slightly rounded, modern chevron. Use transition: transform 0.2s ease to animate direction changes on hover." },
+          acceptedAnswer: { '@type': 'Answer', text: "The arrow inherits everything a border can do: border-color sets the color, and because the default is currentColor it will follow the text color if you leave it alone. Adding border-radius: 2px softens the tip into a modern rounded chevron. For a hover or state change, transition transform rather than swapping classes with different border sides — rotating from 135 to 315 degrees animates an accordion caret smoothly, where changing borders would jump." },
         },
         {
           '@type': 'Question',
           name: "How do you create filled CSS arrow shapes with clip-path?",
-          acceptedAnswer: { '@type': 'Answer', text: "For filled arrow shapes (not just outlines), use clip-path: polygon(). See the clip path generator for arrow and chevron polygon presets." },
+          acceptedAnswer: { '@type': 'Answer', text: "For filled arrow shapes rather than outlines, use clip-path: polygon(). See the clip path generator for arrow and chevron polygon presets. The advantage over the border technique is that a clipped element keeps a real box, so it can carry a background gradient or an image. The border chevron can only ever be a solid color, since it is made of borders." },
+        },
+        {
+          '@type': 'Question',
+          name: "How do you make an arrow accessible?",
+          acceptedAnswer: { '@type': 'Answer', text: "An arrow is almost always decoration, and decoration should be invisible to assistive technology. If it lives in its own element, mark it aria-hidden=\"true\"; if it is a pseudo-element it is already ignored, which is a good reason to prefer that approach. The important part is that the arrow must not be the only thing conveying meaning. An accordion trigger needs aria-expanded so the state is announced, not just a caret that visually rotates." },
+        },
+        {
+          '@type': 'Question',
+          name: "What is the browser compatibility for CSS arrows?",
+          acceptedAnswer: { '@type': 'Answer', text: "Both techniques are safe. Borders and transform: rotate() are universally supported without prefixes, and clip-path with polygon() works in all current browsers. There is nothing here that needs a fallback." },
         },
       ],
     },
@@ -67,13 +87,35 @@ const schema = {
     <div style="padding:40px;border-top:1px solid #1c1c26;max-width:800px">
       <div class="seo-content">
         <h2>How do CSS arrows work?</h2>
-        <p>A CSS chevron arrow uses two borders on a square element — <code>border-top</code> and <code>border-right</code> — then rotates the element with <code>transform: rotate()</code> to point in the desired direction.</p>
+        <p>A chevron arrow is a square element with only two borders — say <code>border-top</code> and <code>border-right</code> — rotated with <code>transform: rotate()</code>. The two borders form a right angle, and rotating that angle points it wherever you need.</p>
+        <p>Because it is built from borders on an empty element, it needs no markup beyond a single <code>span</code>, or no markup at all if you build it on a <code>::after</code> pseudo-element.</p>
+
         <h2>What are the CSS arrow direction rotation angles?</h2>
-        <p>Right: <code>rotate(45deg)</code>. Down: <code>rotate(135deg)</code>. Left: <code>rotate(225deg)</code>. Up: <code>rotate(315deg)</code>. Diagonal arrows use 0°, 90°, 180°, 270°.</p>
-        <h3>How do you style a CSS arrow?</h3>
-        <p>Add <code>border-radius: 2px</code> to the corners for a slightly rounded, modern chevron. Use <code>transition: transform 0.2s ease</code> to animate direction changes on hover.</p>
-        <h3>How do you create filled CSS arrow shapes with clip-path?</h3>
-        <p>For filled arrow shapes (not just outlines), use <code>clip-path: polygon()</code>. See the <a href="/css-clip-path-generator" style="color:#a5b4fc">clip path generator</a> for arrow and chevron polygon presets.</p>
+        <p>With <code>border-top</code> and <code>border-right</code> set, the angle bracket points up-right at rest. Rotate 45 degrees to point right, 135 to point down, 225 to point left and 315 to point up.</p>
+        <p>Leave the rotation at 0, 90, 180 or 270 degrees instead and you get the diagonal arrows, which are what you want for corner indicators and expand controls.</p>
+
+        <h3>How do you size a CSS arrow correctly?</h3>
+        <p>Two values control it independently: the element’s width and height set the arm length, and <code>border-width</code> sets the stroke thickness. A 10px square with a 2px border gives a small, light chevron; the same square with a 4px border reads as bold.</p>
+        <p>Keep the element square unless you deliberately want an asymmetric arrow, and use whole pixels — fractional border widths on a rotated element land off the pixel grid and render soft.</p>
+
+        <h2>How do you center an arrow after rotating it?</h2>
+        <p>Rotation happens around the element’s center by default, but the visible chevron is not centered inside its own box — it occupies the top-right corner. So an arrow that looks centered before rotation drifts afterwards.</p>
+        <p>The fix is to nudge it back with a translate in the same transform, as in <code>transform: rotate(45deg) translate(-2px, 2px)</code>, or to position it with flexbox on the parent and accept a small optical offset. Setting <code>transform-origin</code> is rarely the right lever here — it changes the pivot, not the imbalance.</p>
+
+        <h2>How do you style a CSS arrow?</h2>
+        <p>The arrow inherits everything a border can do: <code>border-color</code> sets the color, and because the default is <code>currentColor</code> it will follow the text color if you leave it alone. Adding <code>border-radius: 2px</code> softens the tip into a modern rounded chevron.</p>
+        <p>For a hover or state change, transition <code>transform</code> rather than swapping classes with different border sides — rotating from 135 to 315 degrees animates an accordion caret smoothly, where changing borders would jump.</p>
+
+        <h2>How do you create filled CSS arrow shapes with clip-path?</h2>
+        <p>For filled arrow shapes rather than outlines, use <code>clip-path: polygon()</code>. See the <a href="/css-clip-path-generator" style="color:#a5b4fc">clip path generator</a> for arrow and chevron polygon presets.</p>
+        <p>The advantage over the border technique is that a clipped element keeps a real box, so it can carry a background gradient or an image. The border chevron can only ever be a solid color, since it is made of borders.</p>
+
+        <h2>How do you make an arrow accessible?</h2>
+        <p>An arrow is almost always decoration, and decoration should be invisible to assistive technology. If it lives in its own element, mark it <code>aria-hidden="true"</code>; if it is a pseudo-element it is already ignored, which is a good reason to prefer that approach.</p>
+        <p>The important part is that the arrow must not be the only thing conveying meaning. An accordion trigger needs <code>aria-expanded</code> so the state is announced, not just a caret that visually rotates.</p>
+
+        <h2>What is the browser compatibility for CSS arrows?</h2>
+        <p>Both techniques are safe. Borders and <code>transform: rotate()</code> are universally supported without prefixes, and <code>clip-path</code> with <code>polygon()</code> works in all current browsers. There is nothing here that needs a fallback.</p>
       </div>
     </div>
     <div style="padding:24px 40px 0;border-top:1px solid #1c1c26">
